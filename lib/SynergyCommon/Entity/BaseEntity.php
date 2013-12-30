@@ -12,13 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 abstract class BaseEntity
     extends AbstractEntity
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer");
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-    /**
+     /**
      * @var bool
      */
     private $localized = false;
