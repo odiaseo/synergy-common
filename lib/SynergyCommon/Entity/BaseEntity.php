@@ -17,7 +17,7 @@ abstract class BaseEntity
      * @ORM\Column(type="integer");
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
     /**
      * @var bool
      */
