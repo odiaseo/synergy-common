@@ -47,7 +47,7 @@ class AbstractServiceFactory
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $serviceId   = str_replace($this->_configPrefix, '', $requestedName);
-        $serviceName = __NAMESPACE__ . '\Service\\' . ucfirst($serviceId) . 'Service';
+        $serviceName = __NAMESPACE__ . '\\' . ucfirst($serviceId) . 'Service';
 
         if (class_exists($serviceName)) {
             /** @var $service \SynergyCommon\Service\AbstractService */

@@ -47,7 +47,7 @@ class AbstractEntityFactory
     public function createServiceWithName(ServiceLocatorInterface $entityLocator, $name, $requestedName)
     {
         $entityId   = str_replace($this->_configPrefix, '', $requestedName);
-        $entityName = __NAMESPACE__ . '\Entity\\' . ucfirst($entityId);
+        $entityName = __NAMESPACE__ . '\\' . ucfirst($entityId);
 
         if (class_exists($entityName)) {
             /** @var $entity \SynergyCommon\Entity\AbstractEntity */

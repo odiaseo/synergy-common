@@ -49,12 +49,12 @@ class AbstractModelFactory
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
         $modelId   = str_replace($this->_configPrefix, '', $requestedName);
-        $modelName = __NAMESPACE__ . '\Model\\' . ucfirst($modelId) . 'Model';
+        $modelName = __NAMESPACE__ . '\\' . ucfirst($modelId) . 'Model';
 
         /** @var $model \SynergyCommon\Model\AbstractModel */
         $model = new $modelName();
 
-        $entity          = $serviceLocator->get('am\entity\\' . $modelId);
+        $entity          = $serviceLocator->get('synergycommon\entity\\' . $modelId);
         $entityClassname = get_class($entity);
 
         $model->setEntity($entityClassname);
