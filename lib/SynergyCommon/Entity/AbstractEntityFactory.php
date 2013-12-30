@@ -13,7 +13,7 @@ class AbstractEntityFactory
 
     public function __construct()
     {
-        $this->_configPrefix = strtolower(__NAMESPACE__) . '\\';
+        $this->_configPrefix = 'synergycommon\entity\\';
     }
 
     /**

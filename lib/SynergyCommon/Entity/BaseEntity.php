@@ -12,7 +12,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 abstract class BaseEntity
     extends AbstractEntity
 {
-     /**
+    private $_id;
+    /**
      * @var bool
      */
     private $localized = false;
@@ -34,11 +35,6 @@ abstract class BaseEntity
      * @ORM\Column(type="datetime", name="updated_at", nullable=true)
      */
     private $updatedAt;
-    /**
-     * @ORM\ManyToOne(targetEntity="SynergyCommon\Entity\Site", cascade="persist")
-     * @ORM\JoinColumn(name="site_id", referencedColumnName="id", nullable=false)
-     */
-    private $site;
 
     public function __construct()
     {
@@ -60,19 +56,6 @@ abstract class BaseEntity
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    public function setSite($siteId)
-    {
-        $this->site = $siteId;
-    }
-
-    /**
-     * @return \SynergyCommon\Entity\Site
-     */
-    public function getSite()
-    {
-        return $this->site;
     }
 
     /**
@@ -115,5 +98,15 @@ abstract class BaseEntity
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    public function setId($id)
+    {
+        $this->_id = $id;
     }
 }
