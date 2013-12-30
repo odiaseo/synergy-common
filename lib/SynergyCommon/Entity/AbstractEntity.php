@@ -16,11 +16,36 @@ abstract class AbstractEntity
     protected $_inputFilter;
 
     /**
+     * Convert the object to an array.
+     *
      * @param null $object
      *
      * @return array
      */
     public function toArray($object = null)
+    {
+        $list   = array();
+        $object = $object ? : $this;
+        foreach (get_object_vars($object) as $key => $value) {
+            if (substr($key, 0, 1) != '_') {
+                if (is_object($value)) {
+                    $list[$key] = $this->toArray($value);
+                } else {
+                    $list[$key] = $value;
+                }
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param null $object
+     *
+     * @deprecated
+     * @return array
+     */
+    public function toArrayOld($object = null)
     {
         $list   = array();
         $object = $object ? : $this;
