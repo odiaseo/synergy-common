@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use SynergyCommon\AbstractEntity;
+use SynergyCommon\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 
