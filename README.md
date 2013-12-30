@@ -1,0 +1,1 @@
+#Library Abstract and concrete classes common to Synergy Modules
