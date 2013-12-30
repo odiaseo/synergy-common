@@ -4,3 +4,7 @@ composer.phar
 vendor/
 .idea/
 .settings
+config
+data
+public
+init_autoload.php
