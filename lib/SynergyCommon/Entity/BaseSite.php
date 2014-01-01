@@ -2,10 +2,9 @@
 
 namespace SynergyCommon\Entity;
 
-use SynergyCommon\Entity\AbstractEntity;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use SynergyCommon\Entity\AbstractEntity;
 
 /**
  * @ORM\MappedSuperclass
@@ -45,16 +44,6 @@ class BaseSite
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
-    /**
-     * @ORM\ManyToMany(targetEntity="Licence", cascade="persist")
-     * @ORM\JoinTable(name="Site_Licence")
-     */
-    protected $licences;
-
-    public function __construct()
-    {
-        $this->licences = new ArrayCollection();
-    }
 
     /**
      * @param \datetime $createdAt
@@ -100,16 +89,6 @@ class BaseSite
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    public function setLicences($licences)
-    {
-        $this->licences = $licences;
-    }
-
-    public function getLicences()
-    {
-        return $this->licences;
     }
 
     public function setTitle($title)

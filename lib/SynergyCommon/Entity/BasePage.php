@@ -110,7 +110,6 @@ class BasePage
     public function __construct()
     {
         $this->children   = new ArrayCollection();
-        $this->pageThemes = new ArrayCollection();
     }
 
 
