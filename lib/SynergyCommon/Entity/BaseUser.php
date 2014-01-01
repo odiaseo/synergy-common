@@ -29,15 +29,15 @@ class BaseUser
      */
     private $lastName;
     /**
-     * @ORM\Column(type="string", length=64, name="username")
+     * @ORM\Column(type="string", length=64, name="username", nullable=true)
      */
     private $username;
     /**
-     * @ORM\Column(type="string", length=64, name="display_name")
+     * @ORM\Column(type="string", length=64, name="display_name", nullable=true)
      */
-    private $displayMame;
+    private $displayName;
     /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $password;
     /**
@@ -45,11 +45,11 @@ class BaseUser
      */
     private $activationCode;
     /**
-     * @ORM\Column(type="date", name="dob")
+     * @ORM\Column(type="date", name="dob", nullable=true)
      */
     private $dateOfBirth;
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $telephone = '';
     /**
@@ -57,7 +57,7 @@ class BaseUser
      */
     private $gender;
     /**
-     * @ORM\Column(type="string", length=64, unique=true)
+     * @ORM\Column(type="string", length=64, unique=true, nullable=false)
      */
     private $email;
     /**
@@ -69,21 +69,22 @@ class BaseUser
      */
     private $isAdmin = 0;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $visits = 0;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $state;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $remarks = '';
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $avatar = '';
+
 
     public function setActivationCode($activationCode)
     {
@@ -115,14 +116,14 @@ class BaseUser
         return $this->dateOfBirth;
     }
 
-    public function setDisplayMame($displayMame)
+    public function setDisplayName($displayMame)
     {
-        $this->displayMame = $displayMame;
+        $this->displayName = $displayMame;
     }
 
-    public function getDisplayMame()
+    public function getDisplayName()
     {
-        return $this->displayMame;
+        return $this->displayName;
     }
 
     public function setEmail($email)
