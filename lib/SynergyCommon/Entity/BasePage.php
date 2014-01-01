@@ -18,93 +18,93 @@ class BasePage
      * @ORM\Column(type="integer");
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
     /**
      * @ORM\Column(type="string")
      */
-    private $title;
+    protected $title;
     /**
      * @ORM\Column(type="string")
      */
-    private $label = '';
+    protected $label = '';
     /**
      * @ORM\Column(type="string", length=150)
      */
-    private $description = '';
+    protected $description = '';
     /**
      * @ORM\Column(type="string", length=255, name="keywords")
      */
-    private $keywords = '';
+    protected $keywords = '';
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $thumbnail = '';
+    protected $thumbnail = '';
     /**
      * @ORM\Column(name="is_visible",type="boolean")
      */
-    private $isVisible = 1;
+    protected $isVisible = 1;
     /**
      * @ORM\Column(name="is_adult",type="boolean")
      *
      */
-    private $isAdult = 0;
+    protected $isAdult = 0;
     /**
      * @ORM\Column(name="is_cached",type="boolean")
      */
-    private $isCached = true;
+    protected $isCached = true;
     /**
      * @ORM\Column(name="route_name", type="string", nullable=false)
      */
-    private $routeName = 'application';
+    protected $routeName = 'application';
     /**
      * @ORM\Column(type="string")
      */
-    private $parameters = '';
+    protected $parameters = '';
     /**
      * @ORM\Column(type="string", name="icon_class_name")
      */
-    private $iconClassName = 'icon-th';
+    protected $iconClassName = 'icon-th';
     /**
      * @Gedmo\Slug(fields={"title"}, updatable=false)
      * @ORM\Column(name="slug", type="string")
      */
-    private $slug;
+    protected $slug;
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      */
-    private $lft;
+    protected $lft;
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
      */
-    private $rgt;
+    protected $rgt;
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(type="integer")
      */
-    private $level;
+    protected $level;
     /**
      * @Gedmo\TreeRoot
      * @ORM\Column(name="root", type="integer", nullable=true)
      */
-    private $root;
+    protected $root;
     /**
      * @ORM\Column(type="string")
      */
-    private $uri = '';
+    protected $uri = '';
     /**
      * @var \datetime createdAt
      *
      * @ORM\Column(type="datetime", name="start_at", nullable=true)
      */
-    private $startAt;
+    protected $startAt;
     /**
      * @var \datetime createdAt
      *
      * @ORM\Column(type="datetime", name="end_at", nullable=true)
      */
-    private $endAt;
+    protected $endAt;
 
 
     public function __construct()

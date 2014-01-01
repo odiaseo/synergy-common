@@ -15,75 +15,75 @@ class BaseUser
      * @ORM\Column(type="integer");
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
     /**
      * @ORM\Column(type="string", length=15)
      */
-    private $title = '';
+    protected $title = '';
     /**
      * @ORM\Column(type="string", length=64, name="first_name")
      */
-    private $firstName;
+    protected $firstName;
     /**
      * @ORM\Column(type="string", length=64, name="last_name")
      */
-    private $lastName;
+    protected $lastName;
     /**
      * @ORM\Column(type="string", length=64, name="username", nullable=true)
      */
-    private $username;
+    protected $username;
     /**
      * @ORM\Column(type="string", length=64, name="display_name", nullable=true)
      */
-    private $displayName;
+    protected $displayName;
     /**
      * @ORM\Column(type="string", length=128, nullable=false)
      */
-    private $password;
+    protected $password;
     /**
      * @ORM\Column(type="string", length=128, name="activation_code", nullable=true)
      */
-    private $activationCode;
+    protected $activationCode;
     /**
      * @ORM\Column(type="date", name="dob", nullable=true)
      */
-    private $dateOfBirth;
+    protected $dateOfBirth;
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $telephone = '';
+    protected $telephone = '';
     /**
      * @ORM\Column(type="string", length=6)
      */
-    private $gender;
+    protected $gender;
     /**
      * @ORM\Column(type="string", length=64, unique=true, nullable=false)
      */
-    private $email;
+    protected $email;
     /**
      * @ORM\Column(type="boolean", name="is_active")
      */
-    private $isActive = 0;
+    protected $isActive = 0;
     /**
      * @ORM\Column(type="boolean", name="is_admin")
      */
-    private $isAdmin = 0;
+    protected $isAdmin = 0;
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $visits = 0;
+    protected $visits = 0;
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $state;
+    protected $state;
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $remarks = '';
+    protected $remarks = '';
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $avatar = '';
+    protected $avatar = '';
 
     public function setActivationCode($activationCode)
     {

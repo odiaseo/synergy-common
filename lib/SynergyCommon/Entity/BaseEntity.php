@@ -12,29 +12,29 @@ use Gedmo\Mapping\Annotation as Gedmo;
 abstract class BaseEntity
     extends AbstractEntity
 {
-    private $_id;
+    protected $_id;
     /**
      * @var bool
      */
-    private $localized = false;
+    protected $localized = false;
     /**
      * @ORM\Column(type="string")
      */
-    private $timezone;
+    protected $timezone;
     /**
      * @var \DateTime createdAt
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="created_at")
      */
-    private $createdAt;
+    protected $createdAt;
     /**
      * @var \DateTime updatedAt
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", name="updated_at", nullable=true)
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     public function __construct()
     {
