@@ -1,5 +1,5 @@
 <?php
-namespace SynergyCommon\Entity\Member;
+namespace SynergyCommon\Member\Entity;
 
 use BjyAuthorize\Acl\HierarchicalRoleInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,7 +39,7 @@ class Role
     /**
      * @var Role
      *
-     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\ManyToOne(targetEntity="SynergyCommon\Member\Entity\Role")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     private $parent;

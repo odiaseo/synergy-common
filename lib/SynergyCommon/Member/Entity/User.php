@@ -1,12 +1,12 @@
 <?php
-namespace SynergyCommon\Entity\Member;
+namespace SynergyCommon\Member\Entity;
 
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use SynergyCommon\Entity\BaseUser;
-use ZfcUser\Entity\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use SynergyCommon\Entity\BaseUser;
+use ZfcUser\Entity\UserInterface;
 
 /**
  * User
@@ -22,7 +22,7 @@ class User
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\ManyToMany(targetEntity="SynergyCommon\Member\Entity\Role")
      * @ORM\JoinTable(name="User_Role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
