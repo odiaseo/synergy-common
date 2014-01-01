@@ -85,7 +85,6 @@ class BaseUser
      */
     private $avatar = '';
 
-
     public function setActivationCode($activationCode)
     {
         $this->activationCode = $activationCode;
