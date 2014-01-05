@@ -17,15 +17,15 @@ class BaseUser
      */
     protected $id;
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=15, nullable=true)
      */
     protected $title = '';
     /**
-     * @ORM\Column(type="string", length=64, name="first_name")
+     * @ORM\Column(type="string", length=64, name="first_name", nullable=true)
      */
     protected $firstName;
     /**
-     * @ORM\Column(type="string", length=64, name="last_name")
+     * @ORM\Column(type="string", length=64, name="last_name", nullable=true)
      */
     protected $lastName;
     /**
@@ -55,7 +55,7 @@ class BaseUser
     /**
      * @ORM\Column(type="string", length=6)
      */
-    protected $gender;
+    protected $gender = 'male';
     /**
      * @ORM\Column(type="string", length=64, unique=true, nullable=false)
      */
