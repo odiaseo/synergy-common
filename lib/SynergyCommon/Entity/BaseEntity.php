@@ -1,10 +1,10 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use SynergyCommon\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Session\Container;
 use Gedmo\Mapping\Annotation as Gedmo;
+use SynergyCommon\Entity\AbstractEntity;
+use Zend\Session\Container;
 
 /**
  * @ORM\MappedSuperclass
@@ -35,12 +35,6 @@ abstract class BaseEntity
      * @ORM\Column(type="datetime", name="updated_at", nullable=true)
      */
     protected $updatedAt;
-
-    public function __construct()
-    {
-        $date           = new \DateTime('now');
-        $this->timezone = $date->getTimezone()->getName();
-    }
 
     /**
      * @param $createdAt
@@ -89,6 +83,11 @@ abstract class BaseEntity
 
     public function getTimezone()
     {
+        if (!$this->timezone) {
+            $date           = new \DateTime('now');
+            $this->timezone = $date->getTimezone()->getName();
+        }
+
         return $this->timezone;
     }
 
