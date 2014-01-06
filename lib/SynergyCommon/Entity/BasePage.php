@@ -24,21 +24,21 @@ class BasePage
      */
     protected $title;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    protected $label = '';
+    protected $label;
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $description = '';
+    protected $description ;
     /**
-     * @ORM\Column(type="string", length=255, name="keywords")
+     * @ORM\Column(type="string", length=255, name="keywords", nullable=true)
      */
-    protected $keywords = '';
+    protected $keywords ;
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $thumbnail = '';
+    protected $thumbnail ;
     /**
      * @ORM\Column(name="is_visible",type="boolean")
      */
@@ -51,15 +51,15 @@ class BasePage
     /**
      * @ORM\Column(name="is_cached",type="boolean")
      */
-    protected $isCached = true;
+    protected $isCached = 1;
     /**
      * @ORM\Column(name="route_name", type="string", nullable=false)
      */
     protected $routeName = 'application';
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    protected $parameters = '';
+    protected $parameters ;
     /**
      * @ORM\Column(type="string", name="icon_class_name")
      */
@@ -90,9 +90,9 @@ class BasePage
      */
     protected $root;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
-    protected $uri = '';
+    protected $uri;
     /**
      * @var \datetime createdAt
      *
