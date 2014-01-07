@@ -11,7 +11,7 @@ class ApiService
     /** @var \SynergyCommon\Util\ErrorHandler */
     protected $_logger;
     /**
-     * @var \Zend\Http\Client
+     * @var \SynergyCommon\Client\HttpRestJsonClient
      */
     protected $_client;
 
@@ -41,7 +41,7 @@ class ApiService
     }
 
     /**
-     * @param \Vaboose\Api\Client\HttpRestJsonClient $client
+     * @param \SynergyCommon\Client\HttpRestJsonClient $client
      */
     public function setClient($client)
     {
@@ -49,7 +49,7 @@ class ApiService
     }
 
     /**
-     * @return \Vaboose\Api\Client\HttpRestJsonClient
+     * @return \SynergyCommon\Client\HttpRestJsonClient
      */
     public function getClient()
     {
