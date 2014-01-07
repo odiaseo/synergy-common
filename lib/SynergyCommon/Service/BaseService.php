@@ -1,11 +1,13 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Doctrine\ORM\PersistentCollection;
 use SynergyCommon\Entity\BaseEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
-use Doctrine\ORM\PersistentCollection;
+use Zend\Filter\Word\CamelCaseToDash;
+use Zend\Json\Json;
 
-class BaseService
+abstract class BaseService
     extends AbstractService
 {
     /**
@@ -295,4 +297,88 @@ class BaseService
 
         return $return;
     }
+
+    public function getEntityCacheFile()
+    {
+        $config   = $this->_serviceManager->get('config');
+        $filename = $config['synergy']['entity_cache']['orm'];
+
+        if (!file_exists($filename)) {
+            $this->_createEntityCache($filename);
+        }
+
+        return $filename;
+    }
+
+    /**
+     * Create cache file if it does not exist
+     *
+     * @param                             $filename
+     *
+     * @return bool|int
+     */
+    protected function _createEntityCache($filename)
+    {
+        $output = array();
+        /** @var $entityManager  \Doctrine\ORM\EntityManager */
+        $entityManager = $this->getEntityManager();
+        $cmf           = $entityManager->getMetadataFactory();
+        $classes       = $cmf->getAllMetadata();
+
+        $filter = new CamelCaseToDash();
+
+        /** @var \Doctrine\ORM\Mapping\ClassMetadata $class */
+        foreach ($classes as $class) {
+            $name         = str_replace($class->namespace . '\\', '', $class->getName());
+            $key          = strtolower($filter->filter($name));
+            $output[$key] = $class->getName();
+        }
+
+        $data = '<?php return ' . var_export($output, true) . ';';
+
+        if (!is_dir(dirname($filename))) {
+            @mkdir(dirname($filename), 0755, true);
+        }
+
+        return file_put_contents($filename, $data);
+    }
+
+    /**
+     * Get key from class name map
+     *
+     * @param $className
+     *
+     * @return mixed
+     */
+    public function getEntityKeyFromClassname($className)
+    {
+        $filename = $this->getEntityCacheFile();
+        $cache    = include "$filename";
+
+        return array_search($className, $cache);
+    }
+
+    /**
+     * Get classname from key map
+     *
+     * @param $entityKey
+     *
+     * @return null
+     */
+    public function getClassnameFromEntityKey($entityKey)
+    {
+        $filename = $this->getEntityCacheFile();
+        $cache    = include "$filename";
+
+        return isset($cache[$entityKey]) ? $cache[$entityKey] : null;
+    }
+
+    /**
+     * @return \SynergyCommon\Util\ErrorHandler
+     */
+    public function getLogger()
+    {
+        return $this->_serviceManager->get('logger');
+    }
+
 }

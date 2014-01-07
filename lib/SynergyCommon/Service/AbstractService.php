@@ -2,17 +2,19 @@
 namespace SynergyCommon\Service;
 
 use SynergyCommon\Entity\AbstractEntity;
+use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use SynergyCommon\Model\AbstractModel;
 
 abstract class AbstractService
     implements ServiceManagerAwareInterface
 {
     protected $_entityKey;
 
+    /** @var \Doctrine\ORM\EntityManager */
+    protected $_entityManager;
 
     /** @var  \Zend\ServiceManager\ServiceManager */
     protected $_serviceManager;
@@ -65,7 +67,16 @@ abstract class AbstractService
         return $fields;
     }
 
-    public function getModel($key, $options = array())
+    /**
+     * Get Model instance
+     *
+     * @param       $key
+     * @param array $options
+     * @param array $additionalOptions
+     *
+     * @return AbstractModel
+     */
+    public function getModel($key, $options = array(), $additionalOptions = array())
     {
         /** @var $model \SynergyCommon\Model\AbstractModel */
         $model = $this->_serviceManager->get('am\model\\' . $key);
@@ -127,5 +138,23 @@ abstract class AbstractService
     {
         return $this->_entityKey;
     }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     */
+    public function setEntityManager($entityManager)
+    {
+        $this->_entityManager = $entityManager;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->_entityManager;
+    }
+
+    abstract public function getEntityCacheFile();
 
 }
