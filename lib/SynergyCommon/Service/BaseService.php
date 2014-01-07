@@ -7,7 +7,7 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\Filter\Word\CamelCaseToDash;
 use Zend\Json\Json;
 
-abstract class BaseService
+class BaseService
     extends AbstractService
 {
     /**
