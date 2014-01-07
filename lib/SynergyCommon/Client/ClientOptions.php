@@ -1,5 +1,5 @@
 <?php
-namespace SynergyCommon\Client\Config;
+namespace SynergyCommon\Client;
 
 use Zend\Stdlib\AbstractOptions;
 
