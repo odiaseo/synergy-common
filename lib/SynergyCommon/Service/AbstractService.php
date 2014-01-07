@@ -152,6 +152,10 @@ abstract class AbstractService
      */
     public function getEntityManager()
     {
+        if (!$this->_entityManager) {
+            $this->_entityManager = $this->_serviceManager->get('doctrine.entitymanager.orm_default');
+        }
+
         return $this->_entityManager;
     }
 
