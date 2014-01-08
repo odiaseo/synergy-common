@@ -4,4 +4,5 @@ composer.phar
 vendor/
 .idea/
 .settings
-config
+autoload
+application.config.php
