@@ -12,7 +12,7 @@ return array(
         'configuration' => array(
             'orm_default' => array(
                 'driver'           => 'orm_default',
-                'generate_proxies' => true,
+                'generate_proxies' => false,
                 'proxy_dir'        => 'data/DoctrineORMModule/Proxy',
                 'proxy_namespace'  => 'DoctrineORMModule\Proxy',
             )
