@@ -5,12 +5,20 @@ use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
+use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 abstract class AbstractService
     implements ServiceManagerAwareInterface
 {
+    /**
+     * Print to console
+     *
+     * @var bool
+     */
+    protected $_verbose = false;
+
     protected $_entityKey;
 
     /** @var \Doctrine\ORM\EntityManager */
@@ -87,7 +95,8 @@ abstract class AbstractService
                      'perPage'   => isset($options['perPage']) ? $options['perPage'] : AbstractModel::PER_PAGE,
                      'filters'   => $this->processFilters($options),
                      'sortOrder' => $this->processSortOrder($options),
-                     'fields'    => $this->processFields($options)
+                     'fields'    => $this->processFields($options),
+                     'data'      => $additionalOptions
                 )
             )
         );
@@ -157,6 +166,51 @@ abstract class AbstractService
         }
 
         return $this->_entityManager;
+    }
+
+    /**
+     * Print message to console
+     *
+     * @param      $msg
+     * @param int  $repeat
+     * @param bool $lineBreak
+     * @param int  $color
+     * @param null $bgColor
+     *
+     * @return \Zend\Console\Adapter\Windows
+     */
+    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GRAY, $bgColor = null)
+    {
+        /** @var $console \Zend\Console\Adapter\Windows */
+        $console = $this->_serviceManager->get('console');
+        if ($this->getVerbose()) {
+            $msg  = is_array($msg) ? print_r($msg, true) : $msg;
+            $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
+            $msg  = "{$sign}$msg";
+            if ($lineBreak) {
+                $console->writeLine($msg, $color, $bgColor);
+            } else {
+                $console->write($msg, $color, $bgColor);
+            }
+        }
+
+        return $console;
+    }
+
+    /**
+     * @param boolean $verbose
+     */
+    public function setVerbose($verbose)
+    {
+        $this->_verbose = $verbose;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getVerbose()
+    {
+        return $this->_verbose;
     }
 
     abstract public function getEntityCacheFile();

@@ -20,7 +20,7 @@ abstract class BaseEntity
     /**
      * @ORM\Column(type="string")
      */
-    protected $timezone;
+    protected $timezone = 'UTC';
     /**
      * @var \DateTime createdAt
      *
