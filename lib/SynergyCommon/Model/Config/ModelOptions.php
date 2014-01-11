@@ -7,6 +7,12 @@ use Zend\Stdlib\AbstractOptions;
 class ModelOptions
     extends AbstractOptions
 {
+    /**
+     * Additional ata
+     *
+     * @var array
+     */
+    protected $_data;
 
     protected $_resultCallback;
     /**
@@ -216,5 +222,19 @@ class ModelOptions
         return $this->_resultCallback;
     }
 
+    /**
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->_data = $data;
+    }
 
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->_data;
+    }
 }
