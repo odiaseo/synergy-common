@@ -21,7 +21,7 @@
         "gedmo/doctrine-extensions": ">=v2.2.0",
         "monolog/monolog": "dev-master",
         "ewgo/solarium-module": "dev-master",
-        "zf-commons/zfc-user-doctrine-orm": "0.*",
+        "zf-commons/zfc-user-doctrine-orm": "*",
         "bjyoungblood/bjy-authorize": "dev-master"
     },
     "autoload": {

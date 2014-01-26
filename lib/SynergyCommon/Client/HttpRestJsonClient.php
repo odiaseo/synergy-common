@@ -33,6 +33,7 @@ class HttpRestJsonClient
     public function dispatchRequestAndDecodeResponse($url, $method, $data = null)
     {
         $request = clone $this->_request;
+        $method  = strtoupper($method);
         $request->getHeaders()->addHeaders($this->_options->getHeaders());
         if (strpos($url, 'http://', 0) === false) {
             $endpoint = rtrim($this->_options->getDomain(), '/') . '/' . ltrim($url, '/');
@@ -44,7 +45,11 @@ class HttpRestJsonClient
         $request->setMethod($method);
 
         if ($data) {
-            $request->setPost(new Parameters($data));
+            if ($method = 'GET') {
+                $request->setQuery(new Parameters($data));
+            } else {
+                $request->setPost(new Parameters($data));
+            }
         }
 
         /** @var $response \Zend\Http\Response */

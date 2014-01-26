@@ -66,7 +66,7 @@ class Role
     }
 
     /**
-     * @param \SynergyCommon\Entity\Member\Role $parent
+     * @param \SynergyCommon\Member\Entity\Role $parent
      */
     public function setParent($parent)
     {
@@ -74,7 +74,7 @@ class Role
     }
 
     /**
-     * @return \SynergyCommon\Entity\Member\Role
+     * @return \SynergyCommon\Member\Entity\Role
      */
     public function getParent()
     {
