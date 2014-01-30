@@ -1,11 +1,18 @@
 <?php
 namespace SynergyCommon\Session;
 
+use Zend\Cache\StorageFactory as CacheStorageFactory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Session\Container;
+use Zend\Session\SaveHandler\Cache;
 use Zend\Session\SessionManager as ZendSessionManager;
 
+/**
+ * Class SessionManager
+ *
+ * @package SynergyCommon\Session
+ */
 class SessionManager
     implements FactoryInterface
 {
@@ -35,9 +42,9 @@ class SessionManager
 
             /** @var $sessionSaveHandler \Zend\Session\SaveHandler\SaveHandlerInterface */
             $sessionSaveHandler = null;
-            if (isset($session['save_handler'])) {
-                // class should be fetched from service manager since it will require constructor arguments
-                $sessionSaveHandler = $serviceLocator->get($session['save_handler']);
+            if (isset($session['save_handler']['cache'])) {
+                $cache              = CacheStorageFactory::factory($session['save_handler']['cache']);
+                $sessionSaveHandler = new Cache($cache);
             }
 
             $sessionManager = new ZendSessionManager($sessionConfig, $sessionStorage, $sessionSaveHandler);
