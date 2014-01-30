@@ -2,73 +2,60 @@
 namespace SynergyCommon\Service;
 
 
-use SynergyCommon\Service\BaseService;
+use SynergyCommon\Client\ClientOptions;
+use SynergyCommon\Client\HttpRestJsonClient;
+use SynergyCommon\Service\BaseApiService;
+use Zend\Http\Client as HttpClient;
+use Zend\Http\Request;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Rest API service
+ *
+ * Class ApiService
+ *
+ * @package SynergyCommon\Service
+ */
 class ApiService
-    extends BaseService
+    implements FactoryInterface
 {
-
-    /** @var \SynergyCommon\Util\ErrorHandler */
-    protected $_logger;
-    /**
-     * @var \SynergyCommon\Client\HttpRestJsonClient
-     */
-    protected $_client;
-
-    /**
-     * Process API request
-     *
-     * @param        $url
-     * @param string $method HTTP Method (GET, POST, DELETE, PUT)
-     * @param null   $params
-     *
-     * @return array
-     */
-    public function processRequest($url, $method = 'GET', $params = null)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        try {
-            $method = strtoupper($method);
+        $config = $serviceLocator->get('config');
 
-            return $this->_client->dispatchRequestAndDecodeResponse($url, $method, $params);
-        } catch (\Exception $e) {
-            $this->_logger->logException($e);
-
-            return array(
-                'error'   => true,
-                'message' => $e->getMessage()
-            );
+        if (isset($config['synergy']['api']['adapter'])) {
+            $adapter = $config['synergy']['api']['adapter'];
+        } else {
+            $adapter = 'Zend\Http\Client\Adapter\Curl';
         }
-    }
 
-    /**
-     * @param \SynergyCommon\Client\HttpRestJsonClient $client
-     */
-    public function setClient($client)
-    {
-        $this->_client = $client;
-    }
+        $httpClient = new HttpClient();
+        $httpClient->setAdapter($adapter);
 
-    /**
-     * @return \SynergyCommon\Client\HttpRestJsonClient
-     */
-    public function getClient()
-    {
-        return $this->_client;
-    }
+        $request            = new Request();
+        $httpRestJsonClient = new HttpRestJsonClient($httpClient, $request);
 
-    /**
-     * @param \SynergyCommon\Util\ErrorHandler $logger
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
-    }
 
-    /**
-     * @return \SynergyCommon\Util\ErrorHandler
-     */
-    public function getLogger()
-    {
-        return $this->_logger;
+        if (isset($config['synergy']['api']['options'])) {
+            $options = new ClientOptions($config['synergy']['api']['options']);
+        } else {
+            $options = new ClientOptions();
+        }
+
+        $httpRestJsonClient->setOptions($options);
+        $service = new BaseApiService();
+
+        if (isset($config['synergy']['api']['logger'])
+            and $serviceLocator->has($config['synergy']['api']['logger'])
+        ) {
+            /** @var $logger \SynergyCommon\Util\ErrorHandler */
+            $logger = $serviceLocator->get($config['synergy']['api']['logger']);
+            $service->setLogger($logger);
+        }
+
+        $service->setClient($httpRestJsonClient);
+
+        return $service;
     }
 }

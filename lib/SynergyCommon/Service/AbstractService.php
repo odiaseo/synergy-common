@@ -197,6 +197,11 @@ abstract class AbstractService
         return $console;
     }
 
+    protected function _filterHostName($host)
+    {
+        return str_replace(array('http://', 'https://', 'www.'), '', $host);
+    }
+
     /**
      * @param boolean $verbose
      */

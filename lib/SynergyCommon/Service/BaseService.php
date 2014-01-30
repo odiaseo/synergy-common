@@ -10,6 +10,10 @@ use Zend\Json\Json;
 class BaseService
     extends AbstractService
 {
+
+    /** @var \SynergyCommon\Util\ErrorHandler */
+    protected $_logger;
+
     /**
      * Find a enity by ID
      *
@@ -344,6 +348,31 @@ class BaseService
     }
 
     /**
+     * Process API request
+     *
+     * @param        $url
+     * @param string $method HTTP Method (GET, POST, DELETE, PUT)
+     * @param null   $params
+     *
+     * @return array
+     */
+    public function processRequest($url, $method = 'GET', $params = null)
+    {
+        try {
+            $method = strtoupper($method);
+
+            return $this->_client->dispatchRequestAndDecodeResponse($url, $method, $params);
+        } catch (\Exception $e) {
+            $this->_logger->logException($e);
+
+            return array(
+                'error'   => true,
+                'message' => $e->getMessage()
+            );
+        }
+    }
+
+    /**
      * Get key from class name map
      *
      * @param $className
@@ -379,6 +408,14 @@ class BaseService
     public function getLogger()
     {
         return $this->_serviceManager->get('logger');
+    }
+
+    /**
+     * @param \SynergyCommon\Util\ErrorHandler $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->_logger = $logger;
     }
 
 }
