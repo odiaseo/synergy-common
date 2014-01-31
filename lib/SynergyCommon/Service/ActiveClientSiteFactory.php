@@ -1,5 +1,5 @@
 <?php
-namespace Vaboose\Service;
+namespace SynergyCommon\Service;
 
 use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
