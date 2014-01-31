@@ -5,7 +5,7 @@ use Doctrine\Common\Cache\MemcacheCache;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DoctrineMemcacheService
+class DoctrineMemcacheFactory
     implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)

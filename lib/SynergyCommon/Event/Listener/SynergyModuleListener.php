@@ -38,6 +38,11 @@ class SynergyModuleListener
         }
     }
 
+    /**
+     * Handle errors and logging
+     *
+     * @param MvcEvent $event
+     */
     public function handleException(MvcEvent $event)
     {
         /** @var $exception \Exception */
@@ -69,6 +74,9 @@ class SynergyModuleListener
         }
     }
 
+    /**
+     * Initialise session
+     */
     public function initSession()
     {
         /** @var $e \Zend\Mvc\MvcEvent */
@@ -90,6 +98,11 @@ class SynergyModuleListener
         }
     }
 
+    /**
+     * Set filters on siteaware modules
+     *
+     * @param MvcEvent $e
+     */
     public function initEntityManager(MvcEvent $e)
     {
         /** @var $sm \Zend\ServiceManager\ServiceManager */

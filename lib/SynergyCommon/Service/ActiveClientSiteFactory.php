@@ -6,7 +6,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Session\Container;
 
-class ActiveClientSite
+class ActiveClientSiteFactory
     implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
