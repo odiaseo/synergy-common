@@ -3,10 +3,12 @@ namespace SynergyCommon\Event\Listener;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+use Zend\Http\Request;
 use Zend\Mvc\MvcEvent;
+use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 
-class ExceptionListener
+class SynergyModuleListener
     implements ListenerAggregateInterface
 {
     protected $listeners = array();
@@ -18,8 +20,13 @@ class ExceptionListener
                  MvcEvent::EVENT_RENDER_ERROR,
                  MvcEvent::EVENT_DISPATCH_ERROR
             ),
-            array($this, 'handleException')
+            array($this, 'handleException'),
+            25
         );
+
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 200);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
+
     }
 
     public function detach(EventManagerInterface $events)
@@ -59,6 +66,48 @@ class ExceptionListener
                 $viewModel->setTerminal(true);
                 $event->setResult($viewModel);
             }
+        }
+    }
+
+    public function initSession()
+    {
+        /** @var $e \Zend\Mvc\MvcEvent */
+        $app = $e->getApplication();
+        $sm  = $app->getServiceManager();
+
+        if ($app->getRequest() instanceof Request) {
+            if ($sm->has('session_manager')) {
+                $session = $sm->get('session_manager');
+                $session->start();
+
+                /** @var $container \Zend\Session\Container */
+                $container = new Container(__NAMESPACE__);
+                if (!isset($container->init) and php_sapi_name() != 'cli') {
+                    $session->regenerateId(true);
+                    $container->init = 1;
+                }
+            }
+        }
+    }
+
+    public function initEntityManager(MvcEvent $e)
+    {
+        /** @var $sm \Zend\ServiceManager\ServiceManager */
+        $sm = $e->getApplication()->getServiceManager();
+
+        if ($sm->has('active_site')) {
+            $site = $sm->get('active_site');
+
+            $viewModel = $e->getViewModel();
+            $viewModel->setVariable('site', $site);
+
+            /** @var $em \Doctrine\ORM\EntityManager */
+            $em = $sm->get('doctrine.entitymanager.orm_default');
+
+            //enable filters
+            /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
+            $siteFilter = $em->getFilters()->enable("site-specific");
+            $siteFilter->setServiceManager($sm);
         }
     }
 }
