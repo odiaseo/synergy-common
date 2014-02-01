@@ -12,9 +12,9 @@ class LoggerFactory
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('config');
-        if (isset($config['logger'])) {
-            $directory = $config['logger']['directory'];
-            $namespace = $config['logger']['namespace'];
+        if (isset($config['synergy']['logger'])) {
+            $directory = $config['synergy']['logger']['directory'];
+            $namespace = $config['synergy']['logger']['namespace'];
         } else {
             $directory = 'data/logs/';
             $namespace = __NAMESPACE__;
