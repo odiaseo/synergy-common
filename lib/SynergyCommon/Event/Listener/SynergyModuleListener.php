@@ -45,7 +45,6 @@ class SynergyModuleListener
      */
     public function handleException(MvcEvent $event)
     {
-
         if ($event->isError()) {
             $services = $event->getApplication()->getServiceManager();
             if ($services->has('logger')) {
