@@ -2,9 +2,6 @@
 namespace SynergyCommon\Model;
 
 
-use SynergyCommon\Entity\AbstractEntity;
-use SynergyCommon\Exception\InvalidArgumentException;
-use SynergyCommon\Model\Config\ModelOptions;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\AbstractQuery;
@@ -14,11 +11,14 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Solarium\QueryType\Select\Result\Result;
+use SynergyCommon\Entity\AbstractEntity;
+use SynergyCommon\Exception\InvalidArgumentException;
+use SynergyCommon\Exception\InvalidEntityException;
+use SynergyCommon\Model\Config\ModelOptions;
+use SynergyCommon\NestedsetInterface;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
-use SynergyCommon\Exception\InvalidEntityException;
-use SynergyCommon\NestedsetInterface;
 
 class AbstractModel
     implements NestedsetInterface
@@ -89,6 +89,18 @@ class AbstractModel
 
     /** @var string */
     protected $_entityKey;
+
+    /**
+     * @var object
+     */
+    protected $_identity;
+
+    /**
+     * Access control
+     *
+     * @var
+     */
+    protected $_acl;
 
     public function setEntity($entity)
     {
@@ -1024,4 +1036,37 @@ class AbstractModel
 
         return true;
     }
+
+    /**
+     * @param  $acl
+     */
+    public function setAcl($acl)
+    {
+        $this->_acl = $acl;
+    }
+
+    /**
+     * @return
+     */
+    public function getAcl()
+    {
+        return $this->_acl;
+    }
+
+    /**
+     * @param object $identity
+     */
+    public function setIdentity($identity)
+    {
+        $this->_identity = $identity;
+    }
+
+    /**
+     * @return object
+     */
+    public function getIdentity()
+    {
+        return $this->_identity;
+    }
+
 }
