@@ -9,6 +9,8 @@ use Zend\Session\Container;
 class ActiveClientSiteFactory
     implements FactoryInterface
 {
+    const STIE_KEY = 'active-site';
+
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var $request \Zend\Http\PhpEnvironment\Request */
@@ -27,9 +29,12 @@ class ActiveClientSiteFactory
         /** @var $container \ArrayObject */
         $container = new Container(__NAMESPACE__);
 
-        if ($container->offsetExists('active-site')) {
-            $site = $container->offsetGet('active-site');
-        } elseif (!$site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
+        if ($container->offsetExists(self::STIE_KEY)) {
+            $site = $container->offsetGet(self::STIE_KEY);
+        } elseif ($data = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
+            $site = new \ArrayObject($data['content']);
+            $container->offsetSet(self::STIE_KEY, $site);
+        } else {
             throw new \InvalidArgumentException("Site {$host} is not registered");
         }
 
