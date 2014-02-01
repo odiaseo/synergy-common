@@ -45,16 +45,13 @@ class SynergyModuleListener
      */
     public function handleException(MvcEvent $event)
     {
-        /** @var $exception \Exception */
-        $exception = $event->getResult()->exception;
 
-        if (!$exception) {
-            return;
-        } else {
+        if ($event->isError()) {
             $services = $event->getApplication()->getServiceManager();
             if ($services->has('logger')) {
+                /** @var $logger \SynergyCommon\Util\ErrorHandler */
                 $logger = $services->get('logger');
-                $logger->logException($exception);
+                $logger->err($event->getError() . ': ' . $event->getRequest());
             }
 
             /** @var $request \Zend\Http\PhpEnvironment\Request */
@@ -65,12 +62,14 @@ class SynergyModuleListener
                 $viewModel->setVariables(
                     array(
                          'error'   => true,
-                         'message' => $exception->getMessage()
+                         'message' => $event->getError()
                     )
                 );
                 $viewModel->setTerminal(true);
                 $event->setResult($viewModel);
             }
+        } else {
+            return;
         }
     }
 
@@ -89,7 +88,7 @@ class SynergyModuleListener
                 $session->start();
 
                 /** @var $container \Zend\Session\Container */
-                $container = new Container(__NAMESPACE__);
+                $container = new Container();
                 if (!isset($container->init) and php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
