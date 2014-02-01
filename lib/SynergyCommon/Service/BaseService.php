@@ -418,4 +418,16 @@ class BaseService
         $this->_logger = $logger;
     }
 
+    /**
+     * @return BaseApiService
+     */
+    public function getApiService()
+    {
+        if ($this->_serviceManager->has('synergycommon\service\api')) {
+            return $this->_serviceManager->get('synergycommon\service\api');
+        }
+
+        return null;
+    }
+
 }
