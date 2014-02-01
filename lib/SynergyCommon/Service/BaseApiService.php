@@ -68,10 +68,24 @@ class BaseApiService
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
         }
 
-        $url  = sprintf('/affiliate/apifunction/%s/%s', 'site', 'findOneByDomain');
-        $site = $this->getClient()->dispatchRequestAndDecodeResponse($url, 'GET', array('params' => array($domain)));
+        return $this->executeRemoteFunction('findOneByDomain', 'GET', array($domain), 'site');
+    }
 
-        return $site;
+    /**
+     * Execute a remote function
+     *
+     * @param       $fundtionName
+     * @param       $method
+     * @param array $paramters
+     * @param null  $entity
+     *
+     * @return mixed
+     */
+    public function executeRemoteFunction($fundtionName, $method, $paramters = array(), $entity = null)
+    {
+        $url = sprintf('/affiliate/apifunction/%s/%s', $entity, $fundtionName);
+
+        return $this->getClient()->dispatchRequestAndDecodeResponse($url, $method, array('params' => $paramters));
     }
 
 }
