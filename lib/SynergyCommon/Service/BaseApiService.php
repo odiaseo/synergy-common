@@ -5,6 +5,7 @@ use Zend\Json\Json;
 
 class BaseApiService
     extends BaseService
+    implements ClientAwareInterface
 {
 
     /**
@@ -26,7 +27,7 @@ class BaseApiService
         try {
             $method = strtoupper($method);
 
-            return $this->_client->dispatchRequestAndDecodeResponse($url, $method, $params);
+            return $this->getClient()->dispatchRequestAndDecodeResponse($url, $method, $params);
         } catch (\Exception $e) {
             $this->_logger->logException($e);
 
