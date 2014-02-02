@@ -18,15 +18,19 @@
         "zendframework/zendframework": ">=2.0",
         "doctrine/doctrine-orm-module": ">=0.5",
         "doctrine/doctrine-module": ">=0.7",
-        "gedmo/doctrine-extensions": ">=v2.2.0",
-        "monolog/monolog": "dev-master",
-        "ewgo/solarium-module": "dev-master",
-        "zf-commons/zfc-user-doctrine-orm": "*",
-        "bjyoungblood/bjy-authorize": "dev-master"
+        "gedmo/doctrine-extensions": ">=v2.2.0"
+    },
+    "suggest": {
+        "ewgo/solarium-module": "For solr search aware models",
+        "monolog/monolog": "For enhanced logging features"
     },
     "autoload": {
         "psr-0": {
-            "SynergyCommon": "lib/"
-        }
+            "SynergyCommon": "lib/",
+            "SynergyCommonTest": "tests/"
+        },
+        "classmap": [
+            "./tests/Module.php"
+        ]
     }
 }

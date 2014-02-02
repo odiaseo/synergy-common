@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Solarium\QueryType\Select\Result\Result;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
@@ -670,46 +669,6 @@ class AbstractModel
         }
 
         return $entity;
-    }
-
-    /**
-     * Hydrate solr results with data from the database
-     *
-     * @param Result $result
-     *
-     * @return \ArrayIterator
-     */
-    public function processSolrResult(Result $result)
-    {
-        $idList = $offerList = array();
-
-        if ($result->getNumFound()) {
-            /** @var $document \Solarium\QueryType\Select\Result\Document */
-            foreach ($result as $document) {
-                $fields   = $document->getFields();
-                $idList[] = $fields['id'];
-            }
-
-            if ($idList = array_filter(array_unique($idList))) {
-
-                $offerList = $this->getItemListByIds($idList);
-
-                usort(
-                    $offerList, function ($a, $b) use ($idList) {
-                        /** @var $a \SynergyCommon\Entity\BaseEntity */
-                        /** @var $b \SynergyCommon\Entity\BaseEntity */
-                        $keyA = array_search($a->getId(), $idList);
-                        $keyB = array_search($b->getId(), $idList);
-
-                        return ($keyA < $keyB) ? -1 : 1;
-                    }
-                );
-            }
-        }
-
-        $return = new \ArrayIterator($offerList);
-
-        return $return;
     }
 
     /**

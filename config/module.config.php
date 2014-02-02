@@ -8,7 +8,7 @@
  */
 
 return array(
-    'doctrine' => array(
+    'doctrine'        => array(
         'configuration' => array(
             'orm_default' => array(
                 'driver'           => 'orm_default',
@@ -64,5 +64,39 @@ return array(
             ),
         ),
     ),
-
+    'service_manager' => array(
+        'abstract_factories' => array(
+            'SynergyCommon\Model\AbstractModelFactory',
+            'SynergyCommon\Service\AbstractServiceFactory',
+            'SynergyCommon\Entity\AbstractEntityFactory',
+        ),
+        'invokables'         => array(
+            'synergycommon\entity\licence' => 'SynergyCommon\Entity\BaseLicence',
+            'synergycommon\entity\site'    => 'SynergyCommon\Entity\BaseSite',
+        )
+    ),
+    'session'           => array(
+        'config'       => array(
+            'class'   => 'Zend\Session\Config\SessionConfig',
+            'options' => array(
+                'name' => 'affiliatemanager',
+            ),
+        ),
+        'save_handler' => array(
+            'cache' => array(
+                'adapter' => array(
+                    'name'    => 'filesystem',
+                    'options' => array(
+                        'cache_dir' => __DIR__ . '/../data/session',
+                    )
+                )
+            ),
+        ),
+        'lifetime'     => 7200,
+        'storage'      => 'Zend\Session\Storage\SessionArrayStorage',
+        'validators'   => array(
+            'Zend\Session\Validator\RemoteAddr',
+            'Zend\Session\Validator\HttpUserAgent',
+        ),
+    ),
 );
