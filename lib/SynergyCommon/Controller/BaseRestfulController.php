@@ -155,13 +155,22 @@ class BaseRestfulController
      */
     protected function _sendPayload($payload)
     {
+        /** @var $response \Zend\Http\PhpEnvironment\Response */
+        $response  = $this->getResponse();
         $viewModel = $this->acceptableViewModelSelector($this->_acceptCriteria);
-        $viewModel->setVariables($payload);
 
         if (isset($payload['error']) and $payload['error'] == true) {
-            /** @var $response \Zend\Http\PhpEnvironment\Response */
-            $response = $this->getResponse();
-            $response->setStatusCode(Response::STATUS_CODE_400);
+            if (!empty($payload['code'])) {
+                $response->setStatusCode($payload['code']);
+            } else {
+                $response->setStatusCode(Response::STATUS_CODE_400);
+            }
+        }
+
+        if (isset($payload['content'])) {
+            $viewModel->setVariables($payload['content']);
+        } elseif (!empty($payload)) {
+            $viewModel->setVariables($payload);
         }
 
         return $viewModel;
