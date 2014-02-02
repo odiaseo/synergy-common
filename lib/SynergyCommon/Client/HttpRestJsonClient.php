@@ -10,7 +10,7 @@ class HttpRestJsonClient
 {
     protected $httpClient;
 
-    /** @var \SynergyCommon\Client\Config\ApiOptions */
+    /** @var \SynergyCommon\Client\ClientOptions */
     protected $_options;
     /** @var \Zend\Http\Request */
     protected $_request;
@@ -45,7 +45,7 @@ class HttpRestJsonClient
         $request->setMethod($method);
 
         if ($data) {
-            if ($method = 'GET') {
+            if ($method == 'GET') {
                 $request->setQuery(new Parameters($data));
             } else {
                 $request->setPost(new Parameters($data));
