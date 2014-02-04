@@ -1,14 +1,14 @@
 <?php
 namespace SynergyCommon\Entity;
 
+
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Proxy\Proxy;
+use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\InputFilter\InputFilter;
 use Zend\Session\Container;
-use SynergyCommon\Exception\InvalidArgumentException;
-
 
 abstract class AbstractEntity
 {
@@ -37,6 +37,22 @@ abstract class AbstractEntity
         }
 
         return $list;
+    }
+
+    /**
+     * Populate object attributes from array
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function fromArray(array $data)
+    {
+        foreach ($data as $field => $value) {
+            $this->{$field} = $value;
+        }
+
+        return $this;
     }
 
     /**
