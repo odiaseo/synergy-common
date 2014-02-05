@@ -75,10 +75,10 @@ class SynergyModuleListener
     /**
      * Initialise session
      */
-    public function initSession()
+    public function initSession(MvcEvent $event)
     {
         /** @var $e \Zend\Mvc\MvcEvent */
-        $app = $e->getApplication();
+        $app = $event->getApplication();
         $sm  = $app->getServiceManager();
 
         if ($app->getRequest() instanceof Request) {
