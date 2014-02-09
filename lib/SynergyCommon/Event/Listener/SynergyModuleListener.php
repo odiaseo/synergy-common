@@ -56,7 +56,7 @@ class SynergyModuleListener
             /** @var $request \Zend\Http\PhpEnvironment\Request */
             $request = $event->getRequest();
 
-            if ($request->isXmlHttpRequest()) {
+            if ($request instanceof Request and $request->isXmlHttpRequest()) {
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
                     array(
