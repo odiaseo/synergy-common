@@ -30,7 +30,7 @@ class User
      */
     private $roles;
     /**
-     * @ORM\ManyToMany(targetEntity="UserGroup")
+     * @ORM\ManyToMany(targetEntity="SynergyCommon\Member\Entity\UserGroup")
      * @ORM\JoinTable(name="User_Group")
      */
     private $userGroups;
