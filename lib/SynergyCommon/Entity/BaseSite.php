@@ -44,7 +44,6 @@ class BaseSite
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
-
     /**
      * @param \datetime $createdAt
      */

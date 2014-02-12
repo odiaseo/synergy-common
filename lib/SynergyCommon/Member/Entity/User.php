@@ -29,13 +29,19 @@ class User
      * )
      */
     private $roles;
+    /**
+     * @ORM\ManyToMany(targetEntity="UserGroup")
+     * @ORM\JoinTable(name="User_Group")
+     */
+    private $userGroups;
 
     /**
      * Initialies the roles variable.
      */
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->roles      = new ArrayCollection();
+        $this->userGroups = new ArrayCollection();
     }
 
     /**
@@ -52,6 +58,16 @@ class User
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    public function setUserGroups($userGroups)
+    {
+        $this->userGroups = $userGroups;
+    }
+
+    public function getUserGroups()
+    {
+        return $this->userGroups;
     }
 
 }
