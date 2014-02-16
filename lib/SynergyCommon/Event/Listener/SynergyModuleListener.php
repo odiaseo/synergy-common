@@ -118,7 +118,11 @@ class SynergyModuleListener
             //enable filters
             /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
             $siteFilter = $em->getFilters()->enable("site-specific");
-            $siteFilter->setServiceManager($sm);
+            $siteFilter->setSite($site);
+
+            if ($sm->has('logger')) {
+                $siteFilter->setLogger($sm->get('logger'));
+            }
         }
     }
 }

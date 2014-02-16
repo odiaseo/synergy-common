@@ -6,38 +6,58 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class SiteFilter extends SQLFilter implements ServiceManagerAwareInterface
+class SiteFilter
+    extends SQLFilter
 {
-    /** @var \Zend\ServiceManager\ServiceManager */
-    protected $_servicemanager;
+
+    /**
+     * @var \SynergyCommon\Entity\BaseSite
+     */
+    protected $_site;
+
+    /** @var \Zend\Log\Logger */
+    protected $_logger;
 
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-
         if (isset($targetEntity->associationMappings['siteId'])
             and $targetEntity->associationMappings['siteId']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
-                /** @var $site \SynergyCommon\Entity\Site */
-                $site = $this->_servicemanager->get('active_site');
-
-                return $targetTableAlias . '.site_id = ' . $site->getId();
+                return $targetTableAlias . '.site_id = ' . $this->getSite()->getId();
             } catch (\Exception $e) {
-                $site = null; //@todo logg error
+                if ($this->getLogger()) {
+                    $this->getLogger()->err($e->getMessage());
+                }
+
                 return '';
             }
-
         } else {
             return '';
         }
     }
 
-    function setServiceManager(ServiceManager $serviceManager)
+    public function setSite($site)
     {
-        $this->_servicemanager = $serviceManager;
-
-        return $this;
+        $this->_site = $site;
+        return $this ;
     }
+
+    public function getSite()
+    {
+        return $this->_site;
+    }
+
+    public function setLogger($logger)
+    {
+        $this->_logger = $logger;
+        return $this ;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
 }
