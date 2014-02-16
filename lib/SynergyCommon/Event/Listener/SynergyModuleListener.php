@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommon\Event\Listener;
 
+use SynergyCommon\Event\Listener\SiteAwareListener;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request;
@@ -12,6 +13,8 @@ class SynergyModuleListener
     implements ListenerAggregateInterface
 {
     protected $listeners = array();
+
+    protected $initialised = false;
 
     public function attach(EventManagerInterface $events)
     {
@@ -103,26 +106,39 @@ class SynergyModuleListener
      */
     public function initEntityManager(MvcEvent $e)
     {
-        /** @var $sm \Zend\ServiceManager\ServiceManager */
-        $sm = $e->getApplication()->getServiceManager();
+        if (!$this->initialised) {
+            /** @var $sm \Zend\ServiceManager\ServiceManager */
+            $sm = $e->getApplication()->getServiceManager();
 
-        if ($sm->has('active_site')) {
-            $site = $sm->get('active_site');
+            if ($sm->has('active_site')) {
+                /** @var $site \SynergyCommon\Entity\BaseSite */
+                $site = $sm->get('active_site');
 
-            $viewModel = $e->getViewModel();
-            $viewModel->setVariable('site', $site);
+                $viewModel = $e->getViewModel();
+                $viewModel->setVariable('site', $site);
 
-            /** @var $em \Doctrine\ORM\EntityManager */
-            $em = $sm->get('doctrine.entitymanager.orm_default');
+                /** @var $em \Doctrine\ORM\EntityManager */
+                $em = $sm->get('doctrine.entitymanager.orm_default');
 
-            //enable filters
-            /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
-            $siteFilter = $em->getFilters()->enable("site-specific");
-            $siteFilter->setSite($site);
+                //enable filters
+                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
+                $siteFilter = $em->getFilters()->enable("site-specific");
+                $siteFilter->setSite($site);
 
-            if ($sm->has('logger')) {
-                $siteFilter->setLogger($sm->get('logger'));
+                if ($sm->has('logger')) {
+                    $siteFilter->setLogger($sm->get('logger'));
+                }
+
+                foreach ($em->getEventManager()->getListeners() as $listeners) {
+                    foreach ($listeners as $listener) {
+                        if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
+                            $listener->setSite($site);
+                        }
+                    }
+                }
             }
+
+            $this->initialised = true;
         }
     }
 }

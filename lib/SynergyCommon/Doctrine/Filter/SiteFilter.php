@@ -21,8 +21,8 @@ class SiteFilter
 
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-        if (isset($targetEntity->associationMappings['siteId'])
-            and $targetEntity->associationMappings['siteId']['type'] != ClassMetadataInfo::MANY_TO_MANY
+        if (isset($targetEntity->associationMappings['site'])
+            and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
                 return $targetTableAlias . '.site_id = ' . $this->getSite()->getId();

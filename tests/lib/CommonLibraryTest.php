@@ -43,7 +43,7 @@ class CommonLibraryTest
         $this->assertInstanceOf('SynergyCommon\Service\BaseApiService', $service);
     }
 
-    public function testFlshMessaager()
+    public function testFlashMessaager()
     {
         $service = $this->_serviceManager->get('viewhelpermanager')->get('flashMessages');
         $this->assertInstanceOf('SynergyCommon\View\Helper\FlashMessages', $service);
