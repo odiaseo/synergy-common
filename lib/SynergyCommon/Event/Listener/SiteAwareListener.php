@@ -14,6 +14,7 @@ class SiteAwareListener
 {
 
     protected $_site;
+
     private $_field = 'site';
 
     /**
@@ -33,7 +34,7 @@ class SiteAwareListener
     public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getObject();
-        if ($this->isSiteAware($entity)) {
+        if ($this->isSiteAware($entity, $args)) {
             $args->setNewValue($this->_field, $this->getSite());
         }
     }
@@ -42,19 +43,22 @@ class SiteAwareListener
     {
         $entity = $args->getObject();
 
-        if ($this->isSiteAware($entity)) {
-            $entity->setSiteId($this->getSite());
+        if ($this->isSiteAware($entity, $args)) {
+            $entity->setSite($this->getSite());
         }
     }
 
-    protected function isSiteAware($entity)
+    protected function isSiteAware($entity, LifecycleEventArgs $args)
     {
         $className = get_class($entity);
-        $object    = new \ReflectionClass($className);
-        $method    = 'get' . ucfirst($this->_field);
+        /** @var $mapping \Doctrine\ORM\Mapping\ClassMetadata */
+        $mapping = $args->getObjectManager()->getClassMetadata($className);
 
-        return ($object->hasProperty($this->_field) and !$entity->{$method}());
+        if (array_key_exists($this->_field, $mapping->associationMappings)) {
+            return true;
+        }
 
+        return false;
     }
 
     public function setSite(BaseSite $site)
