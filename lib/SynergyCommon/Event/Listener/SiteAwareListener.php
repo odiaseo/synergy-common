@@ -56,7 +56,7 @@ class SiteAwareListener
 
         if (array_key_exists($this->_field, $mapping->associationMappings)) {
             $method     = 'get' . ucfirst($this->_field);
-            $entitySite = $entity->{$method};
+            $entitySite = $entity->{$method}();
 
             return empty($entitySite);
         }
