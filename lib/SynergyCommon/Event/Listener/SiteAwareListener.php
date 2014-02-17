@@ -55,7 +55,10 @@ class SiteAwareListener
         $mapping = $args->getObjectManager()->getClassMetadata($className);
 
         if (array_key_exists($this->_field, $mapping->associationMappings)) {
-            return true;
+            $method     = 'get' . ucfirst($this->_field);
+            $entitySite = $entity->{$method};
+
+            return empty($entitySite);
         }
 
         return false;
