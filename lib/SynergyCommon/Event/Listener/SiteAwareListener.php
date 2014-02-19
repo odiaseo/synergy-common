@@ -43,7 +43,7 @@ class SiteAwareListener
     {
         $entity = $args->getObject();
 
-        if ($this->isSiteAware($entity, $args)) {
+        if ($this->getSite() and $this->isSiteAware($entity, $args)) {
             $entity->setSite($this->getSite());
         }
     }
@@ -64,7 +64,7 @@ class SiteAwareListener
         return false;
     }
 
-    public function setSite(BaseSite $site)
+    public function setSite($site)
     {
         $this->_site = $site;
 
