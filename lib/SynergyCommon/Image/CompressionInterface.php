@@ -1,5 +1,5 @@
 <?php
-namespace SynergyCommon\Service;
+namespace SynergyCommon\Image;
 
 interface CompressionInterface
 {
