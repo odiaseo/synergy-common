@@ -20,12 +20,14 @@ class ImageProcessorFactory
     public function compress()
     {
         $config      = $this->_serviceManager->get('config');
-        $imageConfig = isset($config['image_config']) ? $config['image_config'] : array();
+        $imageConfig = isset($config['synergy']['image_compression']) ? $config['synergy']['image_compression'] : array();
 
         if (!empty($imageConfig) and extension_loaded('pngquant')) {
-            $watchDirectory       = $imageConfig['watch_directory'];
-            $destinationDirectory = $imageConfig['destination'];
-            $masterDirectory      = $imageConfig['master_directory'];
+
+            $directory            = trim($imageConfig['image_directory'], '/') . '/';
+            $watchDirectory       = $directory . 'watch/';
+            $destinationDirectory = $directory . 'compressed/';
+            $masterDirectory      = $directory . 'original/';
 
             $min = empty($imageConfig['min_quality']) ? 60 : $imageConfig['min_quality'];
             $max = empty($imageConfig['max_quality']) ? 90 : $imageConfig['max_quality'];
@@ -42,8 +44,8 @@ class ImageProcessorFactory
             foreach (new \DirectoryIterator($watchDirectory) as $file) {
                 if ($file->isFile()) {
                     $sourceFile      = $file->getPathname();
-                    $masterCopy      = rtrim($masterDirectory, '/') . '/' . $file->getFilename();
-                    $destinationFile = rtrim($destinationDirectory, '/') . '/' . $file->getFilename();
+                    $masterCopy      = $masterDirectory . $file->getFilename();
+                    $destinationFile = $destinationDirectory . $file->getFilename();
 
                     $logger->info('original copied to ' . $destinationFile);
 
