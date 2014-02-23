@@ -5,7 +5,7 @@ use Zend\Console\Request;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class ImageProcessorFactory
+class ImageProcessorService
     implements ServiceManagerAwareInterface, CompressionInterface
 {
     /** @var \Zend\ServiceManager\ServiceManager */
