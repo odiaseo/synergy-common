@@ -17,6 +17,7 @@ class ImageCompressor
 
     public function compress()
     {
+        $logger = $this->getLogger() ? : $this;
 
         if (extension_loaded('pngquant')) {
 
@@ -27,9 +28,9 @@ class ImageCompressor
             $destinationDirectory = $destDirectory . 'compressed/';
             $masterDirectory      = $destDirectory . 'original/';
 
-            $min    = $this->_config->getMinQuality();
-            $max    = $this->_config->getMaxQuality();
-            $logger = $this->getLogger() ? : $this;
+            $min = $this->_config->getMinQuality();
+            $max = $this->_config->getMaxQuality();
+
 
             $hasTrimange = extension_loaded('trimage');
 
@@ -55,6 +56,8 @@ class ImageCompressor
                                 $triCommand = " xvfb-run -a trimage -f {$triArg}";
                                 \exec($triCommand, $output, $return);
                                 $logger->info('compresed with trimage');
+                            } else {
+                                $logger->notice('trimage library not found');
                             }
 
                             if ($adapter->copy($tmpFile, $destinationDirectory)) {
@@ -67,14 +70,17 @@ class ImageCompressor
                                 $logger->info(
                                     'Unable to copy the compressed file to destination: ' . $destinationDirectory
                                 );
-
                             }
                         } else {
                             $logger->info('compression failed');
                         }
+                    } else {
+                        $logger->info('unable to copy original file to master: ' . $masterDirectory);
                     }
                 }
             }
+        } else {
+            $logger->info('pnquant extenstion not found');
         }
     }
 
@@ -116,5 +122,4 @@ class ImageCompressor
     {
         $this->_serviceManager = $serviceManager;
     }
-
 }
