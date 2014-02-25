@@ -5,12 +5,12 @@ use Zend\Console\Request;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class ImageProcessor
+class ImageCompressor
     implements ServiceManagerAwareInterface, CompressionInterface
 {
     /** @var \Zend\Log\LoggerInterface */
     protected $_logger;
-    /** @var Config\ImageProcessorOptions */
+    /** @var Config\ImageCompressorOptions */
     protected $_config;
     /** @var \Zend\ServiceManager\ServiceManager */
     protected $_serviceManager;

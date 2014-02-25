@@ -1,8 +1,8 @@
 <?php
 namespace SynergyCommon\Service;
 
-use SynergyCommon\Image\Config\ImageProcessorOptions;
-use SynergyCommon\Image\ImageProcessor;
+use SynergyCommon\Image\Config\ImageCompressorOptions;
+use SynergyCommon\Image\ImageCompressor;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -10,31 +10,28 @@ use Zend\ServiceManager\ServiceManager;
 class ImageCompressorFactory
     implements FactoryInterface
 {
-    /** @var \Zend\ServiceManager\ServiceManager */
-    protected $_serviceManager;
-
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
-        $config      = $this->_serviceManager->get('config');
+        $config      = $serviceLocator->get('config');
         $imageConfig = isset($config['synergy']['image_compressor']) ? $config['synergy']['image_compressor']
             : array();
 
-        if (!empty($imageConfig['adapter'])) {
-            $imageConfig['adapter'];
+        $config = new ImageCompressorOptions($imageConfig);
+
+        if ($config->getAdapter()) {
             /** @var $dapter \SynergyCommon\Image\TransferAdapterInterface */
-            $adapter = $serviceLocator->get($imageConfig['adapter']);
+            $adapter = $serviceLocator->get($config->getAdapter());
             $adapter->setOptions($config);
-            $imageConfig['adapter'] = $adapter;
         }
 
-        $config  = new ImageProcessorOptions($imageConfig);
-        $service = new ImageProcessor();
+        $service = new ImageCompressor();
         $service->setConfig($config);
         $service->setServiceManager($serviceLocator);
-        if ($this->_serviceManager->has('logger')) {
-            $logger = $this->_serviceManager->get('logger');
+
+        if ($serviceLocator->has('logger')) {
+            $logger = $serviceLocator->get('logger');
             $service->setLogger($logger);
         }
 

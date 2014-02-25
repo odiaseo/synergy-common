@@ -3,7 +3,7 @@ namespace SynergyCommon\Image\Config;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ImageProcessorOptions
+class ImageCompressorOptions
     extends AbstractOptions
 {
     /** @var \SynergyCommon\Image\TransferAdapterInterface */

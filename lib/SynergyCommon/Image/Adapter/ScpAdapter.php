@@ -6,11 +6,11 @@ use SynergyCommon\Image\TransferAdapterInterface;
 class ScpAdapter
     implements TransferAdapterInterface
 {
-    /** @var \SynergyCommon\Image\Config\ImageProcessorOptions */
+    /** @var \SynergyCommon\Image\Config\ImageCompressorOptions */
     public $_options;
 
     /**
-     * @param \SynergyCommon\Image\Config\ImageProcessorOptions $options
+     * @param \SynergyCommon\Image\Config\ImageCompressorOptions $options
      */
     public function setOptions($options)
     {
@@ -18,7 +18,7 @@ class ScpAdapter
     }
 
     /**
-     * @return \SynergyCommon\Image\Config\ImageProcessorOptions
+     * @return \SynergyCommon\Image\Config\ImageCompressorOptions
      */
     public function getOptions()
     {
