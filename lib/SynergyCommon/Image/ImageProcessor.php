@@ -20,10 +20,12 @@ class ImageProcessor
 
         if (extension_loaded('pngquant')) {
 
-            $directory            = trim($this->_config->getDirectory(), '/') . '/';
+            $directory     = trim($this->_config->getSourceDirectory(), '/') . '/';
+            $destDirectory = trim($this->_config->getDestinationDirectory(), '/') . '/';
+
             $watchDirectory       = $directory . 'watch/';
-            $destinationDirectory = $directory . 'compressed/';
-            $masterDirectory      = $directory . 'original/';
+            $destinationDirectory = $destDirectory . 'compressed/';
+            $masterDirectory      = $destDirectory . 'original/';
 
             $min    = $this->_config->getMinQuality();
             $max    = $this->_config->getMaxQuality();
@@ -55,11 +57,17 @@ class ImageProcessor
                                 $logger->info('compresed with trimage');
                             }
 
-                            $adapter->copy($tmpFile, $destinationDirectory);
-                            $logger->info('copied to ' . $destinationDirectory);
+                            if ($adapter->copy($tmpFile, $destinationDirectory)) {
+                                $logger->info('copied to ' . $destinationDirectory);
 
-                            if (unlink($sourceFile) && unlink($tmpFile)) {
-                                $logger->info('source and temporary files deleted');
+                                if (unlink($sourceFile) && unlink($tmpFile)) {
+                                    $logger->info('source and temporary files deleted');
+                                }
+                            } else {
+                                $logger->info(
+                                    'Unable to copy the compressed file to destination: ' . $destinationDirectory
+                                );
+
                             }
                         } else {
                             $logger->info('compression failed');

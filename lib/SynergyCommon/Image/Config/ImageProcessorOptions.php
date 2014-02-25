@@ -9,7 +9,9 @@ class ImageProcessorOptions
     /** @var \SynergyCommon\Image\TransferAdapterInterface */
     protected $_adapter;
 
-    protected $_directory;
+    protected $_sourceDirectory;
+
+    protected $_destinationDirectory;
 
     protected $_minQuality;
 
@@ -20,6 +22,17 @@ class ImageProcessorOptions
     protected $_remoteUser;
 
     protected $_remotePassword;
+
+    public function setDestinationDirectory($destinationDirectory)
+    {
+        $this->_destinationDirectory = $destinationDirectory;
+    }
+
+    public function getDestinationDirectory()
+    {
+        return $this->_destinationDirectory;
+    }
+
 
     public function setRemoteHost($remoteHost)
     {
@@ -64,14 +77,14 @@ class ImageProcessorOptions
         return $this->_adapter;
     }
 
-    public function setDirectory($directory)
+    public function setSourceDirectory($directory)
     {
-        $this->_directory = $directory;
+        $this->_sourceDirectory = $directory;
     }
 
-    public function getDirectory()
+    public function getSourceDirectory()
     {
-        return $this->_directory;
+        return $this->_sourceDirectory;
     }
 
     public function setMaxQuality($maxQuality)

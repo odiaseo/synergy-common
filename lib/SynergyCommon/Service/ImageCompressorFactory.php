@@ -7,7 +7,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
-class ImageProcessorFactory
+class ImageCompressorFactory
     implements FactoryInterface
 {
     /** @var \Zend\ServiceManager\ServiceManager */
@@ -18,7 +18,7 @@ class ImageProcessorFactory
     {
         /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
         $config      = $this->_serviceManager->get('config');
-        $imageConfig = isset($config['synergy']['image_compression']) ? $config['synergy']['image_compression']
+        $imageConfig = isset($config['synergy']['image_compressor']) ? $config['synergy']['image_compressor']
             : array();
 
         if (!empty($imageConfig['adapter'])) {
