@@ -21,8 +21,8 @@ class ImageCompressor
 
         if (extension_loaded('pngquant')) {
 
-            $directory     = trim($this->_config->getSourceDirectory(), '/') . '/';
-            $destDirectory = trim($this->_config->getDestinationDirectory(), '/') . '/';
+            $directory     = rtrim($this->_config->getSourceDirectory(), '/') . '/';
+            $destDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
 
             $watchDirectory       = $directory . 'watch/';
             $destinationDirectory = $destDirectory . 'compressed/';

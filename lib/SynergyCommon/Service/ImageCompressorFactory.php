@@ -18,16 +18,17 @@ class ImageCompressorFactory
         $imageConfig = isset($config['synergy']['image_compressor']) ? $config['synergy']['image_compressor']
             : array();
 
-        $config = new ImageCompressorOptions($imageConfig);
+        $compressorConfig = new ImageCompressorOptions($imageConfig);
 
-        if ($config->getAdapter()) {
+        if ($compressorConfig->getAdapter()) {
             /** @var $dapter \SynergyCommon\Image\TransferAdapterInterface */
-            $adapter = $serviceLocator->get($config->getAdapter());
-            $adapter->setOptions($config);
+            $adapter = $serviceLocator->get($compressorConfig->getAdapter());
+            $adapter->setOptions($compressorConfig);
+            $compressorConfig->setAdapter($adapter);
         }
 
         $service = new ImageCompressor();
-        $service->setConfig($config);
+        $service->setConfig($compressorConfig);
         $service->setServiceManager($serviceLocator);
 
         if ($serviceLocator->has('logger')) {

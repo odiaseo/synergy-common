@@ -32,15 +32,14 @@ class ScpAdapter
         $password = $password ? ':' . $password : '';
 
         $command = sprintf(
-            'scp -r %s%s@%s:%s',
+            'scp  %s %s%s@%s:%s',
+            $filename,
             $this->_options->getRemoteUser(),
             $password,
             $this->_options->getRemoteHost(),
             $destination
         );
 
-        \exec($command, $output, $return);
-
-        return $return;
+        return \shell_exec($command);
     }
 }
