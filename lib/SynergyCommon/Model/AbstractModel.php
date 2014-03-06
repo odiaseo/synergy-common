@@ -15,12 +15,13 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\NestedsetInterface;
+use SynergyCommon\SiteAwareInteface;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
 
 class AbstractModel
-    implements NestedsetInterface
+    implements NestedsetInterface, SiteAwareInteface
 {
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';
@@ -94,6 +95,7 @@ class AbstractModel
      */
     protected $_identity;
 
+    protected static $_site;
     /**
      * Access control
      *
@@ -1026,6 +1028,16 @@ class AbstractModel
     public function getIdentity()
     {
         return $this->_identity;
+    }
+
+    public function setSite($site)
+    {
+        self::$_site = $site;
+    }
+
+    public static function getSite()
+    {
+        return self::$_site;
     }
 
 }

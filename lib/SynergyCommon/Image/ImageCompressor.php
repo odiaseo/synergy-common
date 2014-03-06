@@ -19,69 +19,74 @@ class ImageCompressor
     {
         $logger = $this->getLogger() ? : $this;
 
-        if (extension_loaded('pngquant')) {
+        $directory     = rtrim($this->_config->getSourceDirectory(), '/') . '/';
+        $destDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
 
-            $directory     = rtrim($this->_config->getSourceDirectory(), '/') . '/';
-            $destDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
+        $watchDirectory       = $directory . 'watch/';
+        $destinationDirectory = $destDirectory . 'compressed/';
+        $masterDirectory      = $destDirectory . 'original/';
 
-            $watchDirectory       = $directory . 'watch/';
-            $destinationDirectory = $destDirectory . 'compressed/';
-            $masterDirectory      = $destDirectory . 'original/';
+        $min = $this->_config->getMinQuality();
+        $max = $this->_config->getMaxQuality();
 
-            $min = $this->_config->getMinQuality();
-            $max = $this->_config->getMaxQuality();
+        if (!file_exists($watchDirectory)) {
+            mkdir($watchDirectory, 0775, true);
+            $logger->info('creating directory ' . $watchDirectory);
+        }
 
+        /** @var $file  \SplFileObject */
+        foreach (new \DirectoryIterator($watchDirectory) as $file) {
 
-            $hasTrimange = extension_loaded('trimage');
+            if ($file->isDot()) {
+                continue;
+            } elseif ($file->isFile()) {
+                $sourceFile = $file->getPathname();
+                $logger->info('processing ' . $sourceFile);
 
-            /** @var $file  \SplFileObject */
-            foreach (new \DirectoryIterator($watchDirectory) as $file) {
-                if ($file->isFile()) {
-                    $sourceFile = $file->getPathname();
-                    $adapter    = $this->getConfig()->getAdapter();
+                $adapter = $this->getConfig()->getAdapter();
+                $logger->info('coping original ... ' . $masterDirectory);
 
-                    if ($adapter->copy($sourceFile, $masterDirectory)) {
-                        $logger->info('original copied to ' . $masterDirectory);
+                if ($adapter->copy($sourceFile, $masterDirectory)) {
+                    $logger->info(' ... done');
 
-                        $arg     = \escapeshellarg($sourceFile);
-                        $command = "pngquant --force --quality={$min}-{$max} {$arg} - < {$sourceFile}";
-                        $content = \shell_exec($command);
+                    $arg     = \escapeshellarg($sourceFile);
+                    $ext     = '-new.png';
+                    $command = "pngquant -f --ext {$ext} --quality={$min}-{$max} {$arg} < {$sourceFile}";
+                    \shell_exec($command);
 
-                        $tmpFile = sys_get_temp_dir() . '/' . $file->getFilename();
+                    $tmpFile = str_replace('.png', $ext, $sourceFile);
 
-                        if (file_put_contents($tmpFile, $content)) {
+                    if (file_exists($tmpFile)) {
+                        $logger->info($tmpFile . ' created');
 
-                            if ($hasTrimange) {
-                                $triArg     = escapeshellarg($tmpFile);
-                                $triCommand = " xvfb-run -a trimage -f {$triArg}";
-                                \exec($triCommand, $output, $return);
-                                $logger->info('compresed with trimage');
-                            } else {
-                                $logger->notice('trimage library not found');
-                            }
+                        $triArg     = escapeshellarg($tmpFile);
+                        $triCommand = " xvfb-run -a trimage -f {$triArg}";
+                        \exec($triCommand, $output, $return);
+                        $logger->info('compresed with trimage');
 
-                            if ($adapter->copy($tmpFile, $destinationDirectory)) {
-                                $logger->info('copied to ' . $destinationDirectory);
+                        if ($adapter->copy($tmpFile, $destinationDirectory . basename($sourceFile))) {
+                            $logger->info('copied to ' . $destinationDirectory);
 
-                                if (unlink($sourceFile) && unlink($tmpFile)) {
-                                    $logger->info('source and temporary files deleted');
-                                }
-                            } else {
-                                $logger->info(
-                                    'Unable to copy the compressed file to destination: ' . $destinationDirectory
-                                );
+                            if (unlink($sourceFile) && unlink($tmpFile)) {
+                                $logger->info('source and temporary files deleted');
+
+                                return true;
                             }
                         } else {
-                            $logger->info('compression failed');
+                            $logger->info(
+                                'Unable to copy the compressed file to destination: ' . $destinationDirectory
+                            );
                         }
                     } else {
-                        $logger->info('unable to copy original file to master: ' . $masterDirectory);
+                        $logger->info('compression failed');
                     }
+                } else {
+                    $logger->info('unable to copy original file to master: ' . $masterDirectory);
                 }
             }
-        } else {
-            $logger->info('pnquant extenstion not found');
         }
+
+        return false;
     }
 
     /**
