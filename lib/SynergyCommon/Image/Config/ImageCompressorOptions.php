@@ -23,6 +23,19 @@ class ImageCompressorOptions
 
     protected $_remotePassword;
 
+    protected $_jpegConverter ;
+
+    public function setJpegConverter($jpegConverter)
+    {
+        $this->_jpegConverter = $jpegConverter;
+    }
+
+    public function getJpegConverter()
+    {
+        return $this->_jpegConverter;
+    }
+
+
     public function setDestinationDirectory($destinationDirectory)
     {
         $this->_destinationDirectory = $destinationDirectory;

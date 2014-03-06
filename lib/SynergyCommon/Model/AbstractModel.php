@@ -21,7 +21,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
 
 class AbstractModel
-    implements NestedsetInterface, SiteAwareInterface
+    implements NestedsetInterface
 {
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';
@@ -1029,15 +1029,4 @@ class AbstractModel
     {
         return $this->_identity;
     }
-
-    public function setSite($site)
-    {
-        self::$_site = $site;
-    }
-
-    public static function getSite()
-    {
-        return self::$_site;
-    }
-
 }

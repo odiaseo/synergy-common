@@ -64,6 +64,15 @@ class ImageCompressor
                         \exec($triCommand, $output, $return);
                         $logger->info('compresed with trimage');
 
+
+                        if ($converter = $this->_config->getJpegConverter()) {
+                            $converter = $this->_serviceManager->get($converter);
+                            if ($converter instanceof ImageConverterInterface) {
+                                $convertedFile = $converter->convert($tmpFile);
+                                $adapter->copy($convertedFile, $destinationDirectory . basename($convertedFile));
+                                $logger->info('file converted to ' . $convertedFile);
+                            }
+                        }
                         if ($adapter->copy($tmpFile, $destinationDirectory . basename($sourceFile))) {
                             $logger->info('copied to ' . $destinationDirectory);
 
