@@ -15,13 +15,13 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\NestedsetInterface;
-use SynergyCommon\SiteAwareInteface;
+use SynergyCommon\SiteAwareInterface;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
 
 class AbstractModel
-    implements NestedsetInterface, SiteAwareInteface
+    implements NestedsetInterface, SiteAwareInterface
 {
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';

@@ -2,7 +2,7 @@
 
 namespace SynergyCommon;
 
-interface SiteAwareInteface
+interface SiteAwareInterface
 {
     public function setSite($site);
 }
