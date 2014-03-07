@@ -19,13 +19,10 @@ class ImageCompressor
     {
         $logger = $this->getLogger() ? : $this;
 
-        $directory     = rtrim($this->_config->getSourceDirectory(), '/') . '/';
-        $destDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
-
-        $watchDirectory       = $directory . 'watch/';
-        $destinationDirectory = $destDirectory . 'compressed/png';
-        $jpegDirectory        = $destDirectory . 'compressed/jpg/';
-        $masterDirectory      = $destDirectory . 'original/';
+        $watchDirectory       = rtrim($this->_config->getWatchDirectory(), '/') . '/';
+        $destinationDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
+        $jpegDirectory        = rtrim($this->_config->getJpegDirectory(), '/') . '/';
+        $masterDirectory      = rtrim($this->_config->getOriginalDirectory(), '/') . '/';
 
         $min = $this->_config->getMinQuality();
         $max = $this->_config->getMaxQuality();

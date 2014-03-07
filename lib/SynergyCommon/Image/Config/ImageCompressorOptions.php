@@ -9,9 +9,14 @@ class ImageCompressorOptions
     /** @var \SynergyCommon\Image\TransferAdapterInterface */
     protected $_adapter;
 
-    protected $_sourceDirectory;
 
     protected $_destinationDirectory;
+
+    protected $_watchDirectory;
+
+    protected $_originalDirectory;
+
+    protected $_jpegDirectory;
 
     protected $_minQuality;
 
@@ -23,7 +28,38 @@ class ImageCompressorOptions
 
     protected $_remotePassword;
 
-    protected $_jpegConverter ;
+    protected $_jpegConverter;
+
+    public function setJpegDirectory($jpegDirectory)
+    {
+        $this->_jpegDirectory = $jpegDirectory;
+    }
+
+    public function getJpegDirectory()
+    {
+        return $this->_jpegDirectory;
+    }
+
+    public function setOriginalDirectory($originalDirectory)
+    {
+        $this->_originalDirectory = $originalDirectory;
+    }
+
+    public function getOriginalDirectory()
+    {
+        return $this->_originalDirectory;
+    }
+
+    public function setWatchDirectory($watchDirectory)
+    {
+        $this->_watchDirectory = $watchDirectory;
+    }
+
+    public function getWatchDirectory()
+    {
+        return $this->_watchDirectory;
+    }
+
 
     public function setJpegConverter($jpegConverter)
     {
@@ -88,16 +124,6 @@ class ImageCompressorOptions
     public function getAdapter()
     {
         return $this->_adapter;
-    }
-
-    public function setSourceDirectory($directory)
-    {
-        $this->_sourceDirectory = $directory;
-    }
-
-    public function getSourceDirectory()
-    {
-        return $this->_sourceDirectory;
     }
 
     public function setMaxQuality($maxQuality)
