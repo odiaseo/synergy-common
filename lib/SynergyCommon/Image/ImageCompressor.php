@@ -67,7 +67,7 @@ class ImageCompressor
                             $converter = $this->_serviceManager->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
                                 $convertedFile = $converter->convert($tmpFile);
-                                $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
+                                $adapter->copy($convertedFile, $jpegDirectory . basename($sourceFile));
                                 $logger->info('file converted to ' . $convertedFile);
                             }
                         }
