@@ -23,7 +23,8 @@ class ImageCompressor
         $destDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
 
         $watchDirectory       = $directory . 'watch/';
-        $destinationDirectory = $destDirectory . 'compressed/';
+        $destinationDirectory = $destDirectory . 'compressed/png';
+        $jpegDirectory        = $destDirectory . 'compressed/jpg/';
         $masterDirectory      = $destDirectory . 'original/';
 
         $min = $this->_config->getMinQuality();
@@ -69,7 +70,7 @@ class ImageCompressor
                             $converter = $this->_serviceManager->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
                                 $convertedFile = $converter->convert($tmpFile);
-                                $adapter->copy($convertedFile, $destinationDirectory . basename($convertedFile));
+                                $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
                                 $logger->info('file converted to ' . $convertedFile);
                             }
                         }
