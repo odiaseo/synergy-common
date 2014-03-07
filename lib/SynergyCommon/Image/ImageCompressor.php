@@ -66,9 +66,12 @@ class ImageCompressor
                         if ($converter = $this->_config->getJpegConverter()) {
                             $converter = $this->_serviceManager->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
-                                $convertedFile = $converter->convert($tmpFile, $this->_config->getDimensions());
-                                $adapter->copy($convertedFile, $jpegDirectory . basename($sourceFile));
-                                $logger->info('file converted to ' . $convertedFile);
+                                $convertedList = $converter->convert($tmpFile, $this->_config->getDimensions());
+
+                                foreach ((array)$convertedList as $convertedFile) {
+                                    $adapter->copy($convertedFile, $jpegDirectory . basename($sourceFile));
+                                    $logger->info('file converted to ' . $convertedFile);
+                                }
                             }
                         }
                         if ($adapter->copy($tmpFile, $destinationDirectory . basename($sourceFile))) {
