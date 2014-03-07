@@ -30,6 +30,19 @@ class ImageCompressorOptions
 
     protected $_jpegConverter;
 
+    protected $_dimensions = array();
+
+    public function setDimensions($dimensions)
+    {
+        $this->_dimensions = $dimensions;
+    }
+
+    public function getDimensions()
+    {
+        return $this->_dimensions;
+    }
+
+
     public function setJpegDirectory($jpegDirectory)
     {
         $this->_jpegDirectory = $jpegDirectory;
