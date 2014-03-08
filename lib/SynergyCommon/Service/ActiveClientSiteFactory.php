@@ -31,8 +31,7 @@ class ActiveClientSiteFactory
 
         if ($container->offsetExists(self::STIE_KEY)) {
             $site = $container->offsetGet(self::STIE_KEY);
-        } elseif ($data = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
-            $site = new \ArrayObject($data);
+        } elseif ($site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
             $container->offsetSet(self::STIE_KEY, $site);
         } else {
             throw new \InvalidArgumentException("Site {$host} is not registered");
