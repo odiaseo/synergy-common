@@ -25,7 +25,7 @@ class SiteFilter
             and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
-                return $targetTableAlias . '.site_id = ' . $this->getSite()->getId();
+                return $targetTableAlias . '.site_id = ' . $this->_getSiteId();
             } catch (\Exception $e) {
                 if ($this->getLogger()) {
                     $this->getLogger()->err($e->getMessage());
@@ -38,10 +38,21 @@ class SiteFilter
         }
     }
 
+    protected function _getSiteId()
+    {
+        $site = $this->getSite();
+        if ($site instanceof \ArrayObject) {
+            return $site->id;
+        } else {
+            return $site->getId();
+        }
+    }
+
     public function setSite($site)
     {
         $this->_site = $site;
-        return $this ;
+
+        return $this;
     }
 
     public function getSite()
@@ -52,7 +63,8 @@ class SiteFilter
     public function setLogger($logger)
     {
         $this->_logger = $logger;
-        return $this ;
+
+        return $this;
     }
 
     public function getLogger()
