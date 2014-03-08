@@ -84,8 +84,6 @@ class ImageCompressor
 
                             if (unlink($sourceFile) && unlink($tmpFile)) {
                                 $logger->info('source and temporary files deleted');
-
-                                return true;
                             }
                         } else {
                             $logger->info(
