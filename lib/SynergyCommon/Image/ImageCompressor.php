@@ -55,6 +55,8 @@ class ImageCompressor
                     $tmpFile = str_replace('.png', $ext, $sourceFile);
 
                     if (file_exists($tmpFile)) {
+                        $newFilename = basename($sourceFile);
+
                         $logger->info($tmpFile . ' created');
 
                         $triArg     = escapeshellarg($tmpFile);
@@ -66,15 +68,18 @@ class ImageCompressor
                         if ($converter = $this->_config->getJpegConverter()) {
                             $converter = $this->_serviceManager->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
-                                $convertedList = $converter->convert($tmpFile, $this->_config->getDimensions());
+                                $convertedList = $converter->convert(
+                                    $tmpFile, $newFilename, $this->_config->getDimensions()
+                                );
 
-                                foreach ((array)$convertedList as $convertedFile) {
-                                    $adapter->copy($convertedFile, $jpegDirectory . basename($sourceFile));
+                                foreach ($convertedList as $convertedFile) {
+                                    $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
                                     $logger->info('file converted to ' . $convertedFile);
+                                    unlink($convertedFile);
                                 }
                             }
                         }
-                        if ($adapter->copy($tmpFile, $destinationDirectory . basename($sourceFile))) {
+                        if ($adapter->copy($tmpFile, $destinationDirectory . $newFilename)) {
                             $logger->info('copied to ' . $destinationDirectory);
 
                             if (unlink($sourceFile) && unlink($tmpFile)) {
