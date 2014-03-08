@@ -99,7 +99,7 @@ class ImageCompressor
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
