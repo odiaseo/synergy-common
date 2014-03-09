@@ -79,9 +79,6 @@ class SynergyModuleListener
                     $errorPageRender->render($event);
                 }
             }
-
-            $event->stopPropagation(true);
-
         } else {
             return;
         }
