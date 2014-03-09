@@ -2,6 +2,7 @@
 namespace SynergyCommon\Event\Listener;
 
 use SynergyCommon\Event\Listener\SiteAwareListener;
+use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request;
@@ -70,6 +71,17 @@ class SynergyModuleListener
                 $viewModel->setTerminal(true);
                 $event->setResult($viewModel);
             }
+
+            if ($services->has('error_page')) {
+                $errorPageRender = $services->get('error_page');
+
+                if ($errorPageRender instanceof PageRendererInterface) {
+                    $errorPageRender->render($event);
+                }
+            }
+
+            $event->stopPropagation(true);
+
         } else {
             return;
         }
