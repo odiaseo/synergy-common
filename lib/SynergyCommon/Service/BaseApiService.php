@@ -77,16 +77,23 @@ class BaseApiService
      *
      * @param       $fundtionName
      * @param       $method
-     * @param array $paramters
+     * @param array $functionFaramters
      * @param null  $entity
+     * @param array $options
      *
      * @return mixed
      */
-    public function executeRemoteFunction($fundtionName, $method, $paramters = array(), $entity = null)
-    {
+    public function executeRemoteFunction(
+        $fundtionName, $method, $functionFaramters = array(), $entity = null, $options = array()
+    ) {
         $url = sprintf('/affiliate/apifunction/%s/%s', $entity, $fundtionName);
+        if ($options) {
+            $url = $url . '?' . \http_build_query($options);
+        }
 
-        return $this->getClient()->dispatchRequestAndDecodeResponse($url, $method, array('params' => $paramters));
+        return $this->getClient()->dispatchRequestAndDecodeResponse(
+            $url, $method, array('params' => $functionFaramters)
+        );
     }
 
 }
