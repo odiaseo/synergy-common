@@ -30,6 +30,7 @@ class SynergyModuleListener
 
         $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 200);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 100);
 
     }
 
@@ -149,5 +150,28 @@ class SynergyModuleListener
 
             $this->initialised = true;
         }
+    }
+
+    /**
+     * Add Route translator
+     *
+     * @param MvcEvent $e
+     */
+    public function onPreRoute(MvcEvent $e)
+    {
+        if ($e->getApplication()->getRequest() instanceof Request) {
+            $app = $e->getTarget();
+
+            /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+            $serviceManager = $app->getServiceManager();
+
+            if ($serviceManager->has('translator')) {
+                $translator = $serviceManager->get('translator');
+                if ($router = $serviceManager->get('router') and method_exists($router, 'setTranslator')) {
+                    $router->setTranslator($translator);
+                }
+            }
+        }
+
     }
 }
