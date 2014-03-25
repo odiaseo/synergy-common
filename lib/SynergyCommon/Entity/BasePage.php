@@ -1,9 +1,9 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use \Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use SynergyCommon\Entity\BaseEntity;
 
 
@@ -30,15 +30,15 @@ class BasePage
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $description ;
+    protected $description;
     /**
      * @ORM\Column(type="string", length=255, name="keywords", nullable=true)
      */
-    protected $keywords ;
+    protected $keywords;
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $thumbnail ;
+    protected $thumbnail;
     /**
      * @ORM\Column(name="is_visible",type="boolean")
      */
@@ -59,7 +59,7 @@ class BasePage
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $parameters ;
+    protected $parameters;
     /**
      * @ORM\Column(type="string", name="icon_class_name")
      */
@@ -109,7 +109,7 @@ class BasePage
 
     public function __construct()
     {
-        $this->children   = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
 
