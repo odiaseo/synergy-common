@@ -1,15 +1,16 @@
 <?php
 namespace SynergyCommon\Admin\Entity;
-use Gedmo\Mapping\Annotation as Gedmo,
-    Doctrine\Common\Collections\ArrayCollection,
-    Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use SynergyCommon\Entity\BasePage;
 
 
 /**
  * AdminMenu
  *
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Entity(repositoryClass="SynergyCommon\Model\NestedSetRepository")
  * @ORM\Table(name="Admin_Menu")
  * @Gedmo\Tree(type="nested")
  *
