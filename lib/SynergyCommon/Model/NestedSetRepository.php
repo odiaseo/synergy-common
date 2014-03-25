@@ -113,7 +113,7 @@ class NestedSetRepository
             $stack = array();
             foreach ($collection as $node) {
                 if (is_callable($callback)) {
-                    $item = $callback($node);
+                    $item = call_user_func($callback, $node);
                 } else {
                     $item = $node;
                 }
