@@ -571,6 +571,8 @@ class AbstractModel
                             $value = $input->getValue();
                             if ($type == 'boolean' and !(is_numeric($value) or is_bool($value))) {
                                 $value = ('true' === $value) ? 1 : 0;
+                            } elseif (is_string($value) and strpos(',', $value) !== false) {
+                                $value = array_filter(explode(',', $value));
                             }
                         } else {
                             throw new InvalidArgumentException($field . ': ' . implode(' ', $input->getMessages()));
