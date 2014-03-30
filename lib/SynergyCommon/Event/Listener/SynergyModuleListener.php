@@ -6,6 +6,7 @@ use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
@@ -31,6 +32,7 @@ class SynergyModuleListener
         $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 200);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
 
     }
 
@@ -53,7 +55,7 @@ class SynergyModuleListener
         if ($event->isError()) {
             $services = $event->getApplication()->getServiceManager();
             if ($services->has('logger')) {
-                /** @var $logger \SynergyCommon\Util\ErrorHandler */
+                /** @var $logger \Zend\Log\Logger*/
                 $logger = $services->get('logger');
                 $logger->err($event->getError() . ': ' . $event->getRequest());
             }
@@ -173,5 +175,23 @@ class SynergyModuleListener
             }
         }
 
+    }
+
+    /**
+     * Compress HTML output
+     *
+     * @param MvcEvent $e
+     */
+    public function compressOutput(MvcEvent $e)
+    {
+        if (defined('APPLICATION_ENV') && APPLICATION_ENV == 'production') {
+            $response = $e->getResponse();
+
+            if ($response instanceof Response) {
+                $content = $response->getBody();
+                $content = preg_replace('/(?<=>)\s+|\s+(?=<)/', ' ', $content);
+                $response->setContent($content);
+            }
+        }
     }
 }

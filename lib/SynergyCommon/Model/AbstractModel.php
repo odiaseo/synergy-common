@@ -549,7 +549,12 @@ class AbstractModel
             $mapping = $this->getEntityManager()->getClassMetadata($entityClass);
 
             foreach ($options as $field => $param) {
-                list($value, $expression) = explode(':', $param . ':');
+                if (is_array($param)) {
+                    $value      = $param;
+                    $expression = self::DEFAULT_EXPRESSION;
+                } else {
+                    list($value, $expression) = explode(':', $param . ':');
+                }
                 $expression = $expression ? trim(strtolower($expression)) : self::DEFAULT_EXPRESSION;
 
                 if (array_key_exists($field, $mapping->fieldMappings)
