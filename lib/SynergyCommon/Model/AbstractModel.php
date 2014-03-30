@@ -15,7 +15,6 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\NestedsetInterface;
-use SynergyCommon\SiteAwareInterface;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
@@ -36,6 +35,8 @@ class AbstractModel
     const NOT_END_WITH          = 'en';
     const CONTAIN               = 'cn';
     const NOT_CONTAIN           = 'nc';
+    const IN                    = 'in';
+    const NOT_IN                = 'ni';
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
@@ -61,7 +62,9 @@ class AbstractModel
             self::END_WITH              => 'LIKE ?',
             self::NOT_END_WITH          => 'NOT LIKE ?',
             self::CONTAIN               => 'LIKE ?',
-            self::NOT_CONTAIN           => 'NOT LIKE ?'
+            self::NOT_CONTAIN           => 'NOT LIKE ?',
+            self::IN                    => 'IN ?',
+            self::NOT_IN                => 'NOT IN ?'
         );
 
     /** @var \SynergyCommon\Util\ErrorHandler */
@@ -721,6 +724,10 @@ class AbstractModel
             case self::CONTAIN:
             case self::NOT_CONTAIN:
                 $value = '%' . $value . '%';
+                break;
+            case self::IN:
+            case self::NOT_IN:
+                $value = '(' . implode(', ', (array)$value) . ')';
                 break;
         }
 
