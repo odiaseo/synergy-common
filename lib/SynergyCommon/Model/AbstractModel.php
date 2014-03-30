@@ -569,23 +569,41 @@ class AbstractModel
 
                         if ($input->isValid()) {
                             $value = $input->getValue();
-                            if ($type == 'boolean' and !(is_numeric($value) or is_bool($value))) {
-                                $value = ('true' === $value) ? 1 : 0;
-                            } elseif (is_string($value) and strpos(',', $value) !== false) {
-                                $value = array_filter(explode(',', $value));
-                            }
                         } else {
                             throw new InvalidArgumentException($field . ': ' . implode(' ', $input->getMessages()));
                         }
                     }
 
-                    $placeHolder = ':' . $field . '_' . $count++;
-                    $replacement = str_replace('?', $placeHolder, $operator);
-                    $where       = sprintf('%s.%s %s', $this->getAlias(), $field, $replacement);
+                    if ($type == 'boolean' && !(is_numeric($value) || is_bool($value))) {
+                        $value = ('true' === $value) ? 1 : 0;
+                    } elseif (is_string($value) && strpos($value, ',') !== false) {
+                        $value = array_filter(explode(',', $value));
+                    }
 
-                    $this->_qb->andWhere($where);
-                    $this->_qb->setParameter($placeHolder, $this->_setWildCardInValue($expression, $value));
+                    if (is_array($value)) {
+                        if ($expression == self::NOT_IN) {
+                            $this->_qb->andWhere(
+                                $this->_qb->expr()->notIn(
+                                    sprintf('%s.%s', $this->getAlias(), $field),
+                                    $value
+                                )
+                            );
+                        } else {
+                            $this->_qb->andWhere(
+                                $this->_qb->expr()->in(
+                                    sprintf('%s.%s', $this->getAlias(), $field),
+                                    $value
+                                )
+                            );
+                        }
+                    } else {
+                        $placeHolder = ':' . $field . '_' . $count++;
+                        $replacement = str_replace('?', $placeHolder, $operator);
+                        $where       = sprintf('%s.%s %s', $this->getAlias(), $field, $replacement);
 
+                        $this->_qb->andWhere($where);
+                        $this->_qb->setParameter($placeHolder, $this->_setWildCardInValue($expression, $value));
+                    }
                 }
 
             }
