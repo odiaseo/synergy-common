@@ -8,6 +8,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 
@@ -45,6 +46,27 @@ class SynergyModuleListener
         }
     }
 
+    public function bootstrap(EventManagerInterface $eventManager, ServiceManager $services)
+    {
+        $eventManager->attach(
+            array(
+                 MvcEvent::EVENT_RENDER_ERROR,
+                 MvcEvent::EVENT_DISPATCH_ERROR
+            ),
+            function ($event) use ($services) {
+                /** @var MvcEvent $event */
+                $exception = $event->getResult()->exception;
+
+                if (!$exception) {
+                    return;
+                } elseif ($services->has('logger')) {
+                    $service = $services->get('logger');
+                    $service->logException($exception);
+                }
+            }
+        );
+    }
+
     /**
      * Handle errors and logging
      *
@@ -55,7 +77,7 @@ class SynergyModuleListener
         if ($event->isError()) {
             $services = $event->getApplication()->getServiceManager();
             if ($services->has('logger')) {
-                /** @var $logger \Zend\Log\Logger*/
+                /** @var $logger \Zend\Log\Logger */
                 $logger = $services->get('logger');
                 $logger->err($event->getError() . ': ' . $event->getRequest());
             }
