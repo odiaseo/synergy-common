@@ -189,14 +189,20 @@ class SynergyModuleListener
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
 
-            if ($serviceManager->has('translator')) {
-                $translator = $serviceManager->get('translator');
-                if ($router = $serviceManager->get('router') and method_exists($router, 'setTranslator')) {
+            if ($router = $serviceManager->get('router') and method_exists($router, 'setTranslator')) {
+                if ($serviceManager->has('route\translator')) {
+                    $translator = $serviceManager->get('route\translator');
+                } elseif ($serviceManager->has('translator')) {
+                    $translator = $serviceManager->get('translator');
+                } else {
+                    $translator = null;
+                }
+
+                if ($translator) {
                     $router->setTranslator($translator);
                 }
             }
         }
-
     }
 
     /**
