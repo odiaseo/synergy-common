@@ -33,7 +33,7 @@ class NestedSetRepository
             ->orderBy('e.root, e.lft', 'ASC')
             ->getQuery();
 
-        return $query->getArrayResult();
+        return $this->_addHints($query)->getArrayResult();
     }
 
     public function getRootMenu()
@@ -51,7 +51,7 @@ class NestedSetRepository
             ->setParameter('level', 0)
             ->getQuery();
 
-        return $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        return $this->_addHints($query)->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
     }
 
     public function getRootMenuById($pageId)
@@ -69,7 +69,7 @@ class NestedSetRepository
             ->setParameter('id', $pageId)
             ->getQuery();
 
-        return $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        return $this->_addHints($query)->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
     }
 
     public function nestify($arrs, $depth_key = 'level')
@@ -165,7 +165,7 @@ class NestedSetRepository
                 ->setMaxResults(1)
                 ->getQuery();
 
-            $menu = $query->execute(array(), AbstractQuery::HYDRATE_OBJECT);
+            $menu = $this->_addHints($query)->execute(array(), AbstractQuery::HYDRATE_OBJECT);
 
             if ($menu) {
                 $path = $this->getPath($menu[0]);
@@ -177,5 +177,17 @@ class NestedSetRepository
         }
 
         return $path;
+    }
+
+    /**
+     * Add hints to the query
+     *
+     * @param AbstractQuery $query
+     *
+     * @return AbstractQuery
+     */
+    protected function _addHints(AbstractQuery $query)
+    {
+        return $query;
     }
 }
