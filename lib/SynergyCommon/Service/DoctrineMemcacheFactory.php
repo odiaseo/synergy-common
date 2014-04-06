@@ -2,7 +2,7 @@
 namespace SynergyCommon\Service;
 
 use Doctrine\Common\Cache\MemcacheCache;
-use Zend\Http\Request;
+use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -18,8 +18,7 @@ class DoctrineMemcacheFactory
         if ($request instanceof Request) {
             /** @var $event \Zend\Mvc\MvcEvent */
             $event = $serviceLocator->get('application')->getMvcEvent();
-
-            if ($rm = $event->getRouteMatch()) {
+            if ($event && $rm = $event->getRouteMatch()) {
                 $host = $rm->getParam('host');
             }
         } else {
