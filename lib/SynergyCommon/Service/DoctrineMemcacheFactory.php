@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Service;
 
-use Doctrine\Common\Cache\MemcacheCache;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -10,10 +9,14 @@ class DoctrineMemcacheFactory
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $cache    = new MemcacheCache();
+        /** @var $site \SynergyCommon\Entity\AbstractEntity */
+        $site     = $serviceLocator->get('active_site');
+        $cache    = new MemcacheService();
         $memcache = new \Memcache();
+
         $memcache->connect('localhost', 11211);
         $cache->setMemcache($memcache);
+        $cache->setSite($site);
 
         return $cache;
     }
