@@ -19,6 +19,8 @@ class SynergyModuleListener
 
     protected $initialised = false;
 
+    protected $callback;
+
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(
@@ -104,8 +106,12 @@ class SynergyModuleListener
                     $errorPageRender->render($event);
                 }
             }
-        } else {
-            return;
+
+            $callback = $this->getCallback();
+
+            if (is_callable($callback)) {
+                call_user_func($callback, $request);
+            }
         }
     }
 
@@ -222,4 +228,15 @@ class SynergyModuleListener
             }
         }
     }
+
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+    }
+
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
 }
