@@ -8,6 +8,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\Http\TranslatorAwareTreeRouteStack;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
@@ -20,6 +21,7 @@ class SynergyModuleListener
     protected $initialised = false;
 
     protected $callback;
+    protected static $handled = false;
 
     public function attach(EventManagerInterface $events)
     {
@@ -76,18 +78,15 @@ class SynergyModuleListener
      */
     public function handleException(MvcEvent $event)
     {
-        if ($event->isError()) {
+        $logException = false;
+        if ($event->isError() && static::$handled === false) {
             $services = $event->getApplication()->getServiceManager();
-            if ($services->has('logger')) {
-                /** @var $logger \Zend\Log\Logger */
-                $logger = $services->get('logger');
-                $logger->err($event->getError() . ': ' . $event->getRequest());
-            }
 
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request = $event->getRequest();
+            $request  = $event->getRequest();
+            $callback = $this->getCallback();
 
-            if ($request instanceof Request and $request->isXmlHttpRequest()) {
+            if ($request instanceof Request && $request->isXmlHttpRequest()) {
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
                     array(
@@ -97,6 +96,7 @@ class SynergyModuleListener
                 );
                 $viewModel->setTerminal(true);
                 $event->setResult($viewModel);
+                $logException = true;
             }
 
             if ($services->has('error_page')) {
@@ -105,13 +105,18 @@ class SynergyModuleListener
                 if ($errorPageRender instanceof PageRendererInterface) {
                     $errorPageRender->render($event);
                 }
-            }
-
-            $callback = $this->getCallback();
-
-            if (is_callable($callback)) {
+            } elseif (is_callable($callback)) {
                 call_user_func($callback, $request);
+            } else {
+                $logException = true;
             }
+
+            if ($logException && $services->has('logger')) {
+                /** @var $logget \Zend\Log\Logger */
+                $logger = $services->get('logger');
+                $logger->err($event->getError() . ': ' . $request->getRequestUri());
+            }
+            static::$handled = true;
         }
     }
 
@@ -191,12 +196,12 @@ class SynergyModuleListener
     {
         if ($e->getApplication()->getRequest() instanceof Request) {
             $app = $e->getTarget();
-
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
-
-            if ($router = $serviceManager->get('router') and method_exists($router, 'setTranslator')) {
+            $router         = $serviceManager->get('router');
+            if ($router && $router instanceof TranslatorAwareTreeRouteStack) {
                 if ($serviceManager->has('route\translator')) {
+                    /** @var $translator \Zend\Mvc\I18n\Translator */
                     $translator = $serviceManager->get('route\translator');
                 } elseif ($serviceManager->has('translator')) {
                     $translator = $serviceManager->get('translator');
