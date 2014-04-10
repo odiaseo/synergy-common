@@ -1,11 +1,9 @@
 <?php
 namespace SynergyCommon\Session;
 
-use Zend\Cache\StorageFactory as CacheStorageFactory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Session\Container;
-use Zend\Session\SaveHandler\Cache;
 use Zend\Session\SessionManager as ZendSessionManager;
 
 /**
@@ -42,9 +40,8 @@ class SessionManager
 
             /** @var $sessionSaveHandler \Zend\Session\SaveHandler\SaveHandlerInterface */
             $sessionSaveHandler = null;
-            if (isset($session['save_handler']['cache'])) {
-                $cache              = CacheStorageFactory::factory($session['save_handler']['cache']);
-                $sessionSaveHandler = new Cache($cache);
+            if (isset($session['save_handler']) && $serviceLocator->has($session['save_handler'])) {
+                $sessionSaveHandler = $serviceLocator->get($session['save_handler']);
             }
 
             $sessionManager = new ZendSessionManager($sessionConfig, $sessionStorage, $sessionSaveHandler);
@@ -54,7 +51,6 @@ class SessionManager
                 foreach ($session['validators'] as $validator) {
                     $validator = new $validator();
                     $chain->attach('session.validate', array($validator, 'isValid'));
-
                 }
             }
         } else {

@@ -18,7 +18,7 @@ class SynergyModuleListener
 {
     protected $listeners = array();
 
-    protected $initialised = false;
+    protected static $initialised = false;
 
     protected $callback;
     protected static $handled = false;
@@ -134,9 +134,16 @@ class SynergyModuleListener
                 $session = $sm->get('session_manager');
                 $session->start();
 
+                if ($sm->has('active_site')) {
+                    $site      = $sm->get('active_site');
+                    $namespace = $site->getSessionNamespace();
+                } else {
+                    $namespace = 'initialised';
+                }
+
                 /** @var $container \Zend\Session\Container */
-                $container = new Container();
-                if (!isset($container->init) and php_sapi_name() != 'cli') {
+                $container = new Container($namespace);
+                if (!isset($container->init) && php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
                 }
@@ -151,7 +158,7 @@ class SynergyModuleListener
      */
     public function initEntityManager(MvcEvent $e)
     {
-        if (!$this->initialised) {
+        if (!static::$initialised) {
             /** @var $sm \Zend\ServiceManager\ServiceManager */
             $sm = $e->getApplication()->getServiceManager();
 
@@ -183,7 +190,7 @@ class SynergyModuleListener
                 }
             }
 
-            $this->initialised = true;
+            static::$initialised = true;
         }
     }
 
