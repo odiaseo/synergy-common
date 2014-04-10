@@ -31,7 +31,7 @@ class BaseSite
      */
     protected $isActive;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=10)
      */
     protected $locale = 'en_US';
     /**
