@@ -31,6 +31,10 @@ class BaseSite
      */
     protected $isActive;
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $locale = 'en_US';
+    /**
      * @var \datetime createdAt
      *
      * @Gedmo\Timestampable(on="create")
@@ -44,6 +48,17 @@ class BaseSite
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
     /**
      * @param \datetime $createdAt
      */
