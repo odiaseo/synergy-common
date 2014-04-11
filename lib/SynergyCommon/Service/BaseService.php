@@ -306,8 +306,12 @@ class BaseService
     {
         $config   = $this->_serviceManager->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
+        $lifetime = $config['synergy']['entity_cache_lifetime'];
 
-        if (!file_exists($filename)) {
+        $fileTime = (int)filemtime($filename);
+        $refresh  = ((time() - $fileTime) > $lifetime);
+
+        if (!file_exists($filename) || $refresh) {
             $this->_createEntityCache($filename);
         }
 
