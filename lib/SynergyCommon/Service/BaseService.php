@@ -311,12 +311,16 @@ class BaseService
         $filename = $config['synergy']['entity_cache']['orm'];
 
         if (!static::$checked) {
-            $lifetime = $config['synergy']['entity_cache_lifetime'];
 
-            $fileTime = (int)filemtime($filename);
-            $refresh  = ((time() - $fileTime) > $lifetime);
+            if (!file_exists($filename)) {
+                $refresh = true;
+            } else {
+                $lifetime = $config['synergy']['entity_cache_lifetime'];
+                $fileTime = (int)filemtime($filename);
+                $refresh  = ((time() - $fileTime) > $lifetime);
+            }
 
-            if (!file_exists($filename) || $refresh) {
+            if ($refresh) {
                 $this->_createEntityCache($filename);
             }
 
