@@ -4,7 +4,6 @@ namespace SynergyCommon\Service;
 use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
 
 class ActiveClientSiteFactory
     implements FactoryInterface
@@ -26,14 +25,7 @@ class ActiveClientSiteFactory
         }
         $host = str_replace(array('http://', 'https://', 'www.'), '', $host);
 
-        /** @var $container \ArrayObject */
-        $container = new Container();
-
-        if ($container->offsetExists(self::STIE_KEY)) {
-            $site = $container->offsetGet(self::STIE_KEY);
-        } elseif ($site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
-            $container->offsetSet(self::STIE_KEY, $site);
-        } else {
+        if (!$site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
             throw new \InvalidArgumentException("Site {$host} is not registered");
         }
 
