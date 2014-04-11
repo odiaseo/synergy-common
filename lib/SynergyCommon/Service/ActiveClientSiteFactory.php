@@ -27,7 +27,7 @@ class ActiveClientSiteFactory
         $host = str_replace(array('http://', 'https://', 'www.'), '', $host);
 
         /** @var $container \ArrayObject */
-        $container = new Container(__NAMESPACE__);
+        $container = new Container();
 
         if ($container->offsetExists(self::STIE_KEY)) {
             $site = $container->offsetGet(self::STIE_KEY);

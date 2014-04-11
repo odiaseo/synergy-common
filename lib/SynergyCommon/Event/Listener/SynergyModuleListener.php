@@ -134,15 +134,8 @@ class SynergyModuleListener
                 $session = $sm->get('session_manager');
                 $session->start();
 
-                if ($sm->has('active_site')) {
-                    $site      = $sm->get('active_site');
-                    $namespace = $site->getSessionNamespace();
-                } else {
-                    $namespace = 'initialised';
-                }
-
                 /** @var $container \Zend\Session\Container */
-                $container = new Container($namespace);
+                $container = new Container();
                 if (!isset($container->init) && php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
