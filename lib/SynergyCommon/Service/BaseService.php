@@ -14,6 +14,8 @@ class BaseService
     /** @var \SynergyCommon\Util\ErrorHandler */
     protected $_logger;
 
+    protected static $checked;
+
     /**
      * Find a enity by ID
      *
@@ -302,17 +304,23 @@ class BaseService
         return $return;
     }
 
+
     public function getEntityCacheFile()
     {
         $config   = $this->_serviceManager->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
-        $lifetime = $config['synergy']['entity_cache_lifetime'];
 
-        $fileTime = (int)filemtime($filename);
-        $refresh  = ((time() - $fileTime) > $lifetime);
+        if (!static::$checked) {
+            $lifetime = $config['synergy']['entity_cache_lifetime'];
 
-        if (!file_exists($filename) || $refresh) {
-            $this->_createEntityCache($filename);
+            $fileTime = (int)filemtime($filename);
+            $refresh  = ((time() - $fileTime) > $lifetime);
+
+            if (!file_exists($filename) || $refresh) {
+                $this->_createEntityCache($filename);
+            }
+
+            static::$checked = true;
         }
 
         return $filename;
