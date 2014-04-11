@@ -34,7 +34,7 @@ class SynergyModuleListener
             25
         );
 
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 200);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 20000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 100);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
@@ -131,17 +131,20 @@ class SynergyModuleListener
 
         if ($app->getRequest() instanceof Request) {
             if ($sm->has('session_manager')) {
+                /** @var $session \Zend\Session\SessionManager */
                 $session = $sm->get('session_manager');
                 $session->start();
 
                 if ($sm->has('active_site')) {
                     $site      = $sm->get('active_site');
+                    $namespace = $site->getSessionNamespace();
                 } else {
                     $namespace = 'initialised';
                 }
 
                 /** @var $container \Zend\Session\Container */
-                $container = new Container();
+                $container = new Container($namespace, $session);
+
                 if (!isset($container->init) && php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
