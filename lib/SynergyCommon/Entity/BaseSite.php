@@ -135,10 +135,11 @@ class BaseSite
      * Get filter query
      *
      * @param $targetTableAlias
+     * @param $targetEntity
      *
      * @return string
      */
-    public function getSiteFilterQuery($targetTableAlias)
+    public function getSiteFilterQuery($targetTableAlias, $targetEntity)
     {
         if ($id = $this->getId()) {
             return $targetTableAlias . '.site_id = ' . $id;

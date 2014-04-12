@@ -25,7 +25,7 @@ class SiteFilter
             and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
-                return $this->getSite()->getSiteFilterQuery($targetTableAlias);
+                return $this->getSite()->getSiteFilterQuery($targetTableAlias, $targetEntity->getName());
             } catch (\Exception $e) {
                 if ($this->getLogger()) {
                     $this->getLogger()->err($e->getMessage());
