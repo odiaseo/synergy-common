@@ -25,12 +25,11 @@ class SiteFilter
             and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
-                return $targetTableAlias . '.site_id = ' . $this->_getSiteId();
+                return $this->getSite()->getSiteFilterQuery($targetTableAlias);
             } catch (\Exception $e) {
                 if ($this->getLogger()) {
                     $this->getLogger()->err($e->getMessage());
                 }
-
                 return '';
             }
         } else {

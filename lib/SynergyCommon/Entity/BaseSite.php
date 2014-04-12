@@ -131,4 +131,20 @@ class BaseSite
         return $this->updatedAt;
     }
 
+    /**
+     * Get filter query
+     *
+     * @param $targetTableAlias
+     *
+     * @return string
+     */
+    public function getSiteFilterQuery($targetTableAlias)
+    {
+        if ($id = $this->getId()) {
+            return $targetTableAlias . '.site_id = ' . $id;
+        }
+
+        return '';
+    }
+
 }
