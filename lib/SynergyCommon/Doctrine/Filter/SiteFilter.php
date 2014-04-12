@@ -25,11 +25,12 @@ class SiteFilter
             and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
             try {
-                return $this->getSite()->getSiteFilterQuery($targetTableAlias, $targetEntity->getName());
+                return $this->getSiteFilterQuery($targetTableAlias, $targetEntity->getName());
             } catch (\Exception $e) {
                 if ($this->getLogger()) {
                     $this->getLogger()->err($e->getMessage());
                 }
+
                 return '';
             }
         } else {
@@ -71,4 +72,20 @@ class SiteFilter
         return $this->_logger;
     }
 
+    /**
+     * Get filter query
+     *
+     * @param $targetTableAlias
+     * @param $targetEntity
+     *
+     * @return string
+     */
+    public function getSiteFilterQuery($targetTableAlias, $targetEntity)
+    {
+        if ($id = $this->getSite()->getId()) {
+            return $targetTableAlias . '.site_id = ' . $id;
+        }
+
+        return '';
+    }
 }
