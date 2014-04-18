@@ -13,7 +13,7 @@ class Util
      */
     public static function ensureIsString($value)
     {
-        if (is_array($value)) {
+        if (is_object($value)) {
             return $value;
         } elseif (is_array($value)) {
             return implode(',', array_filter($value));
