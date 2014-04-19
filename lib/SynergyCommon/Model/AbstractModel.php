@@ -67,7 +67,7 @@ class AbstractModel
             self::NOT_IN                => 'NOT IN ?'
         );
 
-    /** @var \SynergyCommon\Util\ErrorHandler */
+    /** @var \SynergyCommon\Util\ErrorHandler |\Zend\Log\Logger */
     protected $_logger;
     /**
      * @var string
