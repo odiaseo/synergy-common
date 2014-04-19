@@ -13,7 +13,9 @@ class Util
      */
     public static function ensureIsString($value)
     {
-        if (is_bool($value)) {
+        if (is_object($value) or is_null($value)) {
+            return $value;
+        } elseif (is_bool($value)) {
             return $value ? 1 : 0;
         } elseif (is_array($value)) {
             return implode(',', array_filter($value));
