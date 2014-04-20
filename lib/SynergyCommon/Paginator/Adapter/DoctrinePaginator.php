@@ -1,5 +1,5 @@
 <?php
-namespace SynergyCommmon\Paginator\Adapter;
+namespace SynergyCommon\Paginator\Adapter;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
