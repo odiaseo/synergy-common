@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use SynergyCommmon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
@@ -461,7 +462,7 @@ class AbstractModel
     {
         $query = $this->createQuery();
 
-        $paginator = new Paginator($query);
+        $paginator = new DoctrinePaginator($query);
 
         return $paginator;
     }
