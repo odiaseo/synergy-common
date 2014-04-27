@@ -36,7 +36,7 @@ class ModelOptions
     /**
      * @var int
      */
-    protected $_hydrationMode = AbstractQuery::HYDRATE_ARRAY;
+    protected $_hydrationMode = AbstractQuery::HYDRATE_OBJECT;
     /**
      * Result per page
      *

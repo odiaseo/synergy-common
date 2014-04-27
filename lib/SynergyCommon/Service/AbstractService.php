@@ -109,29 +109,41 @@ abstract class AbstractService
         $list = array();
 
         if ($entity instanceof AbstractEntity) {
-            $data = $entity->toArray();
-        } else {
-            $data = $entity;
-        }
+            if (isset($columns[$key])) {
+                foreach ($columns[$key] as $field) {
+                    $method = 'get' . ucfirst($field);
+                    if (method_exists($entity, $method)) {
+                        $list[$field] = $entity->{$method}();
+                    }
 
-        if (isset($columns[$key])) {
-            foreach ($data as $field => $value) {
-                if (in_array($field, $columns[$key])) {
-                    if (is_array($value)) {
-                        $list[$field] = $this->_formatResult($value, $columns, $field);
-                    } elseif ($value instanceof \DateTime) {
-                        // $value->setTimezone(new \DateTimeZone('UTC'));
-                        $list[$field] = array(
-                            'timestamp' => $value->setTimezone(new \DateTimeZone('UTC'))->getTimestamp(),
-                            'timezone'  => $value->getTimezone()->getName(),
-                        );
-                    } else {
-                        $list[$field] = $value;
+                    if ($field == 'deeplink' and method_exists($entity, 'formatDeeplink')) {
+                        $list[$field] = $entity->formatDeeplink($this->_serviceManager);
                     }
                 }
+            } else {
+                $list = $entity->toArray();
             }
         } else {
-            $list = $data;
+            $data = $entity;
+            if (isset($columns[$key])) {
+                foreach ($data as $field => $value) {
+                    if (in_array($field, $columns[$key])) {
+                        if (is_array($value)) {
+                            $list[$field] = $this->_formatResult($value, $columns, $field);
+                        } elseif ($value instanceof \DateTime) {
+                            // $value->setTimezone(new \DateTimeZone('UTC'));
+                            $list[$field] = array(
+                                'timestamp' => $value->setTimezone(new \DateTimeZone('UTC'))->getTimestamp(),
+                                'timezone'  => $value->getTimezone()->getName(),
+                            );
+                        } else {
+                            $list[$field] = $value;
+                        }
+                    }
+                }
+            } else {
+                $list = $data;
+            }
         }
 
         return $list;
