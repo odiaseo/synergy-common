@@ -29,6 +29,7 @@ class CommonSiteSettings
     protected $locale;
     protected $language;
     protected $region;
+    protected $script;
 
     //solr
     protected $offerCore = 'offer';
@@ -60,6 +61,16 @@ class CommonSiteSettings
             }
         }
         parent::__construct($data);
+    }
+
+    public function setScript($script)
+    {
+        $this->script = $script;
+    }
+
+    public function getScript()
+    {
+        return $this->script;
     }
 
     public function setAffiliateWindowVerification($affiliateWindowVerification)
