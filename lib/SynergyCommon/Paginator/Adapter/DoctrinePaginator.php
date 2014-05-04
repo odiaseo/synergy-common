@@ -25,6 +25,9 @@ class DoctrinePaginator
 
     public function getItems($offset, $itemCountPerPage)
     {
+        $this->getQuery()->setFirstResult($offset);
+        $this->getQuery()->setMaxResults($itemCountPerPage);
+
         return $this->getIterator();
     }
 }
