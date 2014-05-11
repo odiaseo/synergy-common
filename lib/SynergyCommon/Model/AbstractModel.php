@@ -295,7 +295,7 @@ class AbstractModel
             ->where($qb->expr()->in('e.id', $idList));
 
         if ($order) {
-            $query->orderBy(key($order), current($order));
+            $query->orderBy('e.' . key($order), current($order));
         }
 
         return $query->getQuery()->execute(null, AbstractQuery::HYDRATE_OBJECT);
