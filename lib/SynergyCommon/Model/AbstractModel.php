@@ -10,12 +10,12 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\NestedsetInterface;
+use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceManager;
@@ -284,7 +284,7 @@ class AbstractModel
         return $id;
     }
 
-    public function getItemListByIds(array $idList)
+    public function getItemListByIds(array $idList, array $order = null)
     {
         $entity = $this->getEntity();
         $qb     = $this->getEntityManager()->createQueryBuilder();
@@ -293,6 +293,10 @@ class AbstractModel
             ->select('e')
             ->from($entity, 'e')
             ->where($qb->expr()->in('e.id', $idList));
+
+        if ($order) {
+            $query->orderBy(key($order), current($order));
+        }
 
         return $query->getQuery()->execute(null, AbstractQuery::HYDRATE_OBJECT);
     }
