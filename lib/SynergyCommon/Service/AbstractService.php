@@ -27,6 +27,9 @@ abstract class AbstractService
     /** @var  \Zend\ServiceManager\ServiceManager */
     protected $_serviceManager;
 
+    /** @var \SynergyCommon\Util\ErrorHandler */
+    protected $_logger;
+
     public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->_serviceManager = $serviceManager;
@@ -228,6 +231,22 @@ abstract class AbstractService
     public function getVerbose()
     {
         return $this->_verbose;
+    }
+
+    /**
+     * @param \SynergyCommon\Util\ErrorHandler $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    /**
+     * @return \SynergyCommon\Util\ErrorHandler
+     */
+    public function getLogger()
+    {
+        return $this->_logger;
     }
 
     abstract public function getEntityCacheFile();
