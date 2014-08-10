@@ -44,6 +44,7 @@ class AbstractModel
     const PER_PAGE       = 15;
     const INDEX_PER_PAGE = 50;
     const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    const SESSION_LOCALE_KEY = 'active_locale';
     /**
      * Mapping human-readable constants to DQL operatores
      *
