@@ -1,5 +1,5 @@
 <?php
-namespace SynergyCommon\Model;
+namespace SynergyCommon\ModelTrait;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
