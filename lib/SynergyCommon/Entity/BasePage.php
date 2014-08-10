@@ -25,6 +25,7 @@ class BasePage
     protected $title;
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Gedmo\Translatable
      */
     protected $label;
     /**
@@ -67,6 +68,7 @@ class BasePage
     /**
      * @Gedmo\Slug(fields={"title"}, updatable=false)
      * @ORM\Column(name="slug", type="string")
+     * @Gedmo\Translatable
      */
     protected $slug;
     /**
