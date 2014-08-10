@@ -11,7 +11,7 @@ use SynergyCommon\ModelTrait\LocaleAwareTrait;
  *
  * @package AffiliateManager\Model
  */
-class LocalAwareNestedSetTrait
+trait LocalAwareNestedSetTrait
 {
     use LocaleAwareTrait;
 
