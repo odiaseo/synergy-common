@@ -11,12 +11,34 @@ use Zend\Session\Container;
 /**
  * Class LocateAwareTrait
  *
- * @method NestedSetRepository getREpository()
- * @package AffiliateManager\ModelTrait
+ * @method getEntity()
+ * @method \Doctrine\ORM\EntityManager getEntityManager()
+ * @method NestedSetRepository getRepository()
+
  */
 trait LocaleAwareTrait
 {
     protected static $_locale = 'en_GB';
+
+    public function getItemsToTranslate($locale, $limit = null)
+    {
+
+        $qb    = $this->getEntityManager()->createQueryBuilder();
+        $query = $qb
+            ->select('e')
+            ->from($this->getEntity(), 'e')
+            ->leftJoin(
+                'e.translations', 't', 'WITH',
+                $qb->expr()->eq('t.locale', ':locale')
+            )->setParameters(array(':locale' => $locale))
+            ->andWhere($qb->expr()->isNull('t.object'));
+
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getQuery()->useResultCache(false)->execute();
+    }
 
     public static function addHints(AbstractQuery $query)
     {
