@@ -251,4 +251,12 @@ abstract class AbstractService
 
     abstract public function getEntityCacheFile();
 
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->_serviceManager;
+    }
+
 }
