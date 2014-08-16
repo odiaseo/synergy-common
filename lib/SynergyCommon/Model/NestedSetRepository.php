@@ -34,7 +34,7 @@ class NestedSetRepository
             ->orderBy('e.root, e.lft', 'ASC')
             ->getQuery();
 
-        if ($this instanceof LocaleAwareTrait) {
+        if ($this->isTranslatable($this)) {
             $query = LocaleAwareTrait::addHints($query);
         }
 
@@ -78,7 +78,7 @@ class NestedSetRepository
             ->setParameter('id', $pageId)
             ->getQuery();
 
-        if ($this instanceof LocaleAwareTrait) {
+        if ($this->isTranslatable($this)) {
             $query = LocaleAwareTrait::addHints($query);
         }
 
@@ -178,9 +178,10 @@ class NestedSetRepository
                 ->setMaxResults(1)
                 ->getQuery();
 
-            if ($this instanceof LocaleAwareTrait) {
+            if ($this->isTranslatable($this)) {
                 $query = LocaleAwareTrait::addHints($query);
             }
+
             $menu = $query->execute(array(), AbstractQuery::HYDRATE_OBJECT);
 
             if ($menu) {
@@ -193,5 +194,13 @@ class NestedSetRepository
         }
 
         return $path;
+    }
+
+    protected function isTranslatable($class)
+    {
+        $reflection = new \ReflectionClass($class);
+        $traits     = $reflection->getTraitNames();
+
+        return (in_array('SynergyCommon\ModelTrait\LocalAwareNestedSetTrait', $traits));
     }
 }
