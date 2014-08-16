@@ -14,6 +14,7 @@ use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
 use SynergyCommon\Model\Config\ModelOptions;
+use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use Zend\Crypt\Password\Bcrypt;
@@ -41,9 +42,9 @@ class AbstractModel
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE       = 15;
-    const INDEX_PER_PAGE = 50;
-    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    const PER_PAGE           = 15;
+    const INDEX_PER_PAGE     = 50;
+    const DB_DATE_FORMAT     = 'Y-m-d H:i:s';
     const SESSION_LOCALE_KEY = 'active_locale';
     /**
      * Mapping human-readable constants to DQL operatores
@@ -141,6 +142,32 @@ class AbstractModel
     public function findObject($id = 0)
     {
         return $this->_entityManager->getRepository($this->_entity)->find($id);
+    }
+
+
+    public function findOneTranslatedBy(array $param)
+    {
+        $alias        = $this->getAlias();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $query        = $queryBuilder
+            ->select($alias)
+            ->from($this->getEntity(), $alias);
+
+        foreach ($param as $key => $value) {
+            $query->andWhere(
+                $queryBuilder->expr()->eq($alias . '.' . $key, $value)
+            );
+        }
+
+        $query = LocaleAwareTrait::addHints($query->getQuery());
+
+        try {
+            return $query->getOneOrNullResult();
+        } catch (\Exception $exception) {
+            $this->_logger->err($exception->getMessage());
+
+            return null;
+        }
     }
 
     public function fetchOne()
