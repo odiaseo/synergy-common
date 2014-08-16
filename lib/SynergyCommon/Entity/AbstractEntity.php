@@ -10,6 +10,11 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\InputFilter\InputFilter;
 use Zend\Session\Container;
 
+/**
+ * Class AbstractEntity
+ * @method formatDeeplink()
+ * @package SynergyCommon\Entity
+ */
 abstract class AbstractEntity
 {
     /** @var \Zend\InputFilter\InputFilter */

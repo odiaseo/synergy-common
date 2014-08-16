@@ -307,7 +307,7 @@ class BaseService
 
     public function getEntityCacheFile()
     {
-        $config   = $this->_serviceManager->get('config');
+        $config   = $this->getServiceManager()->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
         if (!static::$checked) {
@@ -398,7 +398,7 @@ class BaseService
      */
     public function getLogger()
     {
-        return $this->_serviceManager->get('logger');
+        return $this->getServiceManager()->get('logger');
     }
 
     /**
@@ -414,8 +414,8 @@ class BaseService
      */
     public function getApiService()
     {
-        if ($this->_serviceManager->has('synergycommon\service\api')) {
-            return $this->_serviceManager->get('synergycommon\service\api');
+        if ($this->getServiceManager()->has('synergycommon\service\api')) {
+            return $this->getServiceManager()->get('synergycommon\service\api');
         }
 
         return null;

@@ -65,7 +65,7 @@ class BaseApiService
     {
         if (!$domain) {
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request = $this->_serviceManager->get('application')->getRequest();
+            $request = $this->getServiceManager()->get('application')->getRequest();
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
         }
 

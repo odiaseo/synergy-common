@@ -90,7 +90,7 @@ abstract class AbstractService
     public function getModel($key, $options = array(), $additionalOptions = array())
     {
         /** @var $model \SynergyCommon\Model\AbstractModel */
-        $model = $this->_serviceManager->get('am\model\\' . $key);
+        $model = $this->getServiceManager()->get('am\model\\' . $key);
         $model->setOptions(
             new ModelOptions(
                 array(
@@ -120,7 +120,7 @@ abstract class AbstractService
                     }
 
                     if ($field == 'deeplink' and method_exists($entity, 'formatDeeplink')) {
-                        $list[$field] = $entity->formatDeeplink($this->_serviceManager);
+                        $list[$field] = $entity->formatDeeplink($this->getServiceManager());
                     }
                 }
             } else {
@@ -177,7 +177,7 @@ abstract class AbstractService
     public function getEntityManager()
     {
         if (!$this->_entityManager) {
-            $this->_entityManager = $this->_serviceManager->get('doctrine.entitymanager.orm_default');
+            $this->_entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         }
 
         return $this->_entityManager;
@@ -197,7 +197,7 @@ abstract class AbstractService
     public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GRAY, $bgColor = null)
     {
         /** @var $console \Zend\Console\Adapter\Windows */
-        $console = $this->_serviceManager->get('console');
+        $console = $this->getServiceManager()->get('console');
         if ($this->getVerbose()) {
             $msg  = is_array($msg) ? print_r($msg, true) : $msg;
             $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
@@ -256,7 +256,7 @@ abstract class AbstractService
      */
     public function getServiceManager()
     {
-        return $this->_serviceManager;
+        return $this->getServiceManager();
     }
 
 }
