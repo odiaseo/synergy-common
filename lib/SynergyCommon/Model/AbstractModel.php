@@ -155,7 +155,7 @@ class AbstractModel
 
         foreach ($param as $key => $value) {
             $query->andWhere(
-                $queryBuilder->expr()->eq($alias . '.' . $key, $value)
+                $queryBuilder->expr()->eq($alias . '.' . $key, $queryBuilder->expr()->literal($value))
             );
         }
 
