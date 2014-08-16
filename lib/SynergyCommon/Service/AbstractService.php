@@ -256,7 +256,7 @@ abstract class AbstractService
      */
     public function getServiceManager()
     {
-        return $this->getServiceManager();
+        return $this->_serviceManager;
     }
 
 }
