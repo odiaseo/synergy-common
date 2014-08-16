@@ -2,7 +2,9 @@
 namespace SynergyCommon\ModelTrait;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\NestedSetRepository;
@@ -22,7 +24,6 @@ trait LocaleAwareTrait
 
     public function getItemsToTranslate($locale, $limit = null)
     {
-
         $qb    = $this->getEntityManager()->createQueryBuilder();
         $query = $qb
             ->select('e')
