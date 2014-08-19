@@ -153,7 +153,6 @@ class CommonSiteSettings
         return $this->solrPort;
     }
 
-
     public function setSolrIP($solrIP)
     {
         $this->solrIP = $solrIP;
@@ -223,7 +222,6 @@ class CommonSiteSettings
     {
         return $this->region;
     }
-
 
     public function setAmazonApiKey($amazonApiKey)
     {
@@ -335,4 +333,11 @@ class CommonSiteSettings
         return $this->tradeDoublerToken;
     }
 
+    /**
+     * @param boolean $_strictMode__
+     */
+    public function setStrictMode($_strictMode__)
+    {
+        $this->__strictMode__ = $_strictMode__;
+    }
 }
