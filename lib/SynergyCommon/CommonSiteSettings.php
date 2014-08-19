@@ -51,8 +51,9 @@ class CommonSiteSettings
     protected $skimlinksId;
     protected $clickref;
 
-    public function __construct($options = null)
+    public function __construct($options = null, $mode = true)
     {
+        $this->setStrictMode($mode);
         $data = array();
         if ($options) {
             foreach ($options as $key => $value) {
