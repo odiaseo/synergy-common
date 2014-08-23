@@ -11,7 +11,7 @@ class BaseApiService
     /**
      * @var \SynergyCommon\Client\HttpRestJsonClient
      */
-    protected $_client;
+    protected $client;
 
     /**
      * Process API request
@@ -29,7 +29,7 @@ class BaseApiService
 
             return $this->getClient()->dispatchRequestAndDecodeResponse($url, $method, $params);
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->getLogger()->logException($e);
 
             return array(
                 'error'   => true,
@@ -43,7 +43,7 @@ class BaseApiService
      */
     public function setClient($client)
     {
-        $this->_client = $client;
+        $this->client = $client;
     }
 
     /**
@@ -51,7 +51,7 @@ class BaseApiService
      */
     public function getClient()
     {
-        return $this->_client;
+        return $this->client;
     }
 
     /**
