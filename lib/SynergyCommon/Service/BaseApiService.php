@@ -29,7 +29,7 @@ class BaseApiService
 
             return $this->getClient()->dispatchRequestAndDecodeResponse($url, $method, $params);
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->logger->logException($e);
 
             return array(
                 'error'   => true,

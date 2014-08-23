@@ -12,7 +12,7 @@ class BaseService
 {
 
     /** @var \SynergyCommon\Util\ErrorHandler */
-    protected $_logger;
+    protected $logger;
 
     protected static $checked;
 
@@ -406,7 +406,7 @@ class BaseService
      */
     public function setLogger($logger)
     {
-        $this->_logger = $logger;
+        $this->logger = $logger;
     }
 
     /**
