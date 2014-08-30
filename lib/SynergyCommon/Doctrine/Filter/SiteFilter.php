@@ -21,6 +21,10 @@ class SiteFilter
 
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
+        if (strtolower(php_sapi_name()) == 'cli') {
+            return '';
+        }
+
         if (isset($targetEntity->associationMappings['site'])
             and $targetEntity->associationMappings['site']['type'] != ClassMetadataInfo::MANY_TO_MANY
         ) {
