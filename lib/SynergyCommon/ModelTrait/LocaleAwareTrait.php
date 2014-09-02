@@ -72,18 +72,21 @@ trait LocaleAwareTrait
         return $localeData['language'];
     }
 
+
     /**
      * @param null $rootPage
+     * @param int  $mode
      *
-     * @return array
+     * @return mixed
      */
-    public function getEntityNavigation($rootPage = null)
+    public function getEntityNavigation($rootPage = null, $mode = AbstractQuery::HYDRATE_ARRAY)
     {
         /** @var $repo \SynergyCommon\Model\NestedSetRepository */
         $repo  = $this->getRepository();
         $query = $this->addHints($repo->getNodesHierarchyQuery($rootPage));
 
-        return $query->getArrayResult();
+
+        return $query->execute(array(), $mode);
     }
 
     public function setLocale($locale)

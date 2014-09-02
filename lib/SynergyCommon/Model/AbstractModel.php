@@ -71,7 +71,7 @@ class AbstractModel
         );
 
     /** @var \SynergyCommon\Util\ErrorHandler |\Zend\Log\Logger */
-    protected $_logger;
+    protected $logger;
     /**
      * @var string
      */
@@ -164,7 +164,7 @@ class AbstractModel
         try {
             return $query->getOneOrNullResult();
         } catch (\Exception $exception) {
-            $this->_logger->err($exception->getMessage());
+            $this->getLogger()->err($exception->getMessage());
 
             return null;
         }
@@ -881,12 +881,12 @@ class AbstractModel
 
     public function setLogger($logger)
     {
-        $this->_logger = $logger;
+        $this->logger = $logger;
     }
 
     public function getLogger()
     {
-        return $this->_logger;
+        return $this->logger;
     }
 
 

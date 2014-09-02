@@ -28,7 +28,7 @@ abstract class AbstractService
     protected $_serviceManager;
 
     /** @var \SynergyCommon\Util\ErrorHandler */
-    protected $_logger;
+    protected $logger;
 
     public function setServiceManager(ServiceManager $serviceManager)
     {
@@ -238,7 +238,7 @@ abstract class AbstractService
      */
     public function setLogger($logger)
     {
-        $this->_logger = $logger;
+        $this->logger = $logger;
     }
 
     /**
@@ -246,7 +246,7 @@ abstract class AbstractService
      */
     public function getLogger()
     {
-        return $this->_logger;
+        return $this->logger;
     }
 
     abstract public function getEntityCacheFile();

@@ -30,10 +30,12 @@ class BasePage
     protected $label;
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Translatable
      */
     protected $description;
     /**
      * @ORM\Column(type="string", length=255, name="keywords", nullable=true)
+     * @Gedmo\Translatable
      */
     protected $keywords;
     /**
