@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Event\Listener;
 
-use SynergyCommon\Event\Listener\SiteAwareListener;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -9,6 +8,7 @@ use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\Http\TranslatorAwareTreeRouteStack;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
@@ -27,8 +27,8 @@ class SynergyModuleListener
     {
         $this->listeners[] = $events->attach(
             array(
-                 MvcEvent::EVENT_RENDER_ERROR,
-                 MvcEvent::EVENT_DISPATCH_ERROR
+                MvcEvent::EVENT_RENDER_ERROR,
+                MvcEvent::EVENT_DISPATCH_ERROR
             ),
             array($this, 'handleException'),
             25
@@ -54,8 +54,8 @@ class SynergyModuleListener
     {
         $eventManager->attach(
             array(
-                 MvcEvent::EVENT_RENDER_ERROR,
-                 MvcEvent::EVENT_DISPATCH_ERROR
+                MvcEvent::EVENT_RENDER_ERROR,
+                MvcEvent::EVENT_DISPATCH_ERROR
             ),
             function ($event) use ($services) {
                 /** @var MvcEvent $event */
@@ -90,8 +90,8 @@ class SynergyModuleListener
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
                     array(
-                         'error'   => true,
-                         'message' => $event->getError()
+                        'error'   => true,
+                        'message' => $event->getError()
                     )
                 );
                 $viewModel->setTerminal(true);
@@ -175,9 +175,13 @@ class SynergyModuleListener
                 $em = $sm->get('doctrine.entitymanager.orm_default');
 
                 //enable filters
-                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
+                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter |ServiceLocatorAwareTrait */
                 $siteFilter = $em->getFilters()->enable("site-specific");
                 $siteFilter->setSite($site);
+
+                if ($siteFilter instanceof ServiceLocatorAwareTrait) {
+                    $siteFilter->setServiceLocator($sm);
+                }
 
                 if ($sm->has('logger')) {
                     $siteFilter->setLogger($sm->get('logger'));
