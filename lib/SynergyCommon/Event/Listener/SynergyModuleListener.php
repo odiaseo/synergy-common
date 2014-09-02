@@ -175,13 +175,10 @@ class SynergyModuleListener
                 $em = $sm->get('doctrine.entitymanager.orm_default');
 
                 //enable filters
-                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter |ServiceLocatorAwareTrait */
+                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
                 $siteFilter = $em->getFilters()->enable("site-specific");
                 $siteFilter->setSite($site);
-
-                if ($siteFilter instanceof ServiceLocatorAwareTrait) {
-                    $siteFilter->setServiceLocator($sm);
-                }
+                $siteFilter->setServiceLocator($sm);
 
                 if ($sm->has('logger')) {
                     $siteFilter->setLogger($sm->get('logger'));
