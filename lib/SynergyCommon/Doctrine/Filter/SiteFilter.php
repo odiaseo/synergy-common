@@ -5,11 +5,11 @@ namespace SynergyCommon\Doctrine\Filter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query\Filter\SQLFilter;
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class SiteFilter
-    extends SQLFilter
+class SiteFilter extends SQLFilter
 {
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var \SynergyCommon\Entity\BaseSite
