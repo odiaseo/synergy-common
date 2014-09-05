@@ -12,13 +12,16 @@ class LoggerFactory
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        if (isset($config['synergy']['logger'])) {
+        $config    = $serviceLocator->get('config');
+        $directory = 'data/logs/';
+        $namespace = __NAMESPACE__;
+
+        if (isset($config['synergy']['logger']['directory'])) {
             $directory = $config['synergy']['logger']['directory'];
+        }
+
+        if (isset($config['synergy']['logger']['namespace'])) {
             $namespace = $config['synergy']['logger']['namespace'];
-        } else {
-            $directory = 'data/logs/';
-            $namespace = __NAMESPACE__;
         }
 
         $filename = rtrim($directory, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'app.log';
