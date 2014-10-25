@@ -236,7 +236,7 @@ class AbstractModel
         $list = array();
         $qb   = $this->_entityManager->createQueryBuilder();
         /** @var $query \Doctrine\ORM\Query */
-        $query = $qb->select('e.id, e.title, e.description')
+        $query = $qb->select('e')
             ->from($this->_entity, 'e')
             ->getQuery();
 
@@ -246,7 +246,7 @@ class AbstractModel
             foreach ($result as $item) {
                 $list[$item['id']] = array(
                     'title'       => $item['title'],
-                    'description' => $item['description']
+                    'description' => isset($item['description']) ? $item['description'] : $item['title']
                 );
             }
 
