@@ -311,4 +311,18 @@ class BasePage
 	public function getUri() {
 		return $this->uri;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPrivilege() {
+		return $this->privilege;
+	}
+
+	/**
+	 * @param mixed $privilege
+	 */
+	public function setPrivilege( $privilege ) {
+		$this->privilege = $privilege;
+	}
 }
