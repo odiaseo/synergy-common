@@ -60,7 +60,7 @@ class BasePage
 	protected $routeName = 'application';
 	/**
 	 * @Gedmo\Slug(fields={"title"}, updatable=true)
-	 * @ORM\Column(name="privilege", type="string", nullable=false, unique=false, length=25)
+	 * @ORM\Column(name="privilege", type="string", nullable=false, unique=false, length=50)
 	 */
 	protected $privilege;
 	/**
