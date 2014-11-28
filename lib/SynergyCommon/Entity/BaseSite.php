@@ -31,23 +31,41 @@ class BaseSite
      */
     protected $isActive;
     /**
+     * @ORM\Column(type="boolean", name="is_subdomain")
+     */
+    protected $isSubDomain = 0;
+    /**
      * @ORM\Column(type="string", length=10)
      */
     protected $locale = 'en_US';
     /**
      * @var \datetime createdAt
-     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="created_at")
      */
     protected $createdAt;
     /**
      * @var \Datetime updatedAt
-     *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getIsSubDomain()
+    {
+        return $this->isSubDomain;
+    }
+
+    /**
+     * @param mixed $isSubDomain
+     */
+    public function setIsSubDomain($isSubDomain)
+    {
+        $this->isSubDomain = $isSubDomain;
+    }
 
     public function setLocale($locale)
     {
