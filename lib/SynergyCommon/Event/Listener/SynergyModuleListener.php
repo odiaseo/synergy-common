@@ -177,6 +177,8 @@ class SynergyModuleListener
                 //enable filters
                 /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
                 $siteFilter = $em->getFilters()->enable("site-specific");
+                $siteFilter = $em->getFilters()->enable("soft-delete");
+
                 $siteFilter->setSite($site);
                 $siteFilter->setServiceLocator($sm);
 
