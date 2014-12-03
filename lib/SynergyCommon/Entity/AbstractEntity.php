@@ -1,18 +1,19 @@
 <?php
 namespace SynergyCommon\Entity;
 
-
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Proxy\Proxy;
 use SynergyCommon\Exception\InvalidArgumentException;
+use Zend\Filter\Word\UnderscoreToCamelCase;
 use Zend\InputFilter\InputFilter;
 use Zend\Session\Container;
 
 /**
  * Class AbstractEntity
  * @method formatDeeplink()
+ *
  * @package SynergyCommon\Entity
  */
 abstract class AbstractEntity
@@ -30,7 +31,7 @@ abstract class AbstractEntity
     public function toArray($object = null)
     {
         $list   = array();
-        $object = $object ? : $this;
+        $object = $object ?: $this;
         foreach (get_object_vars($object) as $key => $value) {
             if (substr($key, 0, 1) != '_') {
                 if (is_object($value)) {
@@ -69,7 +70,7 @@ abstract class AbstractEntity
     public function toArrayOld($object = null)
     {
         $list   = array();
-        $object = $object ? : $this;
+        $object = $object ?: $this;
 
         if ($object instanceof PersistentCollection) {
             /** @var \SynergyCommon\Entity\AbstractEntity $item */
@@ -138,9 +139,11 @@ abstract class AbstractEntity
         } elseif ($type == 'get' and property_exists($this, $property)) {
             return $this->$property;
         } else {
-            throw new InvalidArgumentException(sprintf(
-                "Method %s called with arguments %s is undefined", $method, print_r($args, true)
-            ));
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Method %s called with arguments %s is undefined", $method, print_r($args, true)
+                )
+            );
         }
     }
 
@@ -179,9 +182,10 @@ abstract class AbstractEntity
      */
     public function exchangeArray(array $data)
     {
-        $filters = $this->getInputFilter();
+        $wordFilter = new UnderscoreToCamelCase();
+        $filters    = $this->getInputFilter();
         foreach ($data as $field => $value) {
-            $method = 'set' . ucfirst($field);
+            $method = 'set' . ucfirst($wordFilter->filter($field));
 
             if (method_exists($this, $method)) {
                 if ($filters and $filters->has($field)) {
@@ -200,7 +204,6 @@ abstract class AbstractEntity
 
         return $this;
     }
-
 
     /**
      * @param \Zend\InputFilter\InputFilter $inputFilter
