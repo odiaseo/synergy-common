@@ -12,7 +12,6 @@ use Zend\Session\Container;
 
 /**
  * Class LocateAwareTrait
- *
  * @method getEntity()
  * @method \Doctrine\ORM\EntityManager getEntityManager()
  * @method NestedSetRepository getRepository()
@@ -22,7 +21,27 @@ trait LocaleAwareTrait
 {
     protected static $_locale = 'en_GB';
 
-    public function getItemsToTranslate($locale, $limit = null)
+    /**
+     * @param       $locale
+     * @param null  $limit
+     * @param array $ids
+     *
+     * @return mixed
+     */
+    public function getItemsToTranslate($locale, $limit = null, array $ids = null)
+    {
+        $query = $this->getItemsToTranslateQueryBuilder($locale, $limit, $ids);
+        return $query->getQuery()->useResultCache(false)->execute();
+    }
+
+    /**
+     * @param       $locale
+     * @param null  $limit
+     * @param array $ids
+     *
+     * @return QueryBuilder
+     */
+    protected function getItemsToTranslateQueryBuilder($locale, $limit = null, array $ids = null)
     {
         $qb    = $this->getEntityManager()->createQueryBuilder();
         $query = $qb
@@ -38,7 +57,11 @@ trait LocaleAwareTrait
             $query->setMaxResults($limit);
         }
 
-        return $query->getQuery()->useResultCache(false)->execute();
+        if ($ids) {
+            $query->andWhere($qb->expr()->in('e.id', $ids));
+        }
+
+        return $query;
     }
 
     public static function addHints(AbstractQuery $query)
@@ -72,7 +95,6 @@ trait LocaleAwareTrait
         return $localeData['language'];
     }
 
-
     /**
      * @param null $rootPage
      * @param int  $mode
@@ -84,7 +106,6 @@ trait LocaleAwareTrait
         /** @var $repo \SynergyCommon\Model\NestedSetRepository */
         $repo  = $this->getRepository();
         $query = $this->addHints($repo->getNodesHierarchyQuery($rootPage));
-
 
         return $query->execute(array(), $mode);
     }
