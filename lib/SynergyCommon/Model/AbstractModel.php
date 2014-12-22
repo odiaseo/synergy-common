@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Model;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\AbstractQuery;
@@ -9,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
@@ -121,7 +121,6 @@ class AbstractModel
         return $this->_entity;
     }
 
-
     public function  getEntityManager()
     {
         return $this->_entityManager;
@@ -144,14 +143,22 @@ class AbstractModel
         return $this->_entityManager->getRepository($this->_entity)->find($id);
     }
 
-
-    public function findOneTranslatedBy(array $param)
+    /**
+     * @param array        $param
+     * @param QueryBuilder $query
+     *
+     * @return mixed|null
+     */
+    public function findOneTranslatedBy(array $param, QueryBuilder $queryBuilder = null)
     {
-        $alias        = $this->getAlias();
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        $query        = $queryBuilder
-            ->select($alias)
-            ->from($this->getEntity(), $alias);
+        $alias = $this->getAlias();
+        if (!$queryBuilder) {
+            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+            $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
+        } else {
+
+            $query = $queryBuilder;
+        }
 
         foreach ($param as $key => $value) {
             $query->andWhere(
@@ -221,7 +228,6 @@ class AbstractModel
         return $entity;
     }
 
-
     /**
      * @return \Doctrine\ORM\EntityRepository
      */
@@ -270,7 +276,6 @@ class AbstractModel
             throw new InvalidArgumentException("Unable to execute method {$method} - " . $e->getMessage());
         }
     }
-
 
     public function getEntityIdBySlug($data)
     {
@@ -368,7 +373,6 @@ class AbstractModel
 
         return array();
     }
-
 
     /**
      * Update and foreign entity
@@ -577,7 +581,7 @@ class AbstractModel
             /** @var $entity \SynergyCommon\Entity\AbstractEntity */
             $entity = new $entityClass();
 
-            $inputFilter = $entity->getInputFilter() ? : new InputFilter();
+            $inputFilter = $entity->getInputFilter() ?: new InputFilter();
 
             $mapping = $this->getEntityManager()->getClassMetadata($entityClass);
 
@@ -663,8 +667,8 @@ class AbstractModel
 
             foreach ($params as $param => $value) {
                 if (array_key_exists($param, $mapping->fieldMappings) or array_key_exists(
-                    $param, $mapping->associationMappings
-                )
+                        $param, $mapping->associationMappings
+                    )
                 ) {
 
                     $method = 'set' . ucfirst($param);
@@ -674,9 +678,11 @@ class AbstractModel
                         $target = $mapping->associationMappings[$param]['targetEntity'];
 
                         if ($mapping->associationMappings[$param]['type'] == ClassMetadataInfo::ONE_TO_MANY) {
-                            throw new InvalidArgumentException(sprintf(
-                                "OneToMany updates not supported: %s was not updated", $param
-                            ));
+                            throw new InvalidArgumentException(
+                                sprintf(
+                                    "OneToMany updates not supported: %s was not updated", $param
+                                )
+                            );
                         } elseif ($mapping->associationMappings[$param]['type'] == ClassMetadataInfo::MANY_TO_MANY) {
                             /** @var \Doctrine\Orm\PersistentCollection $param */
                             if ($entity->$param) {
@@ -691,9 +697,11 @@ class AbstractModel
                                 if ($foreignEntity = $this->getEntityManager()->find($target, $v)) {
                                     $entity->$param->add($foreignEntity);
                                 } else {
-                                    throw new InvalidArgumentException(sprintf(
-                                        "%s with ID #%d was not found  ", $param, $v
-                                    ));
+                                    throw new InvalidArgumentException(
+                                        sprintf(
+                                            "%s with ID #%d was not found  ", $param, $v
+                                        )
+                                    );
                                 }
                             }
                         } elseif ($value) {
@@ -701,9 +709,11 @@ class AbstractModel
                             if ($foreignEntity = $this->getEntityManager()->find($target, $value)) {
                                 $entity->$method($foreignEntity);
                             } else {
-                                throw new InvalidArgumentException(sprintf(
-                                    "%s with ID #%d was not found ", $param, $value
-                                ));
+                                throw new InvalidArgumentException(
+                                    sprintf(
+                                        "%s with ID #%d was not found ", $param, $value
+                                    )
+                                );
                             }
                         }
 
@@ -718,7 +728,8 @@ class AbstractModel
                                 $entity->$method($value);
                             } catch (\Exception $e) {
                                 throw new InvalidArgumentException(
-                                    sprintf("%s: Wrong date format for column ", $param));
+                                    sprintf("%s: Wrong date format for column ", $param)
+                                );
                                 break;
                             }
                         } else {
@@ -808,7 +819,6 @@ class AbstractModel
         return $this->_alias;
     }
 
-
     /**
      * @param \SynergyCommon\Model\Config\ModelOptions $options
      */
@@ -872,8 +882,8 @@ class AbstractModel
 
         $result = array_filter(
             $data, function ($v) {
-                return (\is_bool($v) or \is_numeric($v) or !empty($v));
-            }
+            return (\is_bool($v) or \is_numeric($v) or !empty($v));
+        }
         );
 
         return $result;
@@ -888,7 +898,6 @@ class AbstractModel
     {
         return $this->logger;
     }
-
 
     /**
      * Determines if the date is expired
@@ -946,12 +955,11 @@ class AbstractModel
 
             if ($value instanceof AbstractEntity) {
                 $value = $value->getId();
-            } elseif ($value instanceof  \DateTime) {
+            } elseif ($value instanceof \DateTime) {
                 $value = $value->format(self::DB_DATE_FORMAT);
             } elseif (is_bool($value)) {
                 $value = $value ? 1 : 0;
             }
-
 
             $data[$field] = $escape ? (get_magic_quotes_gpc() ? $value : addslashes($value)) : $value;
         }
@@ -977,7 +985,7 @@ class AbstractModel
         /** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
         $repo = $this->getRepository();
 
-        if ($parentId and  $parentNode = $this->findObject($parentId)) {
+        if ($parentId and $parentNode = $this->findObject($parentId)) {
             $repo->persistAsFirstChildOf($node, $parentNode);
         } else {
             $repo->persistAsLastChild($node);
@@ -991,7 +999,6 @@ class AbstractModel
 
     /**
      * Move a node relatived to the reference node in the direction specified
-     *
      * Direction can be: after, before, last or first
      *
      * @param $id

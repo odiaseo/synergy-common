@@ -6,21 +6,24 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Zend\Paginator\Adapter\AdapterInterface;
 
-class DoctrinePaginator
-    extends Paginator
-    implements AdapterInterface
+/**
+ * Class DoctrinePaginator
+ *
+ * @package SynergyCommon\Paginator\Adapter
+ */
+class DoctrinePaginator extends Paginator implements AdapterInterface
 {
     /**
      * @param Query|\Doctrine\ORM\QueryBuilder $query
      * @param bool                             $fetchJoinCollection
      */
-    public function __construct($query, $fetchJoinCollection = false)
+    public function __construct($query, $fetchJoinCollection = true)
     {
         if ($query instanceof QueryBuilder) {
             $query->distinct(false);
         }
-        parent::__construct($query, false);
-        $this->setUseOutputWalkers(false);
+        parent::__construct($query, $fetchJoinCollection);
+        $this->setUseOutputWalkers(true);
     }
 
     public function getItems($offset, $itemCountPerPage)

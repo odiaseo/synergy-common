@@ -11,10 +11,13 @@ return array(
     'doctrine'        => array(
         'configuration' => array(
             'orm_default' => array(
-                'driver'           => 'orm_default',
-                'generate_proxies' => false,
-                'proxy_dir'        => 'data/DoctrineORMModule/Proxy',
-                'proxy_namespace'  => 'DoctrineORMModule\Proxy',
+                'driver'            => 'orm_default',
+                'generate_proxies'  => false,
+                'proxy_dir'         => 'data/DoctrineORMModule/Proxy',
+                'proxy_namespace'   => 'DoctrineORMModule\Proxy',
+                'numeric_functions' => array(
+                    'Rand' => 'SynergyCommon\Doctrine\Extension\Rand'
+                )
             )
         ),
 
@@ -75,7 +78,7 @@ return array(
             'synergycommon\entity\site'    => 'SynergyCommon\Entity\BaseSite',
         )
     ),
-    'session'           => array(
+    'session'         => array(
         'config'       => array(
             'class'   => 'Zend\Session\Config\SessionConfig',
             'options' => array(
