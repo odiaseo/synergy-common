@@ -409,6 +409,27 @@ class AbstractModel
         return $this->save($entity);
     }
 
+	/**
+	 * @param $id
+	 * @param $field
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	public function updateById($id, $field, $value)
+	{
+		$queryBuilder = $this->getEntityManager()->createQueryBuilder();
+		$updQuery     = $queryBuilder
+			->update($this->getEntity(), 'e')
+			->set("e.{$field}", $queryBuilder->expr()->literal($value))
+			->where('e.id = :id')
+			->setParameters(
+				array(':id' => $id)
+			)
+			->getQuery();
+
+		return $updQuery->execute();
+	}
     /**
      * Update and entity with data in params
      *
