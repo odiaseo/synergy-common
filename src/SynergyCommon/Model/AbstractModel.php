@@ -2,12 +2,9 @@
 namespace SynergyCommon\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use SynergyCommon\Entity\AbstractEntity;
@@ -17,397 +14,422 @@ use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
-use Zend\Crypt\Password\Bcrypt;
 use Zend\InputFilter\InputFilter;
-use Zend\ServiceManager\ServiceManager;
 
 class AbstractModel
-    implements NestedsetInterface
-{
-    const EQUAL                 = 'eq';
-    const NOT_EQUAL             = 'ne';
-    const LESS_THAN             = 'lt';
-    const LESS_THAN_OR_EQUAL    = 'lte';
-    const GREATER_THAN          = 'gt';
-    const GREATER_THAN_OR_EQUAL = 'gte';
-    const BEGIN_WITH            = 'bw';
-    const LIKE                  = 'lk';
-    const NOT_BEGIN_WITH        = 'nb';
-    const END_WITH              = 'ew';
-    const NOT_END_WITH          = 'en';
-    const CONTAIN               = 'cn';
-    const NOT_CONTAIN           = 'nc';
-    const IN                    = 'in';
-    const NOT_IN                = 'ni';
+	implements NestedsetInterface {
+	const EQUAL = 'eq';
+	const NOT_EQUAL = 'ne';
+	const LESS_THAN = 'lt';
+	const LESS_THAN_OR_EQUAL = 'lte';
+	const GREATER_THAN = 'gt';
+	const GREATER_THAN_OR_EQUAL = 'gte';
+	const BEGIN_WITH = 'bw';
+	const LIKE = 'lk';
+	const NOT_BEGIN_WITH = 'nb';
+	const END_WITH = 'ew';
+	const NOT_END_WITH = 'en';
+	const CONTAIN = 'cn';
+	const NOT_CONTAIN = 'nc';
+	const IN = 'in';
+	const NOT_IN = 'ni';
 
-    const DEFAULT_EXPRESSION = self::EQUAL;
+	const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE           = 15;
-    const INDEX_PER_PAGE     = 50;
-    const DB_DATE_FORMAT     = 'Y-m-d H:i:s';
-    const SESSION_LOCALE_KEY = 'active_locale';
-    /**
-     * Mapping human-readable constants to DQL operatores
-     *
-     * @var array
-     */
-    protected $_operator
-        = array(
-            self::EQUAL                 => '= ?',
-            self::NOT_EQUAL             => '!= ?',
-            self::LESS_THAN             => '< ?',
-            self::LESS_THAN_OR_EQUAL    => '<= ?',
-            self::GREATER_THAN          => '> ?',
-            self::GREATER_THAN_OR_EQUAL => '>= ?',
-            self::BEGIN_WITH            => 'LIKE ?',
-            self::LIKE                  => 'LIKE ?',
-            self::NOT_BEGIN_WITH        => 'NOT LIKE ?',
-            self::END_WITH              => 'LIKE ?',
-            self::NOT_END_WITH          => 'NOT LIKE ?',
-            self::CONTAIN               => 'LIKE ?',
-            self::NOT_CONTAIN           => 'NOT LIKE ?',
-            self::IN                    => 'IN ?',
-            self::NOT_IN                => 'NOT IN ?'
-        );
+	const PER_PAGE = 15;
+	const INDEX_PER_PAGE = 50;
+	const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+	const SESSION_LOCALE_KEY = 'active_locale';
+	/**
+	 * Mapping human-readable constants to DQL operatores
+	 *
+	 * @var array
+	 */
+	protected $_operator
+		= array(
+			self::EQUAL                 => '= ?',
+			self::NOT_EQUAL             => '!= ?',
+			self::LESS_THAN             => '< ?',
+			self::LESS_THAN_OR_EQUAL    => '<= ?',
+			self::GREATER_THAN          => '> ?',
+			self::GREATER_THAN_OR_EQUAL => '>= ?',
+			self::BEGIN_WITH            => 'LIKE ?',
+			self::LIKE                  => 'LIKE ?',
+			self::NOT_BEGIN_WITH        => 'NOT LIKE ?',
+			self::END_WITH              => 'LIKE ?',
+			self::NOT_END_WITH          => 'NOT LIKE ?',
+			self::CONTAIN               => 'LIKE ?',
+			self::NOT_CONTAIN           => 'NOT LIKE ?',
+			self::IN                    => 'IN ?',
+			self::NOT_IN                => 'NOT IN ?'
+		);
 
-    /** @var \SynergyCommon\Util\ErrorHandler |\Zend\Log\Logger */
-    protected $logger;
-    /**
-     * @var string
-     */
-    protected $_alias = 'e';
-    /**
-     * @var \Doctrine\ORM\QueryBuilder
-     */
-    protected $_qb;
+	/** @var \SynergyCommon\Util\ErrorHandler |\Zend\Log\Logger */
+	protected $logger;
+	/**
+	 * @var string
+	 */
+	protected $_alias = 'e';
+	/**
+	 * @var \Doctrine\ORM\QueryBuilder
+	 */
+	protected $_qb;
 
-    /** @var string */
-    protected $orm = 'orm_default';
+	/** @var string */
+	protected $orm = 'orm_default';
 
-    /** @var \Doctrine\ORM\EntityManager */
-    protected $_entityManager;
+	/** @var \Doctrine\ORM\EntityManager */
+	protected $_entityManager;
 
-    /** @var \SynergyCommon\Model\Config\ModelOptions */
-    protected $_options;
+	/** @var \SynergyCommon\Model\Config\ModelOptions */
+	protected $_options;
 
-    /** @var string */
-    protected $_entity;
+	/** @var string */
+	protected $_entity;
 
-    /** @var string */
-    protected $_entityKey;
+	/** @var string */
+	protected $_entityKey;
 
-    /**
-     * @var object
-     */
-    protected $_identity;
+	/**
+	 * @var object
+	 */
+	protected $_identity;
 
-    protected static $_site;
-    /**
-     * Access control
-     *
-     * @var
-     */
-    protected $_acl;
+	protected static $_site;
+	/**
+	 * Access control
+	 *
+	 * @var
+	 */
+	protected $_acl;
 
-    public function setEntity($entity)
-    {
-        $this->_entity = $entity;
+	public function setEntity( $entity ) {
+		$this->_entity = $entity;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getEntity()
-    {
-        return $this->_entity;
-    }
+	public function getEntity() {
+		return $this->_entity;
+	}
 
-    public function  getEntityManager()
-    {
-        return $this->_entityManager;
-    }
+	public function  getEntityManager() {
+		return $this->_entityManager;
+	}
 
-    public function setEntityManager($em)
-    {
-        $this->_entityManager = $em;
-    }
+	public function setEntityManager( $em ) {
+		$this->_entityManager = $em;
+	}
 
-    /**
-     * Find object by id in repository
-     *
-     * @param int @id id of an object
-     *
-     * @return \SynergyCommon\Entity\AbstractEntity
-     */
-    public function findObject($id = 0)
-    {
-        return $this->_entityManager->getRepository($this->_entity)->find($id);
-    }
+	/**
+	 * Find object by id in repository
+	 *
+	 * @param int @id id of an object
+	 *
+	 * @return \SynergyCommon\Entity\AbstractEntity
+	 */
+	public function findObject( $id = 0 ) {
+		return $this->findOneBy( array( 'id' => $id ) );
+	}
 
-    /**
-     * @param array        $param
-     * @param QueryBuilder $query
-     *
-     * @return mixed|null
-     */
-    public function findOneTranslatedBy(array $param, QueryBuilder $queryBuilder = null)
-    {
-        $alias = $this->getAlias();
-        if (!$queryBuilder) {
-            $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-            $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
-        } else {
+	/**
+	 * @param array $params
+	 *
+	 * @return mixed
+	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 */
+	public function findOneBy( array $params ) {
+		try {
+			$query = $this->getFindByQueryBuilder( $params );
+			$query->setMaxResults( 1 );
 
-            $query = $queryBuilder;
-        }
+			return $query->getQuery()->getOneOrNullResult();
+		} catch ( \Exception $exception ) {
+			$this->getLogger()->err( $exception->getMessage() );
 
-        foreach ($param as $key => $value) {
-            $query->andWhere(
-                $queryBuilder->expr()->eq($alias . '.' . $key, $queryBuilder->expr()->literal($value))
-            );
-        }
+			return null;
+		}
+	}
 
-        $query = LocaleAwareTrait::addHints($query->getQuery());
+	/**
+	 * @param array        $param
+	 * @param QueryBuilder $queryBuilder
+	 * @param null         $alias
+	 *
+	 * @return QueryBuilder
+	 */
+	protected function getFindByQueryBuilder( array $param, QueryBuilder $queryBuilder = null, $alias = null ) {
+		$alias        = $alias ?: $this->getAlias();
+		$queryBuilder = $queryBuilder ?: $this->getEntityManager()->createQueryBuilder();
+		$query        = $queryBuilder->select( $alias )->from( $this->getEntity(), $alias );
 
-        try {
-            return $query->getOneOrNullResult();
-        } catch (\Exception $exception) {
-            $this->getLogger()->err($exception->getMessage());
+		foreach ( $param as $key => $value ) {
+			$query->andWhere(
+				$queryBuilder->expr()->eq( $alias . '.' . $key, $queryBuilder->expr()->literal( $value ) )
+			);
+		}
 
-            return null;
-        }
-    }
+		return $query;
+	}
 
-    public function fetchOne()
-    {
-        $query = $this->createQuery();
+	/**
+	 * @param $params
+	 * @param $limit
+	 *
+	 * @return mixed|null
+	 */
+	public function findItemsByCriteria( $params, $limit ) {
+		try {
+			$query = $this->getFindByQueryBuilder( $params );
+			$query->setMaxResults( $limit );
 
-        return $query->getSingleResult();
-    }
+			return $query->getQuery()->execute();
+		} catch ( \Exception $exception ) {
+			$this->getLogger()->err( $exception->getMessage() );
 
-    /**
-     * Remove record by id
-     *
-     * @param $id
-     *
-     * @return bool
-     * @throws \SynergyCommon\Exception\InvalidArgumentException
-     */
-    public function remove($id)
-    {
-        $object = $this->findObject($id);
-        if ($object) {
-            $this->getEntityManager()->remove($object);
-            $this->getEntityManager()->flush();
-            $retv = true;
-        } else {
-            throw new InvalidArgumentException(
-                sprintf('Entity with ID #%d was not found', $id)
-            );
-        }
+			return null;
+		}
+	}
 
-        return $retv;
-    }
+	/**
+	 * @param array        $param
+	 * @param QueryBuilder $queryBuilder
+	 *
+	 * @return mixed|null
+	 */
+	public function findOneTranslatedBy( array $param, QueryBuilder $queryBuilder = null ) {
+		try {
+			$query = $this->getFindByQueryBuilder( $param, $queryBuilder );
+			$query->setMaxResults( 1 );
+			$query = LocaleAwareTrait::addHints( $query->getQuery() );
 
-    /**
-     * Save given entity
-     *
-     * @param $entity
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save($entity)
-    {
-        try {
-            $this->getEntityManager()->persist($entity);
-            $this->getEntityManager()->flush();
-        } catch (\Exception $exception) {
-            $this->getLogger()->logException($exception);
-        }
+			return $query->getOneOrNullResult();
+		} catch ( \Exception $exception ) {
+			$this->getLogger()->err( $exception->getMessage() );
 
-        return $entity;
-    }
+			return null;
+		}
+	}
 
-    /**
-     * @return \Doctrine\ORM\EntityRepository
-     */
-    public function getRepository()
-    {
-        return $this->_entityManager->getRepository($this->getEntity());
-    }
+	public function fetchOne() {
+		$query = $this->createQuery();
 
-    public function listItemsByTitle()
-    {
+		return $query->getSingleResult();
+	}
 
-        $list = array();
-        $qb   = $this->_entityManager->createQueryBuilder();
-        /** @var $query \Doctrine\ORM\Query */
-        $query = $qb->select('e')
-            ->from($this->_entity, 'e')
-            ->getQuery();
+	/**
+	 * Remove record by id
+	 *
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \SynergyCommon\Exception\InvalidArgumentException
+	 */
+	public function remove( $id ) {
+		$object = $this->find( $id );
+		if ( $object ) {
+			$this->getEntityManager()->remove( $object );
+			$this->getEntityManager()->flush();
+			$retv = true;
+		} else {
+			throw new InvalidArgumentException(
+				sprintf( 'Entity with ID #%d was not found', $id )
+			);
+		}
 
-        $result = $query->execute(array(), AbstractQuery::HYDRATE_ARRAY);
+		return $retv;
+	}
 
-        if ($result) {
-            foreach ($result as $item) {
-                $list[$item['id']] = array(
-                    'title'       => $item['title'],
-                    'description' => isset($item['description']) ? $item['description'] : $item['title']
-                );
-            }
+	/**
+	 * Save given entity
+	 *
+	 * @param $entity
+	 *
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function save( $entity ) {
+		try {
+			$this->getEntityManager()->persist( $entity );
+			$this->getEntityManager()->flush();
+		} catch ( \Exception $exception ) {
+			$this->getLogger()->logException( $exception );
+		}
 
-        }
+		return $entity;
+	}
 
-        return $list;
+	/**
+	 * @return \Doctrine\ORM\EntityRepository
+	 */
+	public function getRepository() {
+		return $this->_entityManager->getRepository( $this->getEntity() );
+	}
 
-    }
+	public function listItemsByTitle() {
 
-    public static function getUniqueGridIdentifier(array $options)
-    {
-        return implode('_', array_filter($options));
-    }
+		$list = array();
+		$qb   = $this->_entityManager->createQueryBuilder();
+		/** @var $query \Doctrine\ORM\Query */
+		$query = $qb->select( 'e' )
+		            ->from( $this->_entity, 'e' )
+		            ->getQuery();
 
-    public function __call($method, $args)
-    {
-        $repo = $this->getRepository($this->getEntity());
-        try {
-            return \call_user_func_array(array($repo, $method), $args);
-        } catch (\Exception $e) {
-            throw new InvalidArgumentException("Unable to execute method {$method} - " . $e->getMessage());
-        }
-    }
+		$result = $query->execute( array(), AbstractQuery::HYDRATE_ARRAY );
 
-    public function getEntityIdBySlug($data)
-    {
-        $query = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('e.id')
-            ->from($this->_entity, 'e')
-            ->where('e.slug = :slug')
-            ->setParameter(':slug', $data)
-            ->setMaxResults(1)
-            ->getQuery();
+		if ( $result ) {
+			foreach ( $result as $item ) {
+				$list[ $item['id'] ] = array(
+					'title'       => $item['title'],
+					'description' => isset( $item['description'] ) ? $item['description'] : $item['title']
+				);
+			}
 
-        try {
-            $id = $query->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            $id = null;
-        }
+		}
 
-        return $id;
-    }
+		return $list;
 
-    public function getEntityLikeSlug($data)
-    {
-        $query = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('e.id')
-            ->from($this->_entity, 'e')
-            ->where('e.slug LIKE :slug')
-            ->setParameter(':slug', "{$data}%")
-            ->setMaxResults(1)
-            ->getQuery();
+	}
 
-        try {
-            $id = $query->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            $id = null;
-        }
+	public static function getUniqueGridIdentifier( array $options ) {
+		return implode( '_', array_filter( $options ) );
+	}
 
-        return $id;
-    }
+	public function __call( $method, $args ) {
+		$repo = $this->getRepository( $this->getEntity() );
+		try {
+			return \call_user_func_array( array( $repo, $method ), $args );
+		} catch ( \Exception $e ) {
+			throw new InvalidArgumentException( "Unable to execute method {$method} - " . $e->getMessage() );
+		}
+	}
 
-    public function getItemListByIds(array $idList, array $order = null)
-    {
-        $entity = $this->getEntity();
-        $qb     = $this->getEntityManager()->createQueryBuilder();
+	public function getEntityIdBySlug( $data ) {
+		$query = $this->getEntityManager()
+		              ->createQueryBuilder()
+		              ->select( 'e.id' )
+		              ->from( $this->_entity, 'e' )
+		              ->where( 'e.slug = :slug' )
+		              ->setParameter( ':slug', $data )
+		              ->setMaxResults( 1 )
+		              ->getQuery();
 
-        $query = $qb
-            ->select('e')
-            ->from($entity, 'e')
-            ->where($qb->expr()->in('e.id', $idList));
+		try {
+			$id = $query->getSingleScalarResult();
+		} catch ( NoResultException $e ) {
+			$id = null;
+		}
 
-        if ($order) {
-            $query->orderBy('e.' . key($order), current($order));
-        }
+		return $id;
+	}
 
-        return $query->getQuery()->execute(null, AbstractQuery::HYDRATE_OBJECT);
-    }
+	public function getEntityLikeSlug( $data ) {
+		$query = $this->getEntityManager()
+		              ->createQueryBuilder()
+		              ->select( 'e.id' )
+		              ->from( $this->_entity, 'e' )
+		              ->where( 'e.slug LIKE :slug' )
+		              ->setParameter( ':slug', "{$data}%" )
+		              ->setMaxResults( 1 )
+		              ->getQuery();
 
-    /**
-     * Returns a subset of fields based on the criteria
-     *
-     * @param       $idField
-     * @param       $idValue
-     * @param array $returnFields
-     * @param null  $limit
-     *
-     * @return array|mixed
-     */
-    public function getFieldsBy($idField, $idValue, array $returnFields, $limit = null)
-    {
-        $select = array();
-        foreach ($returnFields as $f) {
-            $select[] = 'e.' . $f;
-        }
+		try {
+			$id = $query->getSingleScalarResult();
+		} catch ( NoResultException $e ) {
+			$id = null;
+		}
 
-        $query = $this->_entityManager
-            ->createQueryBuilder()
-            ->select(implode(',', $select))
-            ->from($this->_entity, 'e')
-            ->where("e.$idField = :val")
-            ->setParameter(":val", $idValue)
-            ->getQuery();
+		return $id;
+	}
 
-        if ($limit == 1) {
-            try {
-                return $query->getSingleResult();
-            } catch (NoResultException $e) {
-                return null;
-            }
-        } elseif ($limit) {
-            $query->setMaxResults($limit);
+	public function getItemListByIds( array $idList, array $order = null ) {
+		$entity = $this->getEntity();
+		$qb     = $this->getEntityManager()->createQueryBuilder();
 
-            return $query->getArrayResult();
-        }
+		$query = $qb
+			->select( 'e' )
+			->from( $entity, 'e' )
+			->where( $qb->expr()->in( 'e.id', $idList ) );
 
-        return array();
-    }
+		if ( $order ) {
+			$query->orderBy( 'e.' . key( $order ), current( $order ) );
+		}
 
-    /**
-     * Update and foreign entity
-     *
-     * @param $id
-     * @param $param
-     * @param $value
-     *
-     * @return \Doctrine\ORM\Mapping\Entity
-     */
-    public function updateForeignEntity($id, $param, $value)
-    {
-        $entity  = $this->getRepository($this->_entity)->find($id);
-        $mapping = $this->getEntityManager()->getClassMetadata($this->_entity);
-        $target  = $mapping->associationMappings[$param]['targetEntity'];
+		return $query->getQuery()->execute( null, AbstractQuery::HYDRATE_OBJECT );
+	}
 
-        /** @var $collection ArrayCollection */
-        $collection = $entity->$param;
-        if ($collection) {
-            $collection->clear();
-        } else {
-            $collection = new ArrayCollection();
-        }
-        $value = array_unique(array_filter($value));
+	/**
+	 * Returns a subset of fields based on the criteria
+	 *
+	 * @param       $idField
+	 * @param       $idValue
+	 * @param array $returnFields
+	 * @param null  $limit
+	 *
+	 * @return array|mixed
+	 */
+	public function getFieldsBy( $idField, $idValue, array $returnFields, $limit = null ) {
+		$select = array();
+		foreach ( $returnFields as $f ) {
+			$select[] = 'e.' . $f;
+		}
 
-        foreach ($value as $v) {
-            if ($foreignEntity = $this->getEntityManager()->find($target, $v)) {
-                $collection->add($foreignEntity);
-            }
-        }
+		$query = $this->_entityManager
+			->createQueryBuilder()
+			->select( implode( ',', $select ) )
+			->from( $this->_entity, 'e' )
+			->where( "e.$idField = :val" )
+			->setParameter( ":val", $idValue )
+			->getQuery();
 
-        $entity->$param = $collection;
+		if ( $limit == 1 ) {
+			try {
+				return $query->getSingleResult();
+			} catch ( NoResultException $e ) {
+				return null;
+			}
+		} elseif ( $limit ) {
+			$query->setMaxResults( $limit );
 
-        return $this->save($entity);
-    }
+			return $query->getArrayResult();
+		}
+
+		return array();
+	}
+
+	/**
+	 * Update and foreign entity
+	 *
+	 * @param $id
+	 * @param $param
+	 * @param $value
+	 *
+	 * @return \Doctrine\ORM\Mapping\Entity
+	 */
+	public function updateForeignEntity( $id, $param, $value ) {
+		$entity  = $this->getRepository( $this->_entity )->find( $id );
+		$mapping = $this->getEntityManager()->getClassMetadata( $this->_entity );
+		$target  = $mapping->associationMappings[ $param ]['targetEntity'];
+
+		/** @var $collection ArrayCollection */
+		$collection = $entity->$param;
+		if ( $collection ) {
+			$collection->clear();
+		} else {
+			$collection = new ArrayCollection();
+		}
+		$value = array_unique( array_filter( $value ) );
+
+		foreach ( $value as $v ) {
+			if ( $foreignEntity = $this->getEntityManager()->find( $target, $v ) ) {
+				$collection->add( $foreignEntity );
+			}
+		}
+
+		$entity->$param = $collection;
+
+		return $this->save( $entity );
+	}
 
 	/**
 	 * @param $id
@@ -416,710 +438,680 @@ class AbstractModel
 	 *
 	 * @return mixed
 	 */
-	public function updateById($id, $field, $value)
-	{
+	public function updateById( $id, $field, $value ) {
 		$queryBuilder = $this->getEntityManager()->createQueryBuilder();
 		$updQuery     = $queryBuilder
-			->update($this->getEntity(), 'e')
-			->set("e.{$field}", $queryBuilder->expr()->literal($value))
-			->where('e.id = :id')
+			->update( $this->getEntity(), 'e' )
+			->set( "e.{$field}", $queryBuilder->expr()->literal( $value ) )
+			->where( 'e.id = :id' )
 			->setParameters(
-				array(':id' => $id)
+				array( ':id' => $id )
 			)
 			->getQuery();
 
 		return $updQuery->execute();
 	}
-    /**
-     * Update and entity with data in params
-     *
-     * @param       $entityId
-     * @param array $params
-     *
-     * @return array
-     */
-    public function updateEntity($entityId, array $params)
-    {
-        $error   = false;
-        $message = '';
-
-        $entity = $this->getRepository($this->getEntity())->find($entityId);
-
-        $mapping = $this->getEntityManager()->getClassMetadata($this->_entity);
-
-        try {
-
-            foreach ($params as $param => $value) {
-                if (array_key_exists($param, $mapping->fieldMappings)
-                    or array_key_exists($param, $mapping->associationMappings)
-                ) {
-                    $method = 'set' . ucfirst($param);
-                    if (isset($mapping->fieldMappings[$param])) {
-                        $type = $mapping->fieldMappings[$param]['type'];
-                        if ($type == 'datetime' || $type == 'date') {
-                            $value = $value ? new \DateTime($value) : null;
-                        }
-                        $entity->$method($value);
-
-                    } elseif (isset($mapping->associationMappings[$param])) {
-                        $target = $mapping->associationMappings[$param]['targetEntity'];
-
-                        /** @var $collection ArrayCollection */
-                        $collection = $entity->$param;
-                        if ($mapping->associationMappings[$param]['type'] == 8) {
-                            $collection->clear();
-                            $value = explode(',', $value);
-                            $value = array_unique(array_filter($value));
-
-                            foreach ($value as $v) {
-                                if ($foreignEntity = $this->getEntityManager()->find($target, $v)) {
-                                    $collection->add($foreignEntity);
-                                }
-                            }
-                            $entity->$param = $collection;
-                        } else {
-                            if (is_numeric($value)) {
-                                $foreignEntity = $this->getEntityManager()->find($target, $value);
-                            } else {
-                                //assumes we are finding by slug
-                                $foreignEntity = $this->getEntityManager()
-                                    ->getRepository($target)
-                                    ->findOneBy(array('slug' => $value));
-                            }
-
-                            $entity->$method($foreignEntity);
-                        }
-
-                    }
-                }
-            }
-
-            if (!$error) {
-                return $this->save($entity);
-            }
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            $error   = true;
-        }
-
-        return array($error, $message);
-    }
-
-    public function getOrm()
-    {
-        return $this->orm;
-    }
-
-    /**
-     * Get paginatored list
-     *
-     * @return Paginator
-     */
-    public function getPaginator()
-    {
-        $query = $this->createQuery();
-
-        $paginator = new DoctrinePaginator($query);
-
-        return $paginator;
-    }
-
-    /**
-     * Create Query
-     *
-     * @return \Doctrine\Orm\Query
-     */
-    public function createQuery()
-    {
-        $mapping = $this->getEntityManager()->getClassMetadata($this->getEntity());
-
-        $alias  = $this->getAlias();
-        $offset = ($this->getOptions()->getPage() - 1) * $this->getOptions()->getPerPage();
-
-        $this->_qb  = $this->getEntityManager()->createQueryBuilder();
-        $toJoin     = array();
-        $toSelect[] = $alias;
-        $num        = ord($alias);
-        $fields     = $this->getOptions()->getFields();
-        $entityKey  = $this->getEntityKey();
-
-        if (isset($fields[$entityKey])) {
-            foreach ($fields[$entityKey] as $field) {
-                if (isset($mapping->associationMappings[$field])) {
-                    $joinAlias      = chr(++$num);
-                    $toJoin[$field] = $joinAlias;
-                    $toSelect[]     = $joinAlias;
-                }
-            }
-        }
-
-        $this->_qb->select(implode(',', $toSelect));
-        $this->_qb->from($this->getEntity(), $alias);
-
-        foreach ($toJoin as $field => $joinAlias) {
-            $this->_qb->innerJoin($alias . '.' . $field, $joinAlias);
-        }
-
-        if ($itemCountPerPage = $this->getOptions()->getPerPage()) {
-            $this->_qb->setMaxResults($itemCountPerPage);
-        }
-
-        if ($offset) {
-            $this->_qb->setFirstResult($offset);
-        }
-
-        if ($filter = $this->getOptions()->getFilters()) {
-            $this->_filter($filter);
-        }
-
-        $sortOrder = $this->getOptions()->getSortOrder();
-        if (is_array($sortOrder)) {
-            /** @var $sort \SynergyCommon\Model\Config\SortOrder */
-            foreach ($sortOrder as $sort) {
-                $this->_qb->addOrderBy($alias . '.' . $sort->getField(), $sort->getDirection());
-            }
-        }
-
-        $query = $this->_qb->getQuery()->setHydrationMode(
-            $this->getOptions()->getHydrationMode()
-        );
-
-        return $query;
-    }
-
-    /**
-     * Filter the result set based on criteria.
-     *
-     * @param array $options
-     *
-     * @throws InvalidArgumentException
-     */
-    protected function _filter($options = array())
-    {
-        if ($options) {
-            $count       = 0;
-            $entityClass = $this->getEntity();
-            /** @var $entity \SynergyCommon\Entity\AbstractEntity */
-            $entity = new $entityClass();
-
-            $inputFilter = $entity->getInputFilter() ?: new InputFilter();
-
-            $mapping = $this->getEntityManager()->getClassMetadata($entityClass);
-
-            foreach ($options as $field => $param) {
-                if (is_array($param)) {
-                    $value      = $param;
-                    $expression = self::DEFAULT_EXPRESSION;
-                } else {
-                    list($value, $expression) = explode(':', $param . ':');
-                }
-                $expression = $expression ? trim(strtolower($expression)) : self::DEFAULT_EXPRESSION;
-
-                if (array_key_exists($field, $mapping->fieldMappings)
-                    or array_key_exists($field, $mapping->associationMappings)
-                ) {
-                    $type = $mapping->fieldMappings[$field]['type'];
-
-                    if (isset($this->_operator[$expression])) {
-                        $operator = $this->_operator[$expression];
-                    } else {
-                        $operator = $this->_operator[self::DEFAULT_EXPRESSION];
-                    }
-                    //filter inputs, process if valid or no filter was set
-                    if ($inputFilter->has($field)) {
-                        $input = $inputFilter->get($field);
-                        $input->setValue($value);
-
-                        if ($input->isValid()) {
-                            $value = $input->getValue();
-                        } else {
-                            throw new InvalidArgumentException($field . ': ' . implode(' ', $input->getMessages()));
-                        }
-                    }
-
-                    if ($type == 'boolean' && !(is_numeric($value) || is_bool($value))) {
-                        $value = ('true' === $value) ? 1 : 0;
-                    } elseif (is_string($value) && strpos($value, ',') !== false) {
-                        $value = array_filter(explode(',', $value));
-                    }
-
-                    if (is_array($value)) {
-                        if ($expression == self::NOT_IN) {
-                            $this->_qb->andWhere(
-                                $this->_qb->expr()->notIn(
-                                    sprintf('%s.%s', $this->getAlias(), $field),
-                                    $value
-                                )
-                            );
-                        } else {
-                            $this->_qb->andWhere(
-                                $this->_qb->expr()->in(
-                                    sprintf('%s.%s', $this->getAlias(), $field),
-                                    $value
-                                )
-                            );
-                        }
-                    } else {
-                        $placeHolder = ':' . $field . '_' . $count++;
-                        $replacement = str_replace('?', $placeHolder, $operator);
-                        $where       = sprintf('%s.%s %s', $this->getAlias(), $field, $replacement);
-
-                        $this->_qb->andWhere($where);
-                        $this->_qb->setParameter($placeHolder, $this->_setWildCardInValue($expression, $value));
-                    }
-                }
-
-            }
-        }
-    }
-
-    /**
-     * @param                $entity
-     * @param                $params
-     *
-     * @return \SynergyCommon\Entity\AbstractEntity
-     * @throws  InvalidArgumentException
-     */
-    public function populateEntity($entity, $params)
-    {
-        if ($entity instanceof AbstractEntity) {
-
-            $mapping = $this->getEntityManager()->getClassMetadata($this->getEntity());
-
-            foreach ($params as $param => $value) {
-                if (array_key_exists($param, $mapping->fieldMappings) or array_key_exists(
-                        $param, $mapping->associationMappings
-                    )
-                ) {
-
-                    $method = 'set' . ucfirst($param);
-                    $value  = ($value == 'null' or (empty($value) and !is_numeric($value))) ? null : $value;
-
-                    if (isset($mapping->associationMappings[$param])) {
-                        $target = $mapping->associationMappings[$param]['targetEntity'];
-
-                        if ($mapping->associationMappings[$param]['type'] == ClassMetadataInfo::ONE_TO_MANY) {
-                            throw new InvalidArgumentException(
-                                sprintf(
-                                    "OneToMany updates not supported: %s was not updated", $param
-                                )
-                            );
-                        } elseif ($mapping->associationMappings[$param]['type'] == ClassMetadataInfo::MANY_TO_MANY) {
-                            /** @var \Doctrine\Orm\PersistentCollection $param */
-                            if ($entity->$param) {
-                                $entity->$param->clear();
-                            } else {
-                                $entity->$param = new ArrayCollection();
-                            }
-                            $value = is_string($value) ? explode(',', $value) : $value;
-                            $value = array_unique(array_filter($value));
-
-                            foreach ($value as $v) {
-                                if ($foreignEntity = $this->getEntityManager()->find($target, $v)) {
-                                    $entity->$param->add($foreignEntity);
-                                } else {
-                                    throw new InvalidArgumentException(
-                                        sprintf(
-                                            "%s with ID #%d was not found  ", $param, $v
-                                        )
-                                    );
-                                }
-                            }
-                        } elseif ($value) {
-                            $value = is_array($value) ? current($value) : $value;
-                            if ($foreignEntity = $this->getEntityManager()->find($target, $value)) {
-                                $entity->$method($foreignEntity);
-                            } else {
-                                throw new InvalidArgumentException(
-                                    sprintf(
-                                        "%s with ID #%d was not found ", $param, $value
-                                    )
-                                );
-                            }
-                        }
-
-                    } else {
-                        $type = $mapping->fieldMappings[$param]['type'];
-                        if ($type == 'datetime' || $type == 'date') {
-                            try {
-                                //attempt to ensure date is in acceptable format for datetime object
-                                $ts    = is_numeric($value) ? $value : strtotime($value);
-                                $ds    = $ts ? date(\DateTime::ISO8601, $ts) : null;
-                                $value = $ds ? new \DateTime($ds) : null;
-                                $entity->$method($value);
-                            } catch (\Exception $e) {
-                                throw new InvalidArgumentException(
-                                    sprintf("%s: Wrong date format for column ", $param)
-                                );
-                                break;
-                            }
-                        } else {
-                            $entity->$method($value);
-                        }
-                    }
-                }
-            }
-        } else {
-            throw new InvalidArgumentException('Invalid entity found');
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    public function arrayToSearchIndexFormat(array $data)
-    {
-        $item = array();
-        foreach ($data as $key => $value) {
-            if (is_string($value)) {
-                $value      = trim($value);
-                $value      = preg_replace('/[\p{C}]/iu', ' ', $value);
-                $item[$key] = \html_entity_decode($value, null, 'UTF-8');
-            }
-        }
-
-        $result = array_filter(
-            $item,
-            function ($value) {
-                return (\is_bool($value) or \is_numeric($value) or !empty($value));
-            }
-        );
-
-        return $result;
-    }
-
-    /**
-     * Place wildcard filtering in value
-     *
-     * @param string $expression expression to filter
-     * @param string $value      value to add wildcard to
-     *
-     * @return string
-     */
-    protected function _setWildCardInValue($expression, $value)
-    {
-        switch ($expression) {
-            case self::BEGIN_WITH:
-            case self::NOT_BEGIN_WITH:
-                $value = $value . '%';
-                break;
-            case self::END_WITH:
-            case self::NOT_END_WITH:
-                $value = '%' . $value;
-                break;
-            case self::CONTAIN:
-            case self::NOT_CONTAIN:
-                $value = '%' . $value . '%';
-                break;
-            case self::IN:
-            case self::NOT_IN:
-                $value = '(' . implode(', ', (array)$value) . ')';
-                break;
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param string $alias
-     */
-    public function setAlias($alias)
-    {
-        $this->_alias = $alias;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAlias()
-    {
-        return $this->_alias;
-    }
-
-    /**
-     * @param \SynergyCommon\Model\Config\ModelOptions $options
-     */
-    public function setOptions($options)
-    {
-        $this->_options = $options;
-    }
-
-    /**
-     * @return \SynergyCommon\Model\Config\ModelOptions
-     */
-    public function getOptions()
-    {
-        if (!$this->_options) {
-            $this->_options = new ModelOptions();
-        }
-
-        return $this->_options;
-    }
-
-    /**
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     */
-    public function setQb($qb)
-    {
-        $this->_qb = $qb;
-    }
-
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getQb()
-    {
-        return $this->_qb;
-    }
-
-    /**
-     * @param string $entityKey
-     */
-    public function setEntityKey($entityKey)
-    {
-        $this->_entityKey = $entityKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityKey()
-    {
-        return $this->_entityKey;
-    }
-
-    public function filterSearchData($data)
-    {
-
-        foreach ($data as $k => $v) {
-            if (is_string($v)) {
-                $data[$k] = \html_entity_decode(trim($v), null, 'UTF-8');
-            }
-        }
-
-        $result = array_filter(
-            $data, function ($v) {
-            return (\is_bool($v) or \is_numeric($v) or !empty($v));
-        }
-        );
-
-        return $result;
-    }
-
-    public function setLogger($logger)
-    {
-        $this->logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Determines if the date is expired
-     *
-     * @param $end
-     *
-     * @return bool
-     */
-    public static function isExpired($end)
-    {
-        if ($end) {
-            try {
-                $now     = new \DateTime();
-                $endDate = ($end instanceof \DateTime) ? $end : new \DateTime($end);
-
-                return ($now > $endDate);
-            } catch (\Exception $e) {
-                return false;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Valid data to be imported
-     *
-     * @param array $data
-     * @param array $columns
-     * @param bool  $escape
-     *
-     * @return array
-     */
-    public function validateRecordToImport(array $data, array $columns, $escape = true)
-    {
-        $class = $this->getEntity();
-        /** @var $entity \SynergyCommon\Entity\AbstractEntity */
-        $entity  = new $class();
-        $filters = $entity->getInputFilter();
-
-        foreach ($data as $field => $value) {
-
-            $attribute = isset($columns[$field]) ? $columns[$field] : null;
-
-            if ($filters and $attribute and $filters->has($attribute)) {
-                $input = $filters->get($attribute);
-                $input->setValue($value);
-                if ($input->isValid()) {
-                    $value = $input->getValue();
-                } else {
-                    $value = null;
-                }
-            }
-
-            if ($value instanceof AbstractEntity) {
-                $value = $value->getId();
-            } elseif ($value instanceof \DateTime) {
-                $value = $value->format(self::DB_DATE_FORMAT);
-            } elseif (is_bool($value)) {
-                $value = $value ? 1 : 0;
-            }
-
-            $data[$field] = $escape ? (get_magic_quotes_gpc() ? $value : addslashes($value)) : $value;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Creates a new node as child of a parent node or as a root node
-     *
-     * @param       $parentId
-     * @param array $data
-     *
-     * @return \SynergyCommon\Entity\AbstractEntity|mixed
-     */
-    public function createNode($parentId, $data = array())
-    {
-        $className = $this->getEntity();
-        /** @var $node \SynergyCommon\Entity\AbstractEntity */
-        $node = new $className;
-        $node = $node->exchangeArray($data);
-
-        /** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
-        $repo = $this->getRepository();
-
-        if ($parentId and $parentNode = $this->findObject($parentId)) {
-            $repo->persistAsFirstChildOf($node, $parentNode);
-        } else {
-            $repo->persistAsLastChild($node);
-        }
-
-        $this->getEntityManager()->flush();
-        $this->getEntityManager()->clear();
-
-        return $node;
-    }
-
-    /**
-     * Move a node relatived to the reference node in the direction specified
-     * Direction can be: after, before, last or first
-     *
-     * @param $id
-     * @param $referenceNodeId
-     * @param $direction
-     *
-     * @return mixed
-     * @throws \SynergyCommon\Exception\InvalidArgumentException
-     * @throws \SynergyCommon\Exception\InvalidEntityException
-     */
-    public function moveNode($id, $referenceNodeId, $direction)
-    {
-        /** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
-        $repo = $this->getRepository();
-
-        if (!$node = $this->findObject($id)) {
-            throw new InvalidEntityException(sprintf('Object with ID #%d was not ofund: ', $id));
-        }
-
-        if (!$referenceNode = $this->findObject($referenceNodeId)) {
-            throw new InvalidEntityException(sprintf('Object with ID #%d was not ofund: ', $referenceNodeId));
-        }
-
-        switch ($direction) {
-            case 'after':
-                $done = $repo->persistAsNextSiblingOf($node, $referenceNode);
-                break;
-            case 'before':
-                $done = $repo->persistAsPrevSiblingOf($node, $referenceNode);
-                break;
-            case 'last':
-                $done = $repo->persistAsLastChildOf($node, $referenceNode);
-                break;
-            case 'first':
-                $done = $repo->persistAsFirstChildOf($node, $referenceNode);
-                break;
-            default :
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'Invalid direction {%s) found. Direction should be either after, before, first or last.',
-                        $direction
-                    )
-                );
-        }
-
-        $this->getEntityManager()->flush();
-        $this->getEntityManager()->clear();
-
-        return $done ? $node : $done;
-    }
-
-    /**
-     * Delete a node from the nested set tree
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function removeNode($id)
-    {
-        /** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
-        $repo = $this->getRepository();
-        $node = $this->findObject($id);
-        $repo->removeFromTree($node);
-
-        $this->getEntityManager()->flush();
-        $this->getEntityManager()->clear();
-
-        return true;
-    }
-
-    /**
-     * @param  $acl
-     */
-    public function setAcl($acl)
-    {
-        $this->_acl = $acl;
-    }
-
-    /**
-     * @return
-     */
-    public function getAcl()
-    {
-        return $this->_acl;
-    }
-
-    /**
-     * @param object $identity
-     */
-    public function setIdentity($identity)
-    {
-        $this->_identity = $identity;
-    }
-
-    /**
-     * @return object
-     */
-    public function getIdentity()
-    {
-        return $this->_identity;
-    }
+
+	/**
+	 * Update and entity with data in params
+	 *
+	 * @param       $entityId
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	public function updateEntity( $entityId, array $params ) {
+		$error   = false;
+		$message = '';
+		$entity  = $this->getRepository( $this->getEntity() )->find( $entityId );
+		$mapping = $this->getEntityManager()->getClassMetadata( $this->_entity );
+
+		try {
+
+			foreach ( $params as $param => $value ) {
+				if ( array_key_exists( $param, $mapping->fieldMappings )
+				     or array_key_exists( $param, $mapping->associationMappings )
+				) {
+					$method = 'set' . ucfirst( $param );
+					if ( isset( $mapping->fieldMappings[ $param ] ) ) {
+						$type = $mapping->fieldMappings[ $param ]['type'];
+						if ( $type == 'datetime' || $type == 'date' ) {
+							$value = $value ? new \DateTime( $value ) : null;
+						}
+						$entity->$method( $value );
+
+					} elseif ( isset( $mapping->associationMappings[ $param ] ) ) {
+						$target = $mapping->associationMappings[ $param ]['targetEntity'];
+
+						/** @var $collection ArrayCollection */
+						$collection = $entity->$param;
+						if ( $mapping->associationMappings[ $param ]['type'] == 8 ) {
+							$collection->clear();
+							$value = explode( ',', $value );
+							$value = array_unique( array_filter( $value ) );
+
+							foreach ( $value as $v ) {
+								if ( $foreignEntity = $this->getEntityManager()->find( $target, $v ) ) {
+									$collection->add( $foreignEntity );
+								}
+							}
+							$entity->$param = $collection;
+						} else {
+							if ( is_numeric( $value ) ) {
+								$foreignEntity = $this->getEntityManager()->find( $target, $value );
+							} else {
+								//assumes we are finding by slug
+								$foreignEntity = $this->getEntityManager()
+								                      ->getRepository( $target )
+								                      ->findOneBy( array( 'slug' => $value ) );
+							}
+
+							$entity->$method( $foreignEntity );
+						}
+
+					}
+				}
+			}
+
+			if ( ! $error ) {
+				return $this->save( $entity );
+			}
+		} catch ( \Exception $e ) {
+			$message = $e->getMessage();
+			$error   = true;
+		}
+
+		return array( $error, $message );
+	}
+
+	public function getOrm() {
+		return $this->orm;
+	}
+
+	/**
+	 * Get paginatored list
+	 *
+	 * @return Paginator
+	 */
+	public function getPaginator() {
+		$query     = $this->createQuery();
+		$paginator = new DoctrinePaginator( $query );
+
+		return $paginator;
+	}
+
+	/**
+	 * Create Query
+	 *
+	 * @return \Doctrine\Orm\Query
+	 */
+	public function createQuery() {
+		$mapping = $this->getEntityManager()->getClassMetadata( $this->getEntity() );
+
+		$alias  = $this->getAlias();
+		$offset = ( $this->getOptions()->getPage() - 1 ) * $this->getOptions()->getPerPage();
+
+		$this->_qb  = $this->getEntityManager()->createQueryBuilder();
+		$toJoin     = array();
+		$toSelect[] = $alias;
+		$num        = ord( $alias );
+		$fields     = $this->getOptions()->getFields();
+		$entityKey  = $this->getEntityKey();
+
+		if ( isset( $fields[ $entityKey ] ) ) {
+			foreach ( $fields[ $entityKey ] as $field ) {
+				if ( isset( $mapping->associationMappings[ $field ] ) ) {
+					$joinAlias        = chr( ++ $num );
+					$toJoin[ $field ] = $joinAlias;
+					$toSelect[]       = $joinAlias;
+				}
+			}
+		}
+
+		$this->_qb->select( implode( ',', $toSelect ) );
+		$this->_qb->from( $this->getEntity(), $alias );
+
+		foreach ( $toJoin as $field => $joinAlias ) {
+			$this->_qb->innerJoin( $alias . '.' . $field, $joinAlias );
+		}
+
+		if ( $itemCountPerPage = $this->getOptions()->getPerPage() ) {
+			$this->_qb->setMaxResults( $itemCountPerPage );
+		}
+
+		if ( $offset ) {
+			$this->_qb->setFirstResult( $offset );
+		}
+
+		if ( $filter = $this->getOptions()->getFilters() ) {
+			$this->_filter( $filter );
+		}
+
+		$sortOrder = $this->getOptions()->getSortOrder();
+		if ( is_array( $sortOrder ) ) {
+			/** @var $sort \SynergyCommon\Model\Config\SortOrder */
+			foreach ( $sortOrder as $sort ) {
+				$this->_qb->addOrderBy( $alias . '.' . $sort->getField(), $sort->getDirection() );
+			}
+		}
+
+		$query = $this->_qb->getQuery()->setHydrationMode(
+			$this->getOptions()->getHydrationMode()
+		);
+
+		return $query;
+	}
+
+	/**
+	 * Filter the result set based on criteria.
+	 *
+	 * @param array $options
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	protected function _filter( $options = array() ) {
+		if ( $options ) {
+			$count       = 0;
+			$entityClass = $this->getEntity();
+			/** @var $entity \SynergyCommon\Entity\AbstractEntity */
+			$entity = new $entityClass();
+
+			$inputFilter = $entity->getInputFilter() ?: new InputFilter();
+
+			$mapping = $this->getEntityManager()->getClassMetadata( $entityClass );
+
+			foreach ( $options as $field => $param ) {
+				if ( is_array( $param ) ) {
+					$value      = $param;
+					$expression = self::DEFAULT_EXPRESSION;
+				} else {
+					list( $value, $expression ) = explode( ':', $param . ':' );
+				}
+				$expression = $expression ? trim( strtolower( $expression ) ) : self::DEFAULT_EXPRESSION;
+
+				if ( array_key_exists( $field, $mapping->fieldMappings )
+				     or array_key_exists( $field, $mapping->associationMappings )
+				) {
+					$type = $mapping->fieldMappings[ $field ]['type'];
+
+					if ( isset( $this->_operator[ $expression ] ) ) {
+						$operator = $this->_operator[ $expression ];
+					} else {
+						$operator = $this->_operator[ self::DEFAULT_EXPRESSION ];
+					}
+					//filter inputs, process if valid or no filter was set
+					if ( $inputFilter->has( $field ) ) {
+						$input = $inputFilter->get( $field );
+						$input->setValue( $value );
+
+						if ( $input->isValid() ) {
+							$value = $input->getValue();
+						} else {
+							throw new InvalidArgumentException( $field . ': ' . implode( ' ', $input->getMessages() ) );
+						}
+					}
+
+					if ( $type == 'boolean' && ! ( is_numeric( $value ) || is_bool( $value ) ) ) {
+						$value = ( 'true' === $value ) ? 1 : 0;
+					} elseif ( is_string( $value ) && strpos( $value, ',' ) !== false ) {
+						$value = array_filter( explode( ',', $value ) );
+					}
+
+					if ( is_array( $value ) ) {
+						if ( $expression == self::NOT_IN ) {
+							$this->_qb->andWhere(
+								$this->_qb->expr()->notIn(
+									sprintf( '%s.%s', $this->getAlias(), $field ),
+									$value
+								)
+							);
+						} else {
+							$this->_qb->andWhere(
+								$this->_qb->expr()->in(
+									sprintf( '%s.%s', $this->getAlias(), $field ),
+									$value
+								)
+							);
+						}
+					} else {
+						$placeHolder = ':' . $field . '_' . $count ++;
+						$replacement = str_replace( '?', $placeHolder, $operator );
+						$where       = sprintf( '%s.%s %s', $this->getAlias(), $field, $replacement );
+
+						$this->_qb->andWhere( $where );
+						$this->_qb->setParameter( $placeHolder, $this->_setWildCardInValue( $expression, $value ) );
+					}
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * @param                $entity
+	 * @param                $params
+	 *
+	 * @return \SynergyCommon\Entity\AbstractEntity
+	 * @throws  InvalidArgumentException
+	 */
+	public function populateEntity( $entity, $params ) {
+		if ( $entity instanceof AbstractEntity ) {
+
+			$mapping = $this->getEntityManager()->getClassMetadata( $this->getEntity() );
+
+			foreach ( $params as $param => $value ) {
+				if ( array_key_exists( $param, $mapping->fieldMappings ) or array_key_exists(
+						$param, $mapping->associationMappings
+					)
+				) {
+
+					$method = 'set' . ucfirst( $param );
+					$value  = ( $value == 'null' or ( empty( $value ) and ! is_numeric( $value ) ) ) ? null : $value;
+
+					if ( isset( $mapping->associationMappings[ $param ] ) ) {
+						$target = $mapping->associationMappings[ $param ]['targetEntity'];
+
+						if ( $mapping->associationMappings[ $param ]['type'] == ClassMetadataInfo::ONE_TO_MANY ) {
+							throw new InvalidArgumentException(
+								sprintf(
+									"OneToMany updates not supported: %s was not updated", $param
+								)
+							);
+						} elseif ( $mapping->associationMappings[ $param ]['type'] == ClassMetadataInfo::MANY_TO_MANY
+						) {
+							/** @var \Doctrine\Orm\PersistentCollection $param */
+							if ( $entity->$param ) {
+								$entity->$param->clear();
+							} else {
+								$entity->$param = new ArrayCollection();
+							}
+							$value = is_string( $value ) ? explode( ',', $value ) : $value;
+							$value = array_unique( array_filter( $value ) );
+
+							foreach ( $value as $v ) {
+								if ( $foreignEntity = $this->getEntityManager()->find( $target, $v ) ) {
+									$entity->$param->add( $foreignEntity );
+								} else {
+									throw new InvalidArgumentException(
+										sprintf(
+											"%s with ID #%d was not found  ", $param, $v
+										)
+									);
+								}
+							}
+						} elseif ( $value ) {
+							$value = is_array( $value ) ? current( $value ) : $value;
+							if ( $foreignEntity = $this->getEntityManager()->find( $target, $value ) ) {
+								$entity->$method( $foreignEntity );
+							} else {
+								throw new InvalidArgumentException(
+									sprintf(
+										"%s with ID #%d was not found ", $param, $value
+									)
+								);
+							}
+						}
+
+					} else {
+						$type = $mapping->fieldMappings[ $param ]['type'];
+						if ( $type == 'datetime' || $type == 'date' ) {
+							try {
+								//attempt to ensure date is in acceptable format for datetime object
+								$ts    = is_numeric( $value ) ? $value : strtotime( $value );
+								$ds    = $ts ? date( \DateTime::ISO8601, $ts ) : null;
+								$value = $ds ? new \DateTime( $ds ) : null;
+								$entity->$method( $value );
+							} catch ( \Exception $e ) {
+								throw new InvalidArgumentException(
+									sprintf( "%s: Wrong date format for column ", $param )
+								);
+								break;
+							}
+						} else {
+							$entity->$method( $value );
+						}
+					}
+				}
+			}
+		} else {
+			throw new InvalidArgumentException( 'Invalid entity found' );
+		}
+
+		return $entity;
+	}
+
+	/**
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function arrayToSearchIndexFormat( array $data ) {
+		$item = array();
+		foreach ( $data as $key => $value ) {
+			if ( is_string( $value ) ) {
+				$value        = trim( $value );
+				$value        = preg_replace( '/[\p{C}]/iu', ' ', $value );
+				$item[ $key ] = \html_entity_decode( $value, null, 'UTF-8' );
+			}
+		}
+
+		$result = array_filter(
+			$item,
+			function ( $value ) {
+				return ( \is_bool( $value ) or \is_numeric( $value ) or ! empty( $value ) );
+			}
+		);
+
+		return $result;
+	}
+
+	/**
+	 * Place wildcard filtering in value
+	 *
+	 * @param string $expression expression to filter
+	 * @param string $value      value to add wildcard to
+	 *
+	 * @return string
+	 */
+	protected function _setWildCardInValue( $expression, $value ) {
+		switch ( $expression ) {
+			case self::BEGIN_WITH:
+			case self::NOT_BEGIN_WITH:
+				$value = $value . '%';
+				break;
+			case self::END_WITH:
+			case self::NOT_END_WITH:
+				$value = '%' . $value;
+				break;
+			case self::CONTAIN:
+			case self::NOT_CONTAIN:
+				$value = '%' . $value . '%';
+				break;
+			case self::IN:
+			case self::NOT_IN:
+				$value = '(' . implode( ', ', (array) $value ) . ')';
+				break;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param string $alias
+	 */
+	public function setAlias( $alias ) {
+		$this->_alias = $alias;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAlias() {
+		return $this->_alias;
+	}
+
+	/**
+	 * @param \SynergyCommon\Model\Config\ModelOptions $options
+	 */
+	public function setOptions( $options ) {
+		$this->_options = $options;
+	}
+
+	/**
+	 * @return \SynergyCommon\Model\Config\ModelOptions
+	 */
+	public function getOptions() {
+		if ( ! $this->_options ) {
+			$this->_options = new ModelOptions();
+		}
+
+		return $this->_options;
+	}
+
+	/**
+	 * @param \Doctrine\ORM\QueryBuilder $qb
+	 */
+	public function setQb( $qb ) {
+		$this->_qb = $qb;
+	}
+
+	/**
+	 * @return \Doctrine\ORM\QueryBuilder
+	 */
+	public function getQb() {
+		return $this->_qb;
+	}
+
+	/**
+	 * @param string $entityKey
+	 */
+	public function setEntityKey( $entityKey ) {
+		$this->_entityKey = $entityKey;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEntityKey() {
+		return $this->_entityKey;
+	}
+
+	public function filterSearchData( $data ) {
+
+		foreach ( $data as $k => $v ) {
+			if ( is_string( $v ) ) {
+				$data[ $k ] = \html_entity_decode( trim( $v ), null, 'UTF-8' );
+			}
+		}
+
+		$result = array_filter(
+			$data, function ( $v ) {
+				return ( \is_bool( $v ) or \is_numeric( $v ) or ! empty( $v ) );
+			}
+		);
+
+		return $result;
+	}
+
+	public function setLogger( $logger ) {
+		$this->logger = $logger;
+	}
+
+	public function getLogger() {
+		return $this->logger;
+	}
+
+	/**
+	 * Determines if the date is expired
+	 *
+	 * @param $end
+	 *
+	 * @return bool
+	 */
+	public static function isExpired( $end ) {
+		if ( $end ) {
+			try {
+				$now     = new \DateTime();
+				$endDate = ( $end instanceof \DateTime ) ? $end : new \DateTime( $end );
+
+				return ( $now > $endDate );
+			} catch ( \Exception $e ) {
+				return false;
+			}
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Valid data to be imported
+	 *
+	 * @param array $data
+	 * @param array $columns
+	 * @param bool  $escape
+	 *
+	 * @return array
+	 */
+	public function validateRecordToImport( array $data, array $columns, $escape = true ) {
+		$class = $this->getEntity();
+		/** @var $entity \SynergyCommon\Entity\AbstractEntity */
+		$entity  = new $class();
+		$filters = $entity->getInputFilter();
+
+		foreach ( $data as $field => $value ) {
+
+			$attribute = isset( $columns[ $field ] ) ? $columns[ $field ] : null;
+
+			if ( $filters and $attribute and $filters->has( $attribute ) ) {
+				$input = $filters->get( $attribute );
+				$input->setValue( $value );
+				if ( $input->isValid() ) {
+					$value = $input->getValue();
+				} else {
+					$value = null;
+				}
+			}
+
+			if ( $value instanceof AbstractEntity ) {
+				$value = $value->getId();
+			} elseif ( $value instanceof \DateTime ) {
+				$value = $value->format( self::DB_DATE_FORMAT );
+			} elseif ( is_bool( $value ) ) {
+				$value = $value ? 1 : 0;
+			}
+
+			$data[ $field ] = $escape ? ( get_magic_quotes_gpc() ? $value : addslashes( $value ) ) : $value;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Creates a new node as child of a parent node or as a root node
+	 *
+	 * @param       $parentId
+	 * @param array $data
+	 *
+	 * @return \SynergyCommon\Entity\AbstractEntity|mixed
+	 */
+	public function createNode( $parentId, $data = array() ) {
+		$className = $this->getEntity();
+		/** @var $node \SynergyCommon\Entity\AbstractEntity */
+		$node = new $className;
+		$node = $node->exchangeArray( $data );
+
+		/** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
+		$repo = $this->getRepository();
+
+		if ( $parentId and $parentNode = $this->findObject( $parentId ) ) {
+			$repo->persistAsFirstChildOf( $node, $parentNode );
+		} else {
+			$repo->persistAsLastChild( $node );
+		}
+
+		$this->getEntityManager()->flush();
+		$this->getEntityManager()->clear();
+
+		return $node;
+	}
+
+	/**
+	 * Move a node relatived to the reference node in the direction specified
+	 * Direction can be: after, before, last or first
+	 *
+	 * @param $id
+	 * @param $referenceNodeId
+	 * @param $direction
+	 *
+	 * @return mixed
+	 * @throws \SynergyCommon\Exception\InvalidArgumentException
+	 * @throws \SynergyCommon\Exception\InvalidEntityException
+	 */
+	public function moveNode( $id, $referenceNodeId, $direction ) {
+		/** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
+		$repo = $this->getRepository();
+
+		if ( ! $node = $this->findObject( $id ) ) {
+			throw new InvalidEntityException( sprintf( 'Object with ID #%d was not ofund: ', $id ) );
+		}
+
+		if ( ! $referenceNode = $this->findObject( $referenceNodeId ) ) {
+			throw new InvalidEntityException( sprintf( 'Object with ID #%d was not ofund: ', $referenceNodeId ) );
+		}
+
+		switch ( $direction ) {
+			case 'after':
+				$done = $repo->persistAsNextSiblingOf( $node, $referenceNode );
+				break;
+			case 'before':
+				$done = $repo->persistAsPrevSiblingOf( $node, $referenceNode );
+				break;
+			case 'last':
+				$done = $repo->persistAsLastChildOf( $node, $referenceNode );
+				break;
+			case 'first':
+				$done = $repo->persistAsFirstChildOf( $node, $referenceNode );
+				break;
+			default :
+				throw new InvalidArgumentException(
+					sprintf(
+						'Invalid direction {%s) found. Direction should be either after, before, first or last.',
+						$direction
+					)
+				);
+		}
+
+		$this->getEntityManager()->flush();
+		$this->getEntityManager()->clear();
+
+		return $done ? $node : $done;
+	}
+
+	/**
+	 * Delete a node from the nested set tree
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
+	public function removeNode( $id ) {
+		/** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
+		$repo = $this->getRepository();
+		$node = $this->findObject( $id );
+		$repo->removeFromTree( $node );
+
+		$this->getEntityManager()->flush();
+		$this->getEntityManager()->clear();
+
+		return true;
+	}
+
+	/**
+	 * @param  $acl
+	 */
+	public function setAcl( $acl ) {
+		$this->_acl = $acl;
+	}
+
+	/**
+	 * @return
+	 */
+	public function getAcl() {
+		return $this->_acl;
+	}
+
+	/**
+	 * @param object $identity
+	 */
+	public function setIdentity( $identity ) {
+		$this->_identity = $identity;
+	}
+
+	/**
+	 * @return object
+	 */
+	public function getIdentity() {
+		return $this->_identity;
+	}
 }
