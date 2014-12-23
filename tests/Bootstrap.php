@@ -3,100 +3,99 @@ namespace SynergyCommonTest;
 
 
 use Zend\Mvc\Application;
-use Zend\ServiceManager\ServiceManager;
 
-date_default_timezone_set('UTC');
-error_reporting(E_ALL | E_STRICT);
+date_default_timezone_set( 'UTC' );
+error_reporting( E_ALL | E_STRICT );
 
-chdir(dirname(__DIR__));
-$basePath = realpath('./') . '/';
+chdir( dirname( __DIR__ ) );
+$basePath = realpath( './' ) . '/';
 
 set_include_path(
-    implode(
-        PATH_SEPARATOR,
-        array($basePath,
-              $basePath . '/vendor',
-              $basePath . '/tests',
-              get_include_path(),
-        )
-    )
+	implode(
+		PATH_SEPARATOR,
+		array(
+			$basePath,
+			$basePath . '/vendor',
+			$basePath . '/tests',
+			get_include_path(),
+		)
+	)
 );
 
 
-$classList = include  __DIR__ . "/../autoload_classmap.php";
+$classList = include __DIR__ . "/../autoload_classmap.php";
 
 spl_autoload_register(
-    function ($class) use ($classList, $basePath) {
-        if (isset($classList[$class])) {
-            $filename = $classList[$class];
-            include "{$filename}";
-        } else {
-            $filename = str_replace('\\\\', '/', $class) . '.php';
-            if (file_exists($filename)) {
-                require "{$filename}";
-            }
-        }
-    }
+	function ( $class ) use ( $classList, $basePath ) {
+		if ( isset( $classList[ $class ] ) ) {
+			$filename = $classList[ $class ];
+			include "{$filename}";
+		} else {
+			$filename = str_replace( '\\\\', '/', $class ) . '.php';
+			if ( file_exists( $filename ) ) {
+				require "{$filename}";
+			}
+		}
+	}
 );
 
 /**
  * Test bootstrap, for setting up autoloading
  */
-class Bootstrap
-{
-    protected static $serviceManager;
+class Bootstrap {
+	protected static $serviceManager;
 
-    public static function init()
-    {
-        $zf2ModulePaths = array(dirname(dirname(__DIR__)));
-        if (($path = static::findParentPath('vendor'))) {
-            $zf2ModulePaths[] = $path;
-        }
-        if (($path = static::findParentPath('src')) !== $zf2ModulePaths[0]) {
-            $zf2ModulePaths[] = $path;
-        }
+	public static $config;
 
-        $zf2ModulePaths[] = './';
+	public static function init() {
+		$zf2ModulePaths = array( dirname( dirname( __DIR__ ) ) );
+		if ( ( $path = static::findParentPath( 'vendor' ) ) ) {
+			$zf2ModulePaths[] = $path;
+		}
+		if ( ( $path = static::findParentPath( 'src' ) ) !== $zf2ModulePaths[0] ) {
+			$zf2ModulePaths[] = $path;
+		}
 
-        $config = array(
-            'module_listener_options' => array(
-                'module_paths' => $zf2ModulePaths,
-            ),
-            'modules'                 => array(
-                'DoctrineModule',
-                'DoctrineORMModule',
-                'CommonTest'
-            )
-        );
+		$zf2ModulePaths[] = './';
+
+		$config = array(
+			'module_listener_options' => array(
+				'module_paths' => $zf2ModulePaths,
+			),
+			'modules'                 => array(
+				'DoctrineModule',
+				'DoctrineORMModule',
+				'CommonTest'
+			)
+		);
 
 
-        include __DIR__ . '/../init_autoloader.php';
+		include __DIR__ . '/../init_autoloader.php';
 
-        /** @var \Zend\Mvc\Application $app */
-        $app = Application::init($config);
+		/** @var \Zend\Mvc\Application $app */
+		$app          = Application::init( $config );
+		self::$config = $config;
 
-        $serviceManager         = $app->getServiceManager();
-        static::$serviceManager = $serviceManager;
-    }
+		$serviceManager         = $app->getServiceManager();
+		static::$serviceManager = $serviceManager;
+	}
 
-    public static function getServiceManager()
-    {
-        return static::$serviceManager;
-    }
+	public static function getServiceManager() {
+		return static::$serviceManager;
+	}
 
-    /**
-     *
-     * @param string $path
-     *
-     * @return boolean|string false if the path cannot be found
-     */
-    protected static function findParentPath($path)
-    {
-        $dir    = __DIR__;
-        $srcDir = realpath($dir . '/../');
+	/**
+	 *
+	 * @param string $path
+	 *
+	 * @return boolean|string false if the path cannot be found
+	 */
+	protected static function findParentPath( $path ) {
+		$dir    = __DIR__;
+		$srcDir = realpath( $dir . '/../' );
 
-        return $srcDir . '/' . $path;
-    }
+		return $srcDir . '/' . $path;
+	}
 }
 
 Bootstrap::init();
