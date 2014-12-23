@@ -6,7 +6,6 @@
         "synergy library",
         "abstract classes"
     ],
-    "homepage": "http://developer.peleodiase.com/synergy-data-grid",
     "authors": [
         {
             "name": "Pele Odiase",
@@ -15,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": ">=2.0",
+        "zendframework/zendframework": "2.*",
         "doctrine/doctrine-orm-module": ">=0.5",
         "doctrine/doctrine-module": ">=0.7",
         "gedmo/doctrine-extensions": ">=v2.2.0"
@@ -26,11 +25,12 @@
     },
     "autoload": {
         "psr-0": {
-            "SynergyCommon": "lib/",
+            "SynergyCommon": "src/",
             "SynergyCommonTest": "tests/"
         },
         "classmap": [
-            "./tests/Module.php"
+            "./tests/Module.php",
+            "./Module.php"
         ]
     }
 }
