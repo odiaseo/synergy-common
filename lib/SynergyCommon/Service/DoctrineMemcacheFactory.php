@@ -30,7 +30,7 @@ class DoctrineMemcacheFactory
         $cache    = new MemcacheCache();
         $memcache = new \Memcache();
 
-        $memcache->connect('localhost', 11211);
+        $memcache->connect('127.0.0.1', 11211);
         $cache->setMemcache($memcache);
         $cache->setNamespace($prefix);
 
