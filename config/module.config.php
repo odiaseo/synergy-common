@@ -8,63 +8,6 @@
  */
 
 return array(
-	'doctrine'        => array(
-		'configuration' => array(
-			'orm_default' => array(
-				'driver'            => 'orm_default',
-				'generate_proxies'  => false,
-				'proxy_dir'         => 'data/DoctrineORMModule/Proxy',
-				'proxy_namespace'   => 'DoctrineORMModule\Proxy',
-				'numeric_functions' => array(
-					'Rand' => 'SynergyCommon\Doctrine\Extension\Rand'
-				)
-			)
-		),
-		'driver'        => array(
-			'synergy\common\admin'         => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array(
-					__DIR__ . '/../vendor/synergy/common/lib/SynergyCommon/Admin/Entity'
-				)
-			),
-			'synergy\common\entities'      => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array( __DIR__ . '/../vendor/synergy/common/lib/SynergyCommon/Entity' )
-			),
-			'synergy\member\entities'      => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array( __DIR__ . '/../vendor/synergy/common/lib/SynergyCommon/Member/Entity' )
-			),
-			'translatable\metadata\driver' => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array(
-					'vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity',
-				),
-			),
-			'orm_default'                  => array(
-				'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
-				'drivers' => array(
-					'Gedmo\Translatable\Entity' => 'translatable\metadata\driver',
-					'SynergyCommon\Entity'      => 'synergy\common\entities',
-				)
-			)
-		),
-		'eventmanager'  => array(
-			'orm_default' => array(
-				'subscribers' => array(
-					'Gedmo\Tree\TreeListener',
-					'Gedmo\Timestampable\TimestampableListener',
-					'Gedmo\Sluggable\SluggableListener',
-					'Gedmo\Loggable\LoggableListener',
-					'Gedmo\Translatable\TranslatableListener'
-				)
-			),
-		),
-	),
 	'service_manager' => array(
 		'abstract_factories' => array(
 			'SynergyCommon\Model\AbstractModelFactory',
@@ -86,7 +29,7 @@ return array(
 		'config'       => array(
 			'class'   => 'Zend\Session\Config\SessionConfig',
 			'options' => array(
-				'name' => 'affiliatemanager',
+				'name' => 'synergycommon',
 			),
 		),
 		'save_handler' => array(
