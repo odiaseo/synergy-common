@@ -116,7 +116,7 @@ class SynergyModuleListener
 	}
 
 	/**
-	 * Initialise session
+	 * @param MvcEvent $event
 	 */
 	public function initSession( MvcEvent $event ) {
 		/** @var $e \Zend\Mvc\MvcEvent */
