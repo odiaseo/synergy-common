@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\Exception\InvalidEntityException;
@@ -16,8 +17,15 @@ use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use Zend\InputFilter\InputFilter;
 
-class AbstractModel
-	implements NestedsetInterface {
+/**
+ * Class AbstractModel
+ *
+ * @package SynergyCommon\Model
+ */
+class AbstractModel implements NestedsetInterface {
+
+	use CacheAwareQueryTrait;
+
 	const EQUAL = 'eq';
 	const NOT_EQUAL = 'ne';
 	const LESS_THAN = 'lt';
@@ -102,22 +110,6 @@ class AbstractModel
 	 * @var
 	 */
 	protected $_acl;
-	/** @var bool */
-	protected $cachedEnabled = false;
-
-	/**
-	 * @return boolean
-	 */
-	public function isCachedEnabled() {
-		return $this->cachedEnabled;
-	}
-
-	/**
-	 * @param boolean $cachedEnabled
-	 */
-	public function setCachedEnabled( $cachedEnabled ) {
-		$this->cachedEnabled = $cachedEnabled;
-	}
 
 	public function setEntity( $entity ) {
 		$this->_entity = $entity;
