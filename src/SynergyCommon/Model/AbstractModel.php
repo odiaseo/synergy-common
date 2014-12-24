@@ -102,6 +102,22 @@ class AbstractModel
 	 * @var
 	 */
 	protected $_acl;
+	/** @var bool */
+	protected $cachedEnabled = false;
+
+	/**
+	 * @return boolean
+	 */
+	public function isCachedEnabled() {
+		return $this->cachedEnabled;
+	}
+
+	/**
+	 * @param boolean $cachedEnabled
+	 */
+	public function setCachedEnabled( $cachedEnabled ) {
+		$this->cachedEnabled = $cachedEnabled;
+	}
 
 	public function setEntity( $entity ) {
 		$this->_entity = $entity;
