@@ -12,10 +12,10 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CachedEntityManager {
 
+	use CacheAwareQueryTrait;
+
 	/** @var EntityManager */
 	private $entityManager;
-	/** @var bool */
-	protected $enabled = false;
 
 	/**
 	 * @param EntityManagerInterface $entityManager
@@ -23,20 +23,7 @@ class CachedEntityManager {
 	 */
 	public function __construct( EntityManagerInterface $entityManager, $enableCache = false ) {
 		$this->entityManager = $entityManager;
-		$this->enabled       = $enableCache;
-	}
-
-	/**
-	 * @param AbstractQuery $query
-	 *
-	 * @return AbstractQuery
-	 */
-	public function setCacheFlag( AbstractQuery $query ) {
-		if ( $this->enabled ) {
-			$query->useResultCache( true );
-		}
-
-		return $query;
+		$this->enableResultCache       = $enableCache;
 	}
 
 	/**
@@ -46,7 +33,7 @@ class CachedEntityManager {
 	 */
 	public function createQueryBuilder() {
 		$builder = new QueryBuilder( $this->entityManager );
-		$builder->setCachedEnabled( $this->enabled );
+		$builder->setCachedEnabled( $this->enableResultCache );
 
 		return $builder;
 	}

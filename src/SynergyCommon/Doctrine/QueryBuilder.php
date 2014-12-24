@@ -10,24 +10,19 @@ use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
  */
 class QueryBuilder extends DoctrineQueryBuilder {
 
-	private $cachedEnabled;
+	use CacheAwareQueryTrait;
 
 	/**
 	 * @return \Doctrine\ORM\Query
 	 */
 	public function getQuery() {
-		$query = parent::getQuery();
-		if ( $this->cachedEnabled ) {
-			$query->useResultCache( true );
-		}
-
-		return $query;
+		return $this->setCacheFlag( parent::getQuery() );
 	}
 
 	/**
 	 * @param mixed $cachedEnabled
 	 */
 	public function setCachedEnabled( $cachedEnabled ) {
-		$this->cachedEnabled = $cachedEnabled;
+		$this->enableResultCache = $cachedEnabled;
 	}
 }
