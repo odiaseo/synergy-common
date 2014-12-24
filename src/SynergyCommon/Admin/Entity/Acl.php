@@ -32,7 +32,7 @@ class Acl extends BaseEntity {
 	/**
 	 * @var \Doctrine\Common\Collections\Collection
 	 *
-	 * @ORM\ManyToMany(targetEntity="SynergyCommon\Member\Entity\BaseRole", cascade="all")
+	 * @ORM\ManyToMany(targetEntity="SynergyCommon\Entity\BaseRole", cascade="all")
 	 * @ORM\JoinTable(name="Acl_Role",
 	 *      joinColumns={@ORM\JoinColumn(name="acl_id", referencedColumnName="id")},
 	 *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}

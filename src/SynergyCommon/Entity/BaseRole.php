@@ -1,9 +1,8 @@
 <?php
-namespace SynergyCommon\Member\Entity;
+namespace SynergyCommon\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use SynergyCommon\Entity\BaseEntity;
 
 
 /**

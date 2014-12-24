@@ -22,7 +22,7 @@ class User
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="SynergyCommon\Member\Entity\BaseRole")
+     * @ORM\ManyToMany(targetEntity="SynergyCommon\Entity\BaseRole")
      * @ORM\JoinTable(name="User_Role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
