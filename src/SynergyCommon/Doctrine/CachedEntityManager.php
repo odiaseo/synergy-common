@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommon\Doctrine;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,23 +17,38 @@ class CachedEntityManager {
 	/** @var bool */
 	protected $enabled = false;
 
+	/**
+	 * @param EntityManagerInterface $entityManager
+	 * @param bool                   $enableCache
+	 */
 	public function __construct( EntityManagerInterface $entityManager, $enableCache = false ) {
 		$this->entityManager = $entityManager;
 		$this->enabled       = $enableCache;
 	}
 
 	/**
-	 * @param string $dql
+	 * @param AbstractQuery $query
 	 *
-	 * @return \Doctrine\ORM\Query
+	 * @return AbstractQuery
 	 */
-	public function createQuery( $dql = '' ) {
-		$query = $this->entityManager->createQuery( $dql );
+	public function setCacheFlag( AbstractQuery $query ) {
 		if ( $this->enabled ) {
 			$query->useResultCache( true );
 		}
 
 		return $query;
+	}
+
+	/**
+	 * Create a QueryBuilder instance
+	 *
+	 * @return QueryBuilder
+	 */
+	public function createQueryBuilder() {
+		$builder = new QueryBuilder( $this->entityManager );
+		$builder->setCachedEnabled( $this->enabled );
+
+		return $builder;
 	}
 
 	/**
@@ -42,6 +58,12 @@ class CachedEntityManager {
 	 * @return mixed
 	 */
 	public function __call( $method, $args ) {
-		return call_user_func_array( array( $this->entityManager, $method ), $args );
+		$return = call_user_func_array( array( $this->entityManager, $method ), $args );
+		if ( $return instanceof AbstractQuery ) {
+			return $this->setCacheFlag( $return );
+		}
+
+		return $return;
 	}
+
 }
