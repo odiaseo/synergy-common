@@ -14,27 +14,20 @@ class BaseRole extends BaseEntity {
 	 * @ORM\Column(type="integer");
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	private $id;
+	protected $id;
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $title;
+	protected $title;
 	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 */
-	private $description;
+	protected $description;
 	/**
 	 * @Gedmo\Slug(fields={"title"})
-	 * @ORM\Column(type="string", name="role_id", length=255, unique=true, nullable=true)
+	 * @ORM\Column(type="string", name="role_id", length=50, unique=true, nullable=true)
 	 */
-	private $roleId;
-	/**
-	 * @var BaseRole
-	 *
-	 * @ORM\ManyToOne(targetEntity="BaseRole")
-	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
-	 */
-	private $parent;
+	protected $roleId;
 
 
 	public function setDescription( $description ) {
@@ -51,20 +44,6 @@ class BaseRole extends BaseEntity {
 
 	public function getId() {
 		return $this->id;
-	}
-
-	/**
-	 * @param BaseRole $parent
-	 */
-	public function setParent( $parent ) {
-		$this->parent = $parent;
-	}
-
-	/**
-	 * @return BaseRole
-	 */
-	public function getParent() {
-		return $this->parent;
 	}
 
 	public function setRoleId( $roleId ) {
