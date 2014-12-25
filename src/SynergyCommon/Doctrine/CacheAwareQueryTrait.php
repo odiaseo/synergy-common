@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Doctrine;
 
-use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\ORM\AbstractQuery;
 
 /**
@@ -22,7 +21,7 @@ trait CacheAwareQueryTrait {
 	 *
 	 * @var bool
 	 */
-	protected $enableHydrationCache = false;
+	protected $enableHydrationCache = true;
 	/** @var int */
 	protected $lifetime = 14400;
 	/** @var  string */
@@ -50,10 +49,8 @@ trait CacheAwareQueryTrait {
 	 * @return AbstractQuery
 	 */
 	protected function enableHydrationCacheFlag( AbstractQuery $query ) {
-		if ( $this->enableHydrationCache ) {
-			$cacheProfile = new QueryCacheProfile( $this->lifetime );
-			$query->setHydrationCacheProfile( $cacheProfile );
-			$this->enableHydrationCache = false;
+		if ( $this->enableHydrationCache && $this->enableResultCache ) {
+			$query->setHydrationCacheProfile( $query->getQueryCacheProfile() );
 		}
 
 		return $query;
