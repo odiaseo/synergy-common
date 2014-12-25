@@ -1,5 +1,5 @@
 {
-    "name": "synergy/synergycommon",
+    "name": "synergy/common",
     "description": "Library Abstract and concrete classes common to Synergy Modules",
     "license": "BSD-3-Clause",
     "keywords": [
