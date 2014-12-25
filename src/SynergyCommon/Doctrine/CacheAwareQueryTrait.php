@@ -21,7 +21,7 @@ trait CacheAwareQueryTrait {
 	 *
 	 * @var bool
 	 */
-	protected $enableHydrationCache = true;
+	protected $enableHydrationCache = false;
 	/** @var int */
 	protected $lifetime = 14400;
 	/** @var  string */
@@ -49,8 +49,9 @@ trait CacheAwareQueryTrait {
 	 * @return AbstractQuery
 	 */
 	protected function enableHydrationCacheFlag( AbstractQuery $query ) {
-		if ( $this->enableHydrationCache && $this->enableResultCache ) {
+		if ( $this->enableHydrationCache ) {
 			$query->setHydrationCacheProfile( $query->getQueryCacheProfile() );
+			$this->enableHydrationCache = false;
 		}
 
 		return $query;
