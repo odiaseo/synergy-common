@@ -142,16 +142,17 @@ class AbstractModel implements NestedsetInterface {
 
 	/**
 	 * @param array $params
+	 * @param array $params
+	 * @param int   $mode
 	 *
-	 * @return mixed
-	 * @throws \Doctrine\ORM\NonUniqueResultException
+	 * @return mixed|null
 	 */
-	public function findOneBy( array $params ) {
+	public function findOneBy( array $params, $mode = AbstractQuery::HYDRATE_OBJECT ) {
 		try {
 			$query = $this->getFindByQueryBuilder( $params );
 			$query->setMaxResults( 1 );
 
-			return $query->getQuery()->getOneOrNullResult();
+			return $query->getQuery()->getOneOrNullResult( $mode );
 		} catch ( \Exception $exception ) {
 			$this->getLogger()->err( $exception->getMessage() );
 
@@ -180,18 +181,20 @@ class AbstractModel implements NestedsetInterface {
 		return $query;
 	}
 
+
 	/**
-	 * @param $params
-	 * @param $limit
+	 * @param     $params
+	 * @param     $limit
+	 * @param int $mode
 	 *
-	 * @return mixed|null
+	 * @return array|null
 	 */
-	public function findItemsByCriteria( $params, $limit ) {
+	public function findItemsByCriteria( $params, $limit, $mode = AbstractQuery::HYDRATE_OBJECT ) {
 		try {
 			$query = $this->getFindByQueryBuilder( $params );
 			$query->setMaxResults( $limit );
 
-			return $query->getQuery()->execute();
+			return $query->getQuery()->getResult( $mode );
 		} catch ( \Exception $exception ) {
 			$this->getLogger()->err( $exception->getMessage() );
 
@@ -202,16 +205,19 @@ class AbstractModel implements NestedsetInterface {
 	/**
 	 * @param array        $param
 	 * @param QueryBuilder $queryBuilder
+	 * @param int          $mode
 	 *
 	 * @return mixed|null
 	 */
-	public function findOneTranslatedBy( array $param, QueryBuilder $queryBuilder = null ) {
+	public function findOneTranslatedBy(
+		array $param, QueryBuilder $queryBuilder = null, $mode = AbstractQuery::HYDRATE_OBJECT
+	) {
 		try {
 			$query = $this->getFindByQueryBuilder( $param, $queryBuilder );
 			$query->setMaxResults( 1 );
 			$query = LocaleAwareTrait::addHints( $query->getQuery() );
 
-			return $query->getOneOrNullResult();
+			return $query->getOneOrNullResult( $mode );
 		} catch ( \Exception $exception ) {
 			$this->getLogger()->err( $exception->getMessage() );
 
@@ -234,7 +240,7 @@ class AbstractModel implements NestedsetInterface {
 	 * @throws \SynergyCommon\Exception\InvalidArgumentException
 	 */
 	public function remove( $id ) {
-		$object = $this->find( $id );
+		$object = $this->findObject( $id );
 		if ( $object ) {
 			$this->getEntityManager()->remove( $object );
 			$this->getEntityManager()->flush();
@@ -331,6 +337,11 @@ class AbstractModel implements NestedsetInterface {
 		return $id;
 	}
 
+	/**
+	 * @param $data
+	 *
+	 * @return mixed|null
+	 */
 	public function getEntityLikeSlug( $data ) {
 		$query = $this->getEntityManager()
 		              ->createQueryBuilder()
@@ -350,7 +361,14 @@ class AbstractModel implements NestedsetInterface {
 		return $id;
 	}
 
-	public function getItemListByIds( array $idList, array $order = null ) {
+	/**
+	 * @param array $idList
+	 * @param array $order
+	 * @param int   $mode
+	 *
+	 * @return array
+	 */
+	public function getItemListByIds( array $idList, array $order = null, $mode = AbstractQuery::HYDRATE_OBJECT ) {
 		$entity = $this->getEntity();
 		$qb     = $this->getEntityManager()->createQueryBuilder();
 
@@ -363,7 +381,7 @@ class AbstractModel implements NestedsetInterface {
 			$query->orderBy( 'e.' . key( $order ), current( $order ) );
 		}
 
-		return $query->getQuery()->execute( null, AbstractQuery::HYDRATE_OBJECT );
+		return $query->getQuery()->getResult( $mode );
 	}
 
 	/**
@@ -373,10 +391,14 @@ class AbstractModel implements NestedsetInterface {
 	 * @param       $idValue
 	 * @param array $returnFields
 	 * @param null  $limit
+	 * @param int   $mode
 	 *
-	 * @return array|mixed
+	 * @return array|mixed|null
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function getFieldsBy( $idField, $idValue, array $returnFields, $limit = null ) {
+	public function getFieldsBy(
+		$idField, $idValue, array $returnFields, $limit = null, $mode = AbstractQuery::HYDRATE_OBJECT
+	) {
 		$select = array();
 		foreach ( $returnFields as $f ) {
 			$select[] = 'e.' . $f;
@@ -392,7 +414,7 @@ class AbstractModel implements NestedsetInterface {
 
 		if ( $limit == 1 ) {
 			try {
-				return $query->getSingleResult();
+				return $query->getSingleResult( $mode );
 			} catch ( NoResultException $e ) {
 				return null;
 			}
