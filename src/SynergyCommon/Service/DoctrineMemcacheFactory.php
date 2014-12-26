@@ -26,12 +26,15 @@ class DoctrineMemcacheFactory
 
 		$prefix = preg_replace( '/[^a-z0-9]/i', '', $host );
 
-		$cache    = new MemcacheCache();
-		$memcache = new \Memcache();
-
-		$connected = $memcache->connect( '127.0.0.1', 11211 );
+		$cache          = new MemcacheCache();
+		$memcache       = new \Memcache();
+		$config         = $serviceLocator->get( 'config' );
+		$memcacheConfig = $config['synergy']['memcache'];
+		$connected      = $memcache->connect( $memcacheConfig['host'], $memcacheConfig['port'] );
 		if ( ! $connected ) {
-			throw new MemcacheNotAvailableException( 'Cannot connect to server 127.0.0.1:11211' );
+			throw new MemcacheNotAvailableException(
+				'Cannot connect to server ' . $memcacheConfig['host'] . ':' . $memcacheConfig['port']
+			);
 		}
 		$cache->setMemcache( $memcache );
 		$cache->setNamespace( $prefix );

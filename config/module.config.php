@@ -49,4 +49,10 @@ return array(
 			'Zend\Session\Validator\HttpUserAgent',
 		),
 	),
+	'synergy'         => array(
+		'memcache' => array(
+			'host' => 'localhost',
+			'port' => 11211
+		)
+	)
 );
