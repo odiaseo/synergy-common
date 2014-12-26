@@ -173,9 +173,15 @@ class AbstractModel implements NestedsetInterface {
 		$query        = $queryBuilder->select( $alias )->from( $this->getEntity(), $alias );
 
 		foreach ( $param as $key => $value ) {
-			$query->andWhere(
-				$queryBuilder->expr()->eq( $alias . '.' . $key, $queryBuilder->expr()->literal( $value ) )
-			);
+			if ( is_array( $value ) ) {
+				$query->andWhere(
+					$queryBuilder->expr()->in( $alias . '.' . $key, $value )
+				);
+			} else {
+				$query->andWhere(
+					$queryBuilder->expr()->eq( $alias . '.' . $key, $queryBuilder->expr()->literal( $value ) )
+				);
+			}
 		}
 
 		return $query;
