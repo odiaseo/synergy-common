@@ -15,6 +15,7 @@ use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
+use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
 
 /**
@@ -318,7 +319,7 @@ class AbstractModel implements NestedsetInterface {
 	public function __call( $method, $args ) {
 		$repo = $this->getRepository( $this->getEntity() );
 		try {
-			return \call_user_func_array( array( $repo, $method ), $args );
+			return Util::customCall( $repo, $method, $args );
 		} catch ( \Exception $e ) {
 			throw new InvalidArgumentException( "Unable to execute method {$method} - " . $e->getMessage() );
 		}

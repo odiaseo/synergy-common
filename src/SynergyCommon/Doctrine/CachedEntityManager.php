@@ -4,6 +4,7 @@ namespace SynergyCommon\Doctrine;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use SynergyCommon\Util;
 
 /**
  * Class CachedEntityManager
@@ -22,8 +23,8 @@ class CachedEntityManager {
 	 * @param bool                   $enableCache
 	 */
 	public function __construct( EntityManagerInterface $entityManager, $enableCache = false ) {
-		$this->entityManager = $entityManager;
-		$this->enableResultCache       = $enableCache;
+		$this->entityManager     = $entityManager;
+		$this->enableResultCache = $enableCache;
 	}
 
 	/**
@@ -45,7 +46,8 @@ class CachedEntityManager {
 	 * @return mixed
 	 */
 	public function __call( $method, $args ) {
-		$return = call_user_func_array( array( $this->entityManager, $method ), $args );
+		$return = Util::customCall( $this->entityManager, $method, $args );
+
 		if ( $return instanceof AbstractQuery ) {
 			return $this->setCacheFlag( $return );
 		}

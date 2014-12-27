@@ -2,6 +2,8 @@
 namespace SynergyCommon\Util;
 
 
+use SynergyCommon\Util;
+
 class ErrorHandler {
 
 	private $_logger;
@@ -46,7 +48,7 @@ class ErrorHandler {
 	 * @return mixed
 	 */
 	public function __call( $method, $args = array() ) {
-		return call_user_func_array( array( $this->_logger, $method ), $args );
+		return Util::customCall( $this->_logger, $method, $args );
 	}
 
 	/**
