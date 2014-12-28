@@ -50,7 +50,7 @@ trait CacheAwareQueryTrait {
 	 * @return AbstractQuery
 	 */
 	protected function enableHydrationCacheFlag( AbstractQuery $query ) {
-		if ( $this->enableHydrationCache ) {
+		if ( $this->enableHydrationCache && $query->getQueryCacheProfile() ) {
 			$query->setHydrationCacheProfile( $query->getQueryCacheProfile() );
 			$this->enableHydrationCache = false;
 		}
