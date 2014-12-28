@@ -22,6 +22,7 @@ trait CacheAwareQueryTrait {
 	 * @var bool
 	 */
 	protected $enableHydrationCache = false;
+
 	/** @var int */
 	protected $lifetime = 14400;
 	/** @var  string */
@@ -76,5 +77,12 @@ trait CacheAwareQueryTrait {
 	 */
 	public function setLifetime( $lifetime ) {
 		$this->lifetime = $lifetime;
+	}
+
+	/**
+	 * @param boolean $enableHydrationCache
+	 */
+	public function setEnableHydrationCache( $enableHydrationCache ) {
+		$this->enableHydrationCache = $enableHydrationCache;
 	}
 }
