@@ -109,7 +109,11 @@ class SynergyModuleListener
 			if ( $logException && $services->has( 'logger' ) ) {
 				/** @var $logget \Zend\Log\Logger */
 				$logger = $services->get( 'logger' );
-				$logger->err( $event->getError() . ': ' . $request->getUri() );
+				$uri    = '';
+				if ( $request instanceof Request ) {
+					$uri = $request->getUriString();
+				}
+				$logger->err( $event->getError() . ': ' . $uri );
 			}
 			static::$handled = true;
 		}
