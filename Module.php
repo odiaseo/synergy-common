@@ -47,7 +47,7 @@ class Module {
 					/** @var $authService \Zend\Authentication\AuthenticationService */
 					/** @var ServiceLocatorInterface $serviceLocator */
 					$request = $serviceLocator->get( 'request' );
-
+					$config  = $serviceLocator->get( 'config' );
 					if ( $serviceLocator->has( 'zfcuser_auth_service' ) ) {
 						$authService = $serviceLocator->get( 'zfcuser_auth_service' );
 						$identity    = $authService->hasIdentity();
