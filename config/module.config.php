@@ -19,10 +19,11 @@ return array(
 			'synergycommon\entity\site'    => 'SynergyCommon\Entity\BaseSite',
 		),
 		'factories'          => array(
-			'logger'                          => 'SynergyCommon\Service\LoggerFactory',
-			'doctrine.cache.synergy_memcache' => 'SynergyCommon\Service\DoctrineMemcacheFactory',
-			'doctrine.cache.synergy_apc'      => 'SynergyCommon\Service\DoctrineApcCacheFactory',
-			'doctrine.cache.cache\factory'    => 'SynergyCommon\Service\DoctrineCacheFactory',
+			'logger'                              => 'SynergyCommon\Service\LoggerFactory',
+			'doctrine.cache.synergy_memcache'     => 'SynergyCommon\Service\DoctrineMemcacheFactory',
+			'doctrine.cache.synergy_apc'          => 'SynergyCommon\Service\DoctrineApcCacheFactory',
+			'doctrine.cache.cache\factory'        => 'SynergyCommon\Service\DoctrineCacheFactory',
+			'doctrine.cache.result\cache\factory' => 'SynergyCommon\Service\DoctrineResultCacheFactory',
 		)
 	),
 	'session'         => array(
