@@ -9,6 +9,9 @@
 
 namespace SynergyCommon;
 
+use Zend\Console\Console;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 /**
  * Class Module
  *
@@ -30,6 +33,42 @@ class Module {
 					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
 				),
 			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getServiceConfig() {
+		return array(
+			'factories' => array(
+				'synergy\enable\cache' => function ( $serviceLocator ) {
+					/** @var $authService \Zend\Authentication\AuthenticationService */
+					/** @var ServiceLocatorInterface $serviceLocator */
+					$request = $serviceLocator->get( 'request' );
+
+					if ( $serviceLocator->has( 'zfcuser_auth_service' ) ) {
+						$authService = $serviceLocator->get( 'zfcuser_auth_service' );
+						$identity    = $authService->hasIdentity();
+					} else {
+						$identity = false;
+					}
+
+					if ( $request instanceof Console ) {
+						$enabled = false;
+					} elseif ( $identity ) {
+						$enabled = false;
+					} elseif ( isset( $config['enable_result_cache'] ) ) {
+						$enabled = $config['enable_result_cache'];
+					} else {
+						$enabled = false;
+					}
+
+					$return = array( 'enabled' => $enabled );
+
+					return (object) $return;
+				}
+			)
 		);
 	}
 }
