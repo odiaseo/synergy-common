@@ -19,24 +19,23 @@ class DoctrineApcCacheFactory implements FactoryInterface {
 		$request = $serviceLocator->get( 'application' )->getRequest();
 		$status  = $serviceLocator->get( 'synergy\cache\status' );
 
-		if ( $request instanceof Request ) {
-			/** @var $event \Zend\Mvc\MvcEvent */
-			$event = $serviceLocator->get( 'application' )->getMvcEvent();
-			if ( $event && $rm = $event->getRouteMatch() ) {
-				$host = $rm->getParam( 'host' );
-			}
-		} else {
-			$host = $request->getServer( 'HTTP_HOST' );
-		}
-
-		$prefix = preg_replace( '/[^a-z0-9]/i', '', $host );
 		if ( $status->enabled ) {
-			$cache = new ApcCache();
+			if ( $request instanceof Request ) {
+				/** @var $event \Zend\Mvc\MvcEvent */
+				$event = $serviceLocator->get( 'application' )->getMvcEvent();
+				if ( $event && $rm = $event->getRouteMatch() ) {
+					$host = $rm->getParam( 'host' );
+				}
+			} else {
+				$host = $request->getServer( 'HTTP_HOST' );
+			}
+
+			$prefix = preg_replace( '/[^a-z0-9]/i', '', $host );
+			$cache  = new ApcCache();
+			$cache->setNamespace( $prefix );
 		} else {
 			$cache = new ArrayCache();
 		}
-
-		$cache->setNamespace( $prefix );
 
 		return $cache;
 	}
