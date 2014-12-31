@@ -50,6 +50,7 @@ class CommonSiteSettings
 
     protected $skimlinksId;
     protected $clickref;
+	protected $joinedOnly = 0;
 
     public function __construct($options = null, $mode = true)
     {
@@ -63,6 +64,20 @@ class CommonSiteSettings
         }
         parent::__construct($data);
     }
+
+	/**
+	 * @return int
+	 */
+	public function getJoinedOnly() {
+		return $this->joinedOnly;
+	}
+
+	/**
+	 * @param int $joinedOnly
+	 */
+	public function setJoinedOnly( $joinedOnly ) {
+		$this->joinedOnly = $joinedOnly;
+	}
 
     public function setScript($script)
     {
