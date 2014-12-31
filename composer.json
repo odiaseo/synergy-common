@@ -19,6 +19,9 @@
         "doctrine/doctrine-module": ">=0.7",
         "gedmo/doctrine-extensions": ">=v2.2.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "suggest": {
         "ewgo/solarium-module": "For solr search aware models",
         "monolog/monolog": "For enhanced logging features"
@@ -29,7 +32,7 @@
             "SynergyCommonTest": "tests/"
         },
         "classmap": [
-            "./tests/Module.php",
+            "./tests/lib/Module.php",
             "./Module.php"
         ]
     },

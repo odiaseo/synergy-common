@@ -58,24 +58,13 @@ class Bootstrap {
 
 		$zf2ModulePaths[] = './';
 
-		$config = array(
-			'module_listener_options' => array(
-				'module_paths' => $zf2ModulePaths,
-			),
-			'modules'                 => array(
-				'DoctrineModule',
-				'DoctrineORMModule',
-				'CommonTest'
-			)
-		);
-
+		$config              = include __DIR__ . '/../config/application.config.php';
+		$config['modules'][] = 'SynergyCommonTest';
 
 		include __DIR__ . '/../init_autoloader.php';
 
 		/** @var \Zend\Mvc\Application $app */
-		$app          = Application::init( $config );
-		self::$config = $config;
-
+		$app                    = Application::init( $config );
 		$serviceManager         = $app->getServiceManager();
 		static::$serviceManager = $serviceManager;
 	}

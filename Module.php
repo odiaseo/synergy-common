@@ -9,7 +9,7 @@
 
 namespace SynergyCommon;
 
-use Zend\Console\Console;
+use Zend\Console\Request;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -40,9 +40,10 @@ class Module {
 	 * @return array
 	 */
 	public function getServiceConfig() {
+
 		return array(
 			'factories' => array(
-				'synergy\enable\cache' => function ( $serviceLocator ) {
+				'synergy\cache\status' => function ( $serviceLocator ) {
 					/** @var $authService \Zend\Authentication\AuthenticationService */
 					/** @var ServiceLocatorInterface $serviceLocator */
 					$request = $serviceLocator->get( 'request' );
@@ -54,7 +55,7 @@ class Module {
 						$identity = false;
 					}
 
-					if ( $request instanceof Console ) {
+					if ( $request instanceof Request ) {
 						$enabled = false;
 					} elseif ( $identity ) {
 						$enabled = false;

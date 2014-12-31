@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace CommonTest;
+namespace SynergyCommonTest;
 
 use SynergyCommon\Event\Listener\SynergyModuleListener;
 use Zend\Mvc\ModuleRouteListener;
@@ -24,7 +24,7 @@ class Module {
 	}
 
 	public function getConfig() {
-		return include __DIR__ . '/test.config.php';
+		return include __DIR__ . '/../test.config.php';
 	}
 
 	public function getAutoloaderConfig() {
