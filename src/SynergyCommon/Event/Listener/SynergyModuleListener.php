@@ -139,8 +139,8 @@ class SynergyModuleListener
                 $session = $sm->get('session_manager');
                 $session->start();
 
-                if ($sm->has('active_site')) {
-                    $site = $sm->get('active_site');
+                if ($sm->has('active\site')) {
+                    $site = $sm->get('active\site');
                     $namespace = $site->getSessionNamespace();
                 } else {
                     $namespace = 'initialised';
@@ -170,9 +170,9 @@ class SynergyModuleListener
             /** @var $sm \Zend\ServiceManager\ServiceManager */
             $sm = $event->getApplication()->getServiceManager();
 
-            if ($sm->has('active_site')) {
+            if ($sm->has('active\site')) {
                 /** @var $site \SynergyCommon\Entity\BaseSite */
-                $site = $sm->get('active_site');
+                $site = $sm->get('active\site');
 
                 $viewModel = $event->getViewModel();
                 $viewModel->setVariable('site', $site);

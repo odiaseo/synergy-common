@@ -11,48 +11,52 @@ use SynergyCommon\Util;
  *
  * @package Application\Doctrine
  */
-class CachedEntityManager {
+class CachedEntityManager implements CacheAwareQueryInterface
+{
 
-	use CacheAwareQueryTrait;
+    use CacheAwareQueryTrait;
 
-	/** @var EntityManager */
-	private $entityManager;
+    /** @var EntityManager */
+    private $entityManager;
 
-	/**
-	 * @param EntityManagerInterface $entityManager
-	 * @param bool                   $enableCache
-	 */
-	public function __construct( EntityManagerInterface $entityManager, $enableCache = false ) {
-		$this->entityManager     = $entityManager;
-		$this->enableResultCache = $enableCache;
-	}
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param bool                   $enableCache
+     */
+    public function __construct(EntityManagerInterface $entityManager, $enableCache = false)
+    {
+        $this->entityManager     = $entityManager;
+        $this->enableResultCache = $enableCache;
+    }
 
-	/**
-	 * Create a QueryBuilder instance
-	 *
-	 * @return QueryBuilder
-	 */
-	public function createQueryBuilder() {
-		$builder = new QueryBuilder( $this->entityManager );
-		$builder->setCachedEnabled( $this->enableResultCache );
+    /**
+     * Create a QueryBuilder instance
+     *
+     * @return QueryBuilder
+     */
+    public function createQueryBuilder()
+    {
+        $builder = new QueryBuilder($this->entityManager);
+        $builder->setCachedEnabled($this->enableResultCache);
 
-		return $builder;
-	}
+        return $builder;
+    }
 
-	/**
-	 * @param $method
-	 * @param $args
-	 *
-	 * @return mixed
-	 */
-	public function __call( $method, $args ) {
-		$return = Util::customCall( $this->entityManager, $method, $args );
+    /**
+     * @param $method
+     * @param $args
+     *
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        $return = Util::customCall($this->entityManager, $method, $args);
 
-		if ( $return instanceof AbstractQuery ) {
-			return $this->setCacheFlag( $return );
-		}
+        if ($return instanceof AbstractQuery) {
+            return $this->setCacheFlag($return);
+        }
 
-		return $return;
-	}
+        return $return;
+    }
 
 }
