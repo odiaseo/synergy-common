@@ -328,27 +328,32 @@ class BaseService
 	 * @return bool|int
 	 */
 	protected function _createEntityCache( $filename ) {
-		$output = array();
 		/** @var $entityManager  \Doctrine\ORM\EntityManager */
-		$entityManager = $this->getEntityManager();
-		$cmf           = $entityManager->getMetadataFactory();
-		$classes       = $cmf->getAllMetadata();
+		$output = array();
+		$config = $this->getServiceManager()->get( 'config' );
+		foreach ( $config['doctrine']['connection'] as $orm => $data ) {
+			$ormAlias = 'doctrine.entitymanager.' . $orm;
+			if ( $this->getServiceManager()->has( $ormAlias ) ) {
+				$entityManager = $this->getServiceManager()->get( $ormAlias );
+				$cmf           = $entityManager->getMetadataFactory();
+				$classes       = $cmf->getAllMetadata();
+				$filter        = new CamelCaseToDash();
 
-		$filter = new CamelCaseToDash();
+				/** @var \Doctrine\ORM\Mapping\ClassMetadata $class */
+				foreach ( $classes as $class ) {
+					$className       = $class->getName();
+					$reflectionClass = new \ReflectionClass( $className );
+					if ( ! ( $reflectionClass->isAbstract() || $class->isMappedSuperclass ) ) {
+						$name   = str_replace( $class->namespace . '\\', '', $className );
+						$entity = new $className;
+						if ( $entity instanceof PrefixAwareInterface && ( $prefix = $entity->getPrefix() ) ) {
+							$name = trim( $prefix, '-' ) . '-' . $name;
+						}
 
-		/** @var \Doctrine\ORM\Mapping\ClassMetadata $class */
-		foreach ( $classes as $class ) {
-			$className       = $class->getName();
-			$reflectionClass = new \ReflectionClass( $className );
-			if ( ! ( $reflectionClass->isAbstract() || $class->isMappedSuperclass ) ) {
-				$name   = str_replace( $class->namespace . '\\', '', $className );
-				$entity = new $className;
-				if ( $entity instanceof PrefixAwareInterface && ( $prefix = $entity->getPrefix() ) ) {
-					$name = trim( $prefix, '-' ) . '-' . $name;
+						$key            = strtolower( $filter->filter( $name ) );
+						$output[ $key ] = $className;
+					}
 				}
-
-				$key            = strtolower( $filter->filter( $name ) );
-				$output[ $key ] = $className;
 			}
 		}
 

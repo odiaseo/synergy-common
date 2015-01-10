@@ -47,7 +47,7 @@ class Module {
 				'Zend\Session\SessionManager' => 'SynergyCommon\Session\SessionManager',
 				'synergycommon\service\api'   => 'SynergyCommon\Service\ApiServiceFactory',
 				'logger'                      => 'SynergyCommon\Service\LoggerFactory',
-				'active_site'                 => 'SynergyCommon\Service\ActiveClientSiteFactory',
+				'active\site'                 => 'SynergyCommon\Service\ActiveClientSiteFactory',
 			),
 		);
 	}

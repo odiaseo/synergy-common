@@ -5,12 +5,19 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\QueryException;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use SynergyCommon\Doctrine\CacheAwareQueryInterface;
+use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use Zend\Navigation\Navigation;
 
-class NestedSetRepository
-    extends NestedTreeRepository
+/**
+ * Class NestedSetRepository
+ *
+ * @package SynergyCommon\Model
+ */
+class NestedSetRepository extends NestedTreeRepository implements CacheAwareQueryInterface
 {
+    use CacheAwareQueryTrait;
 
     /**
      * Returns the navigation menus
@@ -144,12 +151,12 @@ class NestedSetRepository
                     // Assigning the root node
                     $i         = count($trees);
                     $trees[$i] = $item;
-                    $stack[]   = & $trees[$i];
+                    $stack[]   = &$trees[$i];
                 } else {
                     // Add node to parent
                     $i                            = count($stack[$l - 1][$childKey]);
                     $stack[$l - 1][$childKey][$i] = $item;
-                    $stack[]                      = & $stack[$l - 1][$childKey][$i];
+                    $stack[]                      = &$stack[$l - 1][$childKey][$i];
                 }
             }
         }

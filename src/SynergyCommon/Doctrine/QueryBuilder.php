@@ -8,21 +8,24 @@ use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
  *
  * @package SynergyCommon\Doctrine
  */
-class QueryBuilder extends DoctrineQueryBuilder {
+class QueryBuilder extends DoctrineQueryBuilder implements CacheAwareQueryInterface
+{
 
-	use CacheAwareQueryTrait;
+    use CacheAwareQueryTrait;
 
-	/**
-	 * @return \Doctrine\ORM\Query
-	 */
-	public function getQuery() {
-		return $this->setCacheFlag( parent::getQuery() );
-	}
+    /**
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQuery()
+    {
+        return $this->setCacheFlag(parent::getQuery());
+    }
 
-	/**
-	 * @param mixed $cachedEnabled
-	 */
-	public function setCachedEnabled( $cachedEnabled ) {
-		$this->enableResultCache = $cachedEnabled;
-	}
+    /**
+     * @param mixed $cachedEnabled
+     */
+    public function setCachedEnabled($cachedEnabled)
+    {
+        $this->enableResultCache = $cachedEnabled;
+    }
 }
