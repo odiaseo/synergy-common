@@ -6,7 +6,6 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\Model\AbstractModel;
-use SynergyCommon\Model\NestedSetRepository;
 use Zend\Session\Container;
 
 /**
