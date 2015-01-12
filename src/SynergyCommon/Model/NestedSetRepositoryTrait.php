@@ -2,10 +2,6 @@
 namespace SynergyCommon\Model;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\Query\QueryException;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use SynergyCommon\Doctrine\CacheAwareQueryInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use Zend\Navigation\Navigation;
@@ -15,7 +11,7 @@ use Zend\Navigation\Navigation;
  *
  * @package SynergyCommon\Model
  */
-class NestedSetRepository extends NestedTreeRepository implements CacheAwareQueryInterface
+trait NestedSetRepositoryTrait
 {
     use CacheAwareQueryTrait;
 
@@ -41,6 +37,9 @@ class NestedSetRepository extends NestedTreeRepository implements CacheAwareQuer
             ->orderBy('e.root, e.lft', 'ASC')
             ->getQuery();
 
+        $query = $this->setCacheFlag($query);
+        $this->setEnableHydrationCache($this->enableResultCache);
+
         if ($this->isTranslatable($this)) {
             $query = LocaleAwareTrait::addHints($query);
         }
@@ -63,6 +62,8 @@ class NestedSetRepository extends NestedTreeRepository implements CacheAwareQuer
             ->setParameter('level', 0)
             ->getQuery();
 
+        $query = $this->setCacheFlag($query);
+
         if ($this instanceof LocaleAwareTrait) {
             $query = LocaleAwareTrait::addHints($query);
         }
@@ -84,6 +85,8 @@ class NestedSetRepository extends NestedTreeRepository implements CacheAwareQuer
             ->setMaxResults(1)
             ->setParameter('id', $pageId)
             ->getQuery();
+
+        $query = $this->setCacheFlag($query);
 
         if ($this->isTranslatable($this)) {
             $query = LocaleAwareTrait::addHints($query);
@@ -171,33 +174,36 @@ class NestedSetRepository extends NestedTreeRepository implements CacheAwareQuer
      */
     public function getBreadcrumbPath($slug)
     {
+        ///** @var $this self |  \PageBuilder\Model\PageRepository */
         $meta   = $this->getClassMetadata();
-        $config = $this->listener->getConfiguration($this->_em, $meta->name);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $path   = array();
 
-        try {
-            $qb = $this->_em->createQueryBuilder();
-            $query
-                = $qb->select('e')
-                ->from($config['useObjectClass'], 'e')
-                ->where('e.slug = :slug')
-                ->setParameter(':slug', $slug)
-                ->setMaxResults(1)
-                ->getQuery();
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $query
+            = $qb->select('e')
+            ->from($config['useObjectClass'], 'e')
+            ->where('e.slug = :slug')
+            ->setParameter(':slug', $slug)
+            ->setMaxResults(1)
+            ->getQuery();
+
+        $query = $this->setCacheFlag($query);
+        $menu  = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+
+        if ($menu) {
+
+            $builder = $this->getPathQueryBuilder($menu);
+            $builder->select('node.title, node.slug, node.level, node.parameters, node.routeName');
+
+            $pathQuery = $builder->getQuery();
+            $pathQuery = $this->setCacheFlag($pathQuery);
+            $this->setEnableHydrationCache($this->enableResultCache);
 
             if ($this->isTranslatable($this)) {
-                $query = LocaleAwareTrait::addHints($query);
+                $this->addHints($pathQuery);
             }
-
-            $menu = $query->execute(array(), AbstractQuery::HYDRATE_OBJECT);
-
-            if ($menu) {
-                $path = $this->getPath($menu[0]);
-            }
-        } catch (NonUniqueResultException $ex) {
-
-        } catch (QueryException $ex) {
-
+            $path = $pathQuery->getArrayResult();
         }
 
         return $path;
