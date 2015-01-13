@@ -13,13 +13,6 @@ return array(
 			)
 		),
 		'driver'        => array(
-			'synergy\common\admin'         => array(
-				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-				'cache' => 'array',
-				'paths' => array(
-					__DIR__ . '/../vendor/synergy/common/lib/SynergyCommon/Admin/Entity'
-				)
-			),
 			'synergy\common\entities'      => array(
 				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
 				'cache' => 'array',
