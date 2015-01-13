@@ -50,7 +50,9 @@ class CommonSiteSettings
 
     protected $skimlinksId;
     protected $clickref;
-	protected $joinedOnly = 0;
+    protected $joinedOnly = 0;
+    /** @var  string */
+    protected $affPublisherId;
 
     public function __construct($options = null, $mode = true)
     {
@@ -65,19 +67,37 @@ class CommonSiteSettings
         parent::__construct($data);
     }
 
-	/**
-	 * @return int
-	 */
-	public function getJoinedOnly() {
-		return $this->joinedOnly;
-	}
+    /**
+     * @return int
+     */
+    public function getJoinedOnly()
+    {
+        return $this->joinedOnly;
+    }
 
-	/**
-	 * @param int $joinedOnly
-	 */
-	public function setJoinedOnly( $joinedOnly ) {
-		$this->joinedOnly = $joinedOnly;
-	}
+    /**
+     * @return string
+     */
+    public function getAffPublisherId()
+    {
+        return $this->affPublisherId;
+    }
+
+    /**
+     * @param string $affPublisherId
+     */
+    public function setAffPublisherId($affPublisherId)
+    {
+        $this->affPublisherId = $affPublisherId;
+    }
+
+    /**
+     * @param int $joinedOnly
+     */
+    public function setJoinedOnly($joinedOnly)
+    {
+        $this->joinedOnly = $joinedOnly;
+    }
 
     public function setScript($script)
     {
