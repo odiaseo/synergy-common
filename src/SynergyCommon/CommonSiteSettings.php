@@ -3,8 +3,12 @@ namespace SynergyCommon;
 
 use Zend\Stdlib\AbstractOptions;
 
-class CommonSiteSettings
-    extends AbstractOptions
+/**
+ * Class CommonSiteSettings
+ *
+ * @package SynergyCommon
+ */
+class CommonSiteSettings extends AbstractOptions
 {
     //amazon
     protected $amazonTag;
