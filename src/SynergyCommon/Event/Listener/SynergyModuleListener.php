@@ -8,6 +8,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Header\CacheControl;
 use Zend\Http\Header\Expires;
 use Zend\Http\Header\Pragma;
+use Zend\Http\PhpEnvironment\Response as HttpResponse;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
@@ -273,12 +274,14 @@ class SynergyModuleListener
     {
         /** @var $authService \Zend\Authentication\AuthenticationService */
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+        /** @var HttpResponse $response */
         $response       = $event->getResponse();
-        $production     = (defined('APPLICATION_ENV') && APPLICATION_ENV == 'production');
+        $production     = (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production');
         $serviceManager = $event->getApplication()->getServiceManager();
         $authService    = $serviceManager->get('zfcuser_auth_service');
 
-        if ( ! $authService->hasIdentity() and $production and $response instanceof \Zend\Http\PhpEnvironment\Response
+        if ( ! $authService->hasIdentity() and
+            $production and $response instanceof HttpResponse and $response->isSuccess()
         ) {
             $age     = 60 * 60 * 6;
             $expire  = new \DateTime('+6 hours');
