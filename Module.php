@@ -17,51 +17,56 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package SynergyCommon
  */
-class Module {
+class Module
+{
 
-	/**
-	 * @return array
-	 */
-	public function getConfig() {
-		return include __DIR__ . '/config/module.config.php';
-	}
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return include __DIR__ . '/config/module.config.php';
+    }
 
-	public function getAutoloaderConfig() {
-		return array(
-			'Zend\Loader\StandardAutoloader' => array(
-				'namespaces' => array(
-					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-				),
-			),
-		);
-	}
+    public function getAutoloaderConfig()
+    {
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getServiceConfig() {
+    /**
+     * @return array
+     */
+    public function getServiceConfig()
+    {
 
-		return array(
-			'factories' => array(
-				'synergy\cache\status' => function ( $serviceLocator ) {
-					/** @var $authService \Zend\Authentication\AuthenticationService */
-					/** @var ServiceLocatorInterface $serviceLocator */
-					$request = $serviceLocator->get( 'request' );
-					$config  = $serviceLocator->get( 'config' );
+        return array(
+            'factories' => array(
+                'synergy\cache\status' => function ($serviceLocator) {
+                    /** @var $authService \Zend\Authentication\AuthenticationService */
+                    /** @var ServiceLocatorInterface $serviceLocator */
+                    $request    = $serviceLocator->get('request');
+                    $config     = $serviceLocator->get('config');
+                    $production = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
 
-					if ( $request instanceof Request ) {
-						$enabled = false;
-					} elseif ( isset( $config['enable_result_cache'] ) ) {
-						$enabled = $config['enable_result_cache'];
-					} else {
-						$enabled = false;
-					}
+                    if ($request instanceof Request and ($production == 'production')) {
+                        $enabled = true;
+                    } elseif (isset($config['enable_result_cache'])) {
+                        $enabled = $config['enable_result_cache'];
+                    } else {
+                        $enabled = false;
+                    }
 
-					$return = array( 'enabled' => $enabled );
+                    $return = array('enabled' => $enabled);
 
-					return (object) $return;
-				}
-			)
-		);
-	}
+                    return (object)$return;
+                }
+            )
+        );
+    }
 }
