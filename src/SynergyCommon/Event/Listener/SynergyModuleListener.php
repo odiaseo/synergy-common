@@ -5,6 +5,9 @@ use Doctrine\Common\Proxy\Autoloader;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+use Zend\Http\Header\CacheControl;
+use Zend\Http\Header\Expires;
+use Zend\Http\Header\Pragma;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
@@ -38,6 +41,7 @@ class SynergyModuleListener
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 100);
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'setHeaders'), -100);
 
     }
 
@@ -61,7 +65,7 @@ class SynergyModuleListener
                 /** @var MvcEvent $event */
                 $exception = $event->getResult()->exception;
 
-                if (!$exception) {
+                if ( ! $exception) {
                     return;
                 } elseif ($services->has('logger')) {
                     $service = $services->get('logger');
@@ -83,7 +87,7 @@ class SynergyModuleListener
             $services = $event->getApplication()->getServiceManager();
 
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request = $event->getRequest();
+            $request  = $event->getRequest();
             $callback = $this->getCallback();
 
             if ($request instanceof Request && $request->isXmlHttpRequest()) {
@@ -114,7 +118,7 @@ class SynergyModuleListener
             if ($logException && $services->has('logger')) {
                 /** @var $logget \Zend\Log\Logger */
                 $logger = $services->get('logger');
-                $uri = '';
+                $uri    = '';
                 if ($request instanceof Request) {
                     $uri = $request->getUriString();
                 }
@@ -131,7 +135,7 @@ class SynergyModuleListener
     {
         /** @var $e \Zend\Mvc\MvcEvent */
         $app = $event->getApplication();
-        $sm = $app->getServiceManager();
+        $sm  = $app->getServiceManager();
 
         if ($app->getRequest() instanceof Request) {
             if ($sm->has('session_manager')) {
@@ -140,7 +144,7 @@ class SynergyModuleListener
                 $session->start();
 
                 if ($sm->has('active\site')) {
-                    $site = $sm->get('active\site');
+                    $site      = $sm->get('active\site');
                     $namespace = $site->getSessionNamespace();
                 } else {
                     $namespace = 'initialised';
@@ -149,7 +153,7 @@ class SynergyModuleListener
                 /** @var $container \Zend\Session\Container */
                 $container = new Container($namespace, $session);
 
-                if (!isset($container->init) && php_sapi_name() != 'cli') {
+                if ( ! isset($container->init) && php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
                 }
@@ -166,7 +170,7 @@ class SynergyModuleListener
      */
     public function initEntityManager(MvcEvent $event)
     {
-        if (!static::$initialised) {
+        if ( ! static::$initialised) {
             /** @var $sm \Zend\ServiceManager\ServiceManager */
             $sm = $event->getApplication()->getServiceManager();
 
@@ -193,7 +197,7 @@ class SynergyModuleListener
 
                 foreach ($em->getEventManager()->getListeners() as $listeners) {
                     foreach ($listeners as $listener) {
-                        if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
+                        if ($listener instanceof SiteAwareListener and ! $listener->hasSite()) {
                             $listener->setSite($site);
                         }
                     }
@@ -202,8 +206,8 @@ class SynergyModuleListener
                 $config = $sm->get('config');
                 foreach ($config['doctrine']['configuration'] as $name => $data) {
                     $proxyNamespace = $data['proxy_namespace'];
-                    $path = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
-                    $proxyDir = getcwd() . DIRECTORY_SEPARATOR . $path;
+                    $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
+                    $proxyDir       = getcwd() . DIRECTORY_SEPARATOR . $path;
 
                     Autoloader::register($proxyDir, $proxyNamespace, array($logger, 'logProxyNotFound'));
                 }
@@ -226,7 +230,7 @@ class SynergyModuleListener
             $app = $e->getTarget();
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
-            $router = $serviceManager->get('router');
+            $router         = $serviceManager->get('router');
             if ($router && $router instanceof TranslatorAwareTreeRouteStack) {
                 if ($serviceManager->has('route\translator')) {
                     /** @var $translator \Zend\Mvc\I18n\Translator */
@@ -247,18 +251,41 @@ class SynergyModuleListener
     /**
      * Compress HTML output
      *
-     * @param MvcEvent $e
+     * @param MvcEvent $event
      */
-    public function compressOutput(MvcEvent $e)
+    public function compressOutput(MvcEvent $event)
     {
         if (defined('APPLICATION_ENV') && APPLICATION_ENV == 'production') {
-            $response = $e->getResponse();
+            $response = $event->getResponse();
 
             if ($response instanceof Response) {
                 $content = $response->getBody();
                 $content = preg_replace('/(?<=>)\s+|\s+(?=<)/', ' ', $content);
                 $response->setContent($content);
             }
+        }
+    }
+
+    /**
+     * @param MvcEvent $event
+     */
+    public function setHeaders(MvcEvent $event)
+    {
+        /** @var $authService \Zend\Authentication\AuthenticationService */
+        /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+        $response       = $event->getResponse();
+        $production     = (defined('APPLICATION_ENV') && APPLICATION_ENV == 'production');
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $authService    = $serviceManager->get('zfcuser_auth_service');
+
+        if ( ! $authService->hasIdentity() and $production and $response instanceof \Zend\Http\PhpEnvironment\Response
+        ) {
+            $age     = 60 * 60 * 6;
+            $expire  = new \DateTime('+6 hours');
+            $headers = $response->getHeaders();
+            $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
+                ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
+                ->addHeader(Pragma::fromString('Pragma: cache'));
         }
     }
 
