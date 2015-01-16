@@ -50,12 +50,11 @@ class Module
                 'synergy\cache\status' => function ($serviceLocator) {
                     /** @var $authService \Zend\Authentication\AuthenticationService */
                     /** @var ServiceLocatorInterface $serviceLocator */
-                    $request    = $serviceLocator->get('request');
-                    $config     = $serviceLocator->get('config');
-                    $production = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
+                    $request = $serviceLocator->get('request');
+                    $config  = $serviceLocator->get('config');
 
-                    if ($request instanceof Request and ($production == 'production')) {
-                        $enabled = true;
+                    if ($request instanceof Request) {
+                        $enabled = false;
                     } elseif (isset($config['enable_result_cache'])) {
                         $enabled = $config['enable_result_cache'];
                     } else {
