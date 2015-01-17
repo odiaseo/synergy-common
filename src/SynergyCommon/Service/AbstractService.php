@@ -194,7 +194,7 @@ abstract class AbstractService
      *
      * @return \Zend\Console\Adapter\Windows
      */
-    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GRAY, $bgColor = null)
+    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GREEN, $bgColor = null)
     {
         /** @var $console \Zend\Console\Adapter\Windows */
         $console = $this->getServiceManager()->get('console');
