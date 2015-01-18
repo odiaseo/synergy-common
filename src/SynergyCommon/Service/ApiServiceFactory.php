@@ -1,10 +1,8 @@
 <?php
 namespace SynergyCommon\Service;
 
-
 use SynergyCommon\Client\ClientOptions;
 use SynergyCommon\Client\HttpRestJsonClient;
-use SynergyCommon\Service\BaseApiService;
 use Zend\Http\Client as HttpClient;
 use Zend\Http\Request;
 use Zend\ServiceManager\FactoryInterface;
@@ -17,8 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package SynergyCommon\Service
  */
-class ApiServiceFactory
-    implements FactoryInterface
+class ApiServiceFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -35,7 +32,6 @@ class ApiServiceFactory
 
         $request            = new Request();
         $httpRestJsonClient = new HttpRestJsonClient($httpClient, $request);
-
 
         if (isset($config['synergy']['api']['options'])) {
             $options = new ClientOptions($config['synergy']['api']['options']);

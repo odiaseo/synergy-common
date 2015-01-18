@@ -18,7 +18,7 @@ class HttpRestJsonClient
     public function __construct(HttpClient $httpClient, $request = null)
     {
         $this->httpClient = $httpClient;
-        $this->_request   = $request ? : new Request();
+        $this->_request   = $request ?: new Request();
     }
 
     /**
@@ -40,7 +40,8 @@ class HttpRestJsonClient
         } else {
             $endpoint = $url;
         }
-
+        $headers = $this->_options->getHeaders();
+        $request->getHeaders()->addHeaders($headers);
         $request->setUri($endpoint);
         $request->setMethod($method);
 
@@ -68,7 +69,6 @@ class HttpRestJsonClient
     {
         return $this->_options;
     }
-
 
     public function get($url)
     {

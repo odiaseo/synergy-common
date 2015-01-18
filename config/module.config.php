@@ -54,6 +54,13 @@ return array(
         'memcache' => array(
             'host' => '127.0.0.1',
             'port' => 11211
+        ),
+        'api'      => array(
+            'options' => array(
+                'headers' => array(
+                    'User-Agent' => 'Synergy Afifiliate Platform v1.0',
+                ),
+            )
         )
     )
 );

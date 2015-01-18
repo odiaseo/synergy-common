@@ -3,8 +3,12 @@ namespace SynergyCommon\Client;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ClientOptions
-    extends AbstractOptions
+/**
+ * Class ClientOptions
+ *
+ * @package SynergyCommon\Client
+ */
+class ClientOptions extends AbstractOptions
 {
     protected $_domain;
 

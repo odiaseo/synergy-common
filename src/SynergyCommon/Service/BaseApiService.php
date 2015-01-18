@@ -1,11 +1,12 @@
 <?php
 namespace SynergyCommon\Service;
 
-use Zend\Json\Json;
-
-class BaseApiService
-    extends BaseService
-    implements ClientAwareInterface
+/**
+ * Class BaseApiService
+ *
+ * @package SynergyCommon\Service
+ */
+class BaseApiService extends BaseService implements ClientAwareInterface
 {
 
     /**
@@ -63,7 +64,7 @@ class BaseApiService
      */
     public function getSiteDetails($domain = null)
     {
-        if (!$domain) {
+        if ( ! $domain) {
             /** @var $request \Zend\Http\PhpEnvironment\Request */
             $request = $this->getServiceManager()->get('application')->getRequest();
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
