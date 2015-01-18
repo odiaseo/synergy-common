@@ -38,9 +38,8 @@ class SynergyModuleListener
             25
         );
 
-        //$this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, array($this, 'initSession'), 20000);
-        //$this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'initEntityManager'), 103);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 200);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initEntityManager'), 120);
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'setHeaders'), -100);
 
