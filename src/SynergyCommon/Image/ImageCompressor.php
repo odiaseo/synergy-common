@@ -17,7 +17,7 @@ class ImageCompressor
 
     public function compress()
     {
-        $logger = $this->getLogger() ? : $this;
+        $logger = $this->getLogger() ?: $this;
 
         $watchDirectory       = rtrim($this->_config->getWatchDirectory(), '/') . '/';
         $destinationDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
@@ -27,7 +27,7 @@ class ImageCompressor
         $min = $this->_config->getMinQuality();
         $max = $this->_config->getMaxQuality();
 
-        if (!file_exists($watchDirectory)) {
+        if ( ! file_exists($watchDirectory)) {
             mkdir($watchDirectory, 0775, true);
             $logger->info('creating directory ' . $watchDirectory);
         }
@@ -64,7 +64,6 @@ class ImageCompressor
                         \exec($triCommand, $output, $return);
                         $logger->info('compresed with trimage');
 
-
                         if ($converter = $this->_config->getJpegConverter()) {
                             $converter = $this->_serviceManager->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
@@ -75,7 +74,9 @@ class ImageCompressor
                                 foreach ($convertedList as $convertedFile) {
                                     $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
                                     $logger->info('file converted to ' . $convertedFile);
-                                    unlink($convertedFile);
+                                    if (file_exists($convertedFile)) {
+                                        unlink($convertedFile);
+                                    }
                                 }
                             }
                         }
@@ -124,7 +125,6 @@ class ImageCompressor
         return $this->_logger;
     }
 
-
     public function setConfig($config)
     {
         $this->_config = $config;
@@ -134,7 +134,6 @@ class ImageCompressor
     {
         return $this->_config;
     }
-
 
     public function setServiceManager(ServiceManager $serviceManager)
     {
