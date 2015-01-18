@@ -8,9 +8,9 @@ use Zend\Session\Container;
 
 /**
  * @ORM\MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
  */
-abstract class BaseEntity
-    extends AbstractEntity
+abstract class BaseEntity extends AbstractEntity
 {
     protected $_id;
     /**
@@ -81,14 +81,37 @@ abstract class BaseEntity
         $this->timezone = $timezone;
     }
 
+    /**
+     * @return string
+     */
     public function getTimezone()
     {
-        if (!$this->timezone) {
+        if ( ! $this->timezone) {
             $date           = new \DateTime('now');
             $this->timezone = $date->getTimezone()->getName();
         }
 
         return $this->timezone;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedDateTimeObject()
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdateDateTimeObject()
+    {
+        if (empty($this->updatedAt)) {
+            $this->updatedAt = new \DateTime();
+        }
     }
 
     /**

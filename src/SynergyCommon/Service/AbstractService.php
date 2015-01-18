@@ -9,8 +9,12 @@ use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-abstract class AbstractService
-    implements ServiceManagerAwareInterface
+/**
+ * Class AbstractService
+ *
+ * @package SynergyCommon\Service
+ */
+abstract class AbstractService implements ServiceManagerAwareInterface
 {
     /**
      * Print to console
@@ -53,8 +57,8 @@ abstract class AbstractService
                 $orderParts = explode(':', $orderList);
                 $order[]    = new SortOrder(
                     array(
-                         'field'     => $orderParts[0],
-                         'direction' => isset($orderParts[1]) ? strtolower($orderParts[1]) : 'asc',
+                        'field'     => $orderParts[0],
+                        'direction' => isset($orderParts[1]) ? strtolower($orderParts[1]) : 'asc',
                     )
                 );
             }
@@ -94,12 +98,12 @@ abstract class AbstractService
         $model->setOptions(
             new ModelOptions(
                 array(
-                     'page'      => isset($options['page']) ? $options['page'] : 1,
-                     'perPage'   => isset($options['perPage']) ? $options['perPage'] : AbstractModel::PER_PAGE,
-                     'filters'   => $this->processFilters($options),
-                     'sortOrder' => $this->processSortOrder($options),
-                     'fields'    => $this->processFields($options),
-                     'data'      => $additionalOptions
+                    'page'      => isset($options['page']) ? $options['page'] : 1,
+                    'perPage'   => isset($options['perPage']) ? $options['perPage'] : AbstractModel::PER_PAGE,
+                    'filters'   => $this->processFilters($options),
+                    'sortOrder' => $this->processSortOrder($options),
+                    'fields'    => $this->processFields($options),
+                    'data'      => $additionalOptions
                 )
             )
         );
@@ -152,7 +156,6 @@ abstract class AbstractService
         return $list;
     }
 
-
     public function setEntityKey($entityKey)
     {
         $this->_entityKey = $entityKey;
@@ -176,7 +179,7 @@ abstract class AbstractService
      */
     public function getEntityManager()
     {
-        if (!$this->_entityManager) {
+        if ( ! $this->_entityManager) {
             $this->_entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         }
 
@@ -210,6 +213,18 @@ abstract class AbstractService
         }
 
         return $console;
+    }
+
+    /**
+     * @param      $msg
+     * @param int  $repeat
+     * @param bool $lineBreak
+     *
+     * @return \Zend\Console\Adapter\Windows
+     */
+    public function printErrorMessage($msg, $repeat = 1, $lineBreak = true)
+    {
+        return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::RED);
     }
 
     protected function _filterHostName($host)
