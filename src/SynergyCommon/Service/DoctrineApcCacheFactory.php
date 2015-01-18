@@ -12,31 +12,33 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package SynergyCommon\Service
  */
-class DoctrineApcCacheFactory implements FactoryInterface {
-	public function createService( ServiceLocatorInterface $serviceLocator ) {
-		$host = '';
-		/** @var $request \Zend\Http\PhpEnvironment\Request */
-		$request = $serviceLocator->get( 'application' )->getRequest();
-		$status  = $serviceLocator->get( 'synergy\cache\status' );
+class DoctrineApcCacheFactory implements FactoryInterface
+{
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $host = '';
+        /** @var $request \Zend\Http\PhpEnvironment\Request */
+        $request = $serviceLocator->get('application')->getRequest();
+        $status  = $serviceLocator->get('synergy\cache\status');
 
-		if ( $status->enabled ) {
-			if ( $request instanceof Request ) {
-				/** @var $event \Zend\Mvc\MvcEvent */
-				$event = $serviceLocator->get( 'application' )->getMvcEvent();
-				if ( $event && $rm = $event->getRouteMatch() ) {
-					$host = $rm->getParam( 'host' );
-				}
-			} else {
-				$host = $request->getServer( 'HTTP_HOST' );
-			}
+        if ($status->enabled) {
+            if ($request instanceof Request) {
+                /** @var $event \Zend\Mvc\MvcEvent */
+                $event = $serviceLocator->get('application')->getMvcEvent();
+                if ($event && $rm = $event->getRouteMatch()) {
+                    $host = $rm->getParam('host');
+                }
+            } else {
+                $host = $request->getServer('HTTP_HOST');
+            }
 
-			$prefix = preg_replace( '/[^a-z0-9]/i', '', $host );
-			$cache  = new ApcCache();
-			$cache->setNamespace( $prefix );
-		} else {
-			$cache = new ArrayCache();
-		}
+            $prefix = preg_replace('/[^a-z0-9]/i', '', $host);
+            $cache  = new ApcCache();
+            $cache->setNamespace($prefix);
+        } else {
+            $cache = new ArrayCache();
+        }
 
-		return $cache;
-	}
+        return $cache;
+    }
 }

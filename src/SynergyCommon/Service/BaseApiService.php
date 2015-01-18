@@ -1,12 +1,11 @@
 <?php
 namespace SynergyCommon\Service;
 
-/**
- * Class BaseApiService
- *
- * @package SynergyCommon\Service
- */
-class BaseApiService extends BaseService implements ClientAwareInterface
+use Zend\Json\Json;
+
+class BaseApiService
+    extends BaseService
+    implements ClientAwareInterface
 {
 
     /**

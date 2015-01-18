@@ -1,15 +1,13 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use SynergyCommon\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
-
+use SynergyCommon\Entity\AbstractEntity;
 
 /**
  * @ORM\MappedSuperclass
  */
-class BaseLicence
-    extends AbstractEntity
+class BaseLicence extends AbstractEntity
 {
     /**
      * @ORM\Id

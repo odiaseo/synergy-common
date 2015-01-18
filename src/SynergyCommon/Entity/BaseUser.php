@@ -265,5 +265,4 @@ class BaseUser
         return $this->visits;
     }
 
-
 }

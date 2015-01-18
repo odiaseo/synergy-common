@@ -11,25 +11,28 @@ use Zend\Paginator\Adapter\AdapterInterface;
  *
  * @package SynergyCommon\Paginator\Adapter
  */
-class DoctrinePaginator extends Paginator implements AdapterInterface {
-	/**
-	 * @param Query|QueryBuilder $query
-	 * @param bool               $fetchJoinCollection
-	 * @param bool               $useOutputWalker
-	 * @param bool               $distinct
-	 */
-	public function __construct( $query, $fetchJoinCollection = true, $useOutputWalker = false, $distinct = false ) {
-		if ( $query instanceof QueryBuilder ) {
-			$query->distinct( $distinct );
-		}
-		parent::__construct( $query, $fetchJoinCollection );
-		$this->setUseOutputWalkers( $useOutputWalker );
-	}
+class DoctrinePaginator extends Paginator implements AdapterInterface
+{
+    /**
+     * @param Query|QueryBuilder $query
+     * @param bool               $fetchJoinCollection
+     * @param bool               $useOutputWalker
+     * @param bool               $distinct
+     */
+    public function __construct($query, $fetchJoinCollection = true, $useOutputWalker = false, $distinct = false)
+    {
+        if ($query instanceof QueryBuilder) {
+            $query->distinct($distinct);
+        }
+        parent::__construct($query, $fetchJoinCollection);
+        $this->setUseOutputWalkers($useOutputWalker);
+    }
 
-	public function getItems( $offset, $itemCountPerPage ) {
-		$this->getQuery()->setFirstResult( $offset );
-		$this->getQuery()->setMaxResults( $itemCountPerPage );
+    public function getItems($offset, $itemCountPerPage)
+    {
+        $this->getQuery()->setFirstResult($offset);
+        $this->getQuery()->setMaxResults($itemCountPerPage);
 
-		return $this->getIterator();
-	}
+        return $this->getIterator();
+    }
 }

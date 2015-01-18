@@ -1,4 +1,6 @@
 <?php
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+use Doctrine\ORM\Query\Lexer;
 use SynergyCommon\Doctrine\Extension;
 
 /**
@@ -10,9 +12,6 @@ use SynergyCommon\Doctrine\Extension;
  * obtain it through the world-wide-web, please send an email
  * to kontakt@beberlei.de so I can send you a copy immediately.
  */
-
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
 
 /**
  * Mysql RAND() implementation for Doctrine2

@@ -30,7 +30,6 @@ class SiteAwareListener
         );
     }
 
-
     public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getObject();
@@ -73,9 +72,11 @@ class SiteAwareListener
 
     public function getSite()
     {
-        if (!$this->_site instanceof BaseSite) {
-            throw new Exception(basename(__CLASS__)
-                . ": No valid site found. Ensure that the listener is initialised with a valid site.");
+        if ( ! $this->_site instanceof BaseSite) {
+            throw new Exception(
+                basename(__CLASS__)
+                . ": No valid site found. Ensure that the listener is initialised with a valid site."
+            );
         }
 
         return $this->_site;

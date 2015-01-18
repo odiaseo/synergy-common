@@ -25,7 +25,6 @@ class ScpAdapter
         return $this->_options;
     }
 
-
     public function copy($filename, $destination)
     {
         $password = $this->_options->getRemotePassword();

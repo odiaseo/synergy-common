@@ -38,10 +38,9 @@ class FlashMessages
         return $this->_serviceLocator;
     }
 
-
     public function getFlashMessenger()
     {
-        if (!$this->flashMessenger) {
+        if ( ! $this->flashMessenger) {
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $this->getServiceLocator()->getServiceLocator();
 

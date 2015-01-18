@@ -9,7 +9,6 @@
 
 namespace SynergyCommon\Session\SaveHandler;
 
-
 use SynergyCommon\Model\SessionModel;
 use Zend\Session\SaveHandler\SaveHandlerInterface;
 
@@ -45,7 +44,6 @@ class DoctrineSaveHandler
      * @var \SynergyCommon\Model\SessionModel
      */
     protected $model;
-
 
     /**
      * @param SessionModel $model
@@ -98,8 +96,8 @@ class DoctrineSaveHandler
         /** @var $row \SynergyCommon\Member\Entity\Session */
         $row = $this->model->getRepository()->findOneBy(
             array(
-                 'id'   => $id,
-                 'name' => $this->sessionName
+                'id'   => $id,
+                'name' => $this->sessionName
             )
         );
 
@@ -132,13 +130,12 @@ class DoctrineSaveHandler
         /** @var $row \SynergyCommon\Member\Entity\Session */
         $row = $this->model->getRepository()->findOneBy(
             array(
-                 'id'   => $id,
-                 'name' => $this->sessionName
+                'id'   => $id,
+                'name' => $this->sessionName
             )
         );
 
-
-        if (!$row) {
+        if ( ! $row) {
             $class = $this->model->getEntity();
             $row   = new $class();
 

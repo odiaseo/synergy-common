@@ -12,40 +12,42 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package SynergyCommon\Service
  */
-class LoggerFactory implements FactoryInterface {
-	/**
-	 * @param ServiceLocatorInterface $serviceLocator
-	 *
-	 * @return mixed|ErrorHandler
-	 */
-	public function createService( ServiceLocatorInterface $serviceLocator ) {
-		$config    = $serviceLocator->get( 'config' );
-		$directory = 'data/logs/';
-		$namespace = __NAMESPACE__;
+class LoggerFactory implements FactoryInterface
+{
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return mixed|ErrorHandler
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config    = $serviceLocator->get('config');
+        $directory = 'data/logs/';
+        $namespace = __NAMESPACE__;
 
-		if ( isset( $config['synergy']['logger']['directory'] ) ) {
-			$directory = $config['synergy']['logger']['directory'];
-		}
+        if (isset($config['synergy']['logger']['directory'])) {
+            $directory = $config['synergy']['logger']['directory'];
+        }
 
-		if ( isset( $config['synergy']['logger']['namespace'] ) ) {
-			$namespace = $config['synergy']['logger']['namespace'];
-		}
+        if (isset($config['synergy']['logger']['namespace'])) {
+            $namespace = $config['synergy']['logger']['namespace'];
+        }
 
-		$filename = rtrim( $directory, \DIRECTORY_SEPARATOR ) . \DIRECTORY_SEPARATOR . 'app.log';
-		$handler  = new ErrorHandler();
+        $filename = rtrim($directory, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'app.log';
+        $handler  = new ErrorHandler();
 
-		if ( class_exists( 'Monolog\Logger' ) ) {
-			$stream = new  \Monolog\Handler\RotatingFileHandler( $filename, 5 );
-			$logger = new \Monolog\Logger( $namespace, array( $stream ) );
-		} else {
-			$logger   = new Logger();
-			$resource = fopen( $filename, 'w' );
-			$writer   = new Stream( $resource );
-			$logger->addWriter( $writer );
-		}
-		$handler->setServiceLocator( $serviceLocator );
-		$handler->setLogger( $logger );
+        if (class_exists('Monolog\Logger')) {
+            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5);
+            $logger = new \Monolog\Logger($namespace, array($stream));
+        } else {
+            $logger   = new Logger();
+            $resource = fopen($filename, 'w');
+            $writer   = new Stream($resource);
+            $logger->addWriter($writer);
+        }
+        $handler->setServiceLocator($serviceLocator);
+        $handler->setLogger($logger);
 
-		return $handler;
-	}
+        return $handler;
+    }
 }
