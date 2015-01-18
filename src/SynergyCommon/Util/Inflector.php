@@ -42,7 +42,7 @@ class Inflector
     /**
      * Convert word in to the format for a Doctrine table name. Converts 'ModelName' to 'model_name'
      *
-     * @param  string $word  Word to tableize
+     * @param  string $word Word to tableize
      *
      * @return string $word  Tableized word
      */
@@ -54,7 +54,7 @@ class Inflector
     /**
      * Convert a word in to the format for a Doctrine class name. Converts 'table_name' to 'TableName'
      *
-     * @param string $word  Word to classify
+     * @param string $word Word to classify
      *
      * @return string $word  Classified word
      */
@@ -62,7 +62,7 @@ class Inflector
     {
         static $cache = array();
 
-        if (!isset($cache[$word])) {
+        if ( ! isset($cache[$word])) {
             $word         = preg_replace('/[$]/', '', $word);
             $classify     = preg_replace_callback(
                 '~(_?)([-_])([\w])~', array("Doctrine_Inflector", "classifyCallback"), ucfirst(strtolower($word))
@@ -76,7 +76,7 @@ class Inflector
     /**
      * Callback function to classify a classname properly.
      *
-     * @param  array $matches  An array of matches from a pcre_replace call
+     * @param  array $matches An array of matches from a pcre_replace call
      *
      * @return string $string   A string with matches 1 and mathces 3 in upper case.
      */
@@ -131,13 +131,13 @@ class Inflector
     /**
      * Remove any illegal characters, accents, etc.
      *
-     * @param  string $string  String to unaccent
+     * @param  string $string String to unaccent
      *
      * @return string $string  Unaccented string
      */
     public static function unaccent($string)
     {
-        if (!preg_match('/[\x80-\xff]/', $string)) {
+        if ( ! preg_match('/[\x80-\xff]/', $string)) {
             return $string;
         }
 
@@ -264,8 +264,10 @@ class Inflector
             $chars['out'] = "EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy";
 
             $string             = strtr($string, $chars['in'], $chars['out']);
-            $doubleChars['in']  = array(chr(140), chr(156), chr(198), chr(208), chr(222), chr(223), chr(230), chr(240),
-                                        chr(254));
+            $doubleChars['in']  = array(
+                chr(140), chr(156), chr(198), chr(208), chr(222), chr(223), chr(230), chr(240),
+                chr(254)
+            );
             $doubleChars['out'] = array('OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th');
             $string             = str_replace($doubleChars['in'], $doubleChars['out'], $string);
         }
@@ -276,7 +278,7 @@ class Inflector
     /**
      * Convert any passed string to a url friendly string. Converts 'My first blog post' to 'my-first-blog-post'
      *
-     * @param  string $text  Text to urlize
+     * @param  string $text Text to urlize
      *
      * @return string $text  Urlized text
      */

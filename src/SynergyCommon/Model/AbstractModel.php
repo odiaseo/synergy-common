@@ -1058,8 +1058,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
         $result = array_filter(
             $data, function ($v) {
-                return (\is_bool($v) or \is_numeric($v) or ! empty($v));
-            }
+            return (\is_bool($v) or \is_numeric($v) or ! empty($v));
+        }
         );
 
         return $result;

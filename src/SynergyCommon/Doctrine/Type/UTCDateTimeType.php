@@ -48,7 +48,7 @@ class UTCDateTimeType extends DateTimeType
             $value,
             (self::$utc) ? self::$utc : (self::$utc = new \DateTimeZone('UTC'))
         );
-        if (!$val) {
+        if ( ! $val) {
             throw ConversionException::conversionFailed($value, $this->getName());
         }
 

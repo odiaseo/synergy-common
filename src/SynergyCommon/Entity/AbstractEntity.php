@@ -19,7 +19,7 @@ use Zend\Session\Container;
 abstract class AbstractEntity
 {
     /** @var \Zend\InputFilter\InputFilter */
-    protected $_inputFilter;
+    protected $inputFilter;
 
     /**
      * Convert the object to an array.
@@ -210,7 +210,7 @@ abstract class AbstractEntity
      */
     public function setInputFilter($inputFilter)
     {
-        $this->_inputFilter = $inputFilter;
+        $this->inputFilter = $inputFilter;
     }
 
     /**
@@ -218,8 +218,8 @@ abstract class AbstractEntity
      */
     public function getInputFilter()
     {
-        return $this->_inputFilter;
+        return $this->inputFilter;
     }
 
-    abstract function getId();
+    abstract public function getId();
 }

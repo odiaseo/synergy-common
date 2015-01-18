@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Model;
 
-
 use SynergyCommon\Exception\InvalidEntityException;
 use Zend\Log\Formatter\Base;
 use Zend\ServiceManager\AbstractFactoryInterface;

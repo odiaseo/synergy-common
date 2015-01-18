@@ -45,7 +45,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     public static function processException(\Exception $e)
     {
         $trace = $e->getTraceAsString();
-        $i = 1;
+        $i     = 1;
         do {
             $messages[] = $i++ . ": " . $e->getMessage();
         } while ($e = $e->getPrevious());

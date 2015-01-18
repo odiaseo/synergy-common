@@ -8,33 +8,33 @@ use Doctrine\ORM\AbstractQuery;
  *
  * @package SynergyCommon\Doctrine
  */
-interface CacheAwareQueryInterface {
+interface CacheAwareQueryInterface
+{
 
-	/**
-	 * @param AbstractQuery $query
-	 *
-	 * @return AbstractQuery
-	 */
-	public function setCacheFlag( AbstractQuery $query );
+    /**
+     * @param AbstractQuery $query
+     *
+     * @return AbstractQuery
+     */
+    public function setCacheFlag(AbstractQuery $query);
 
+    /**
+     * @param boolean $enabled
+     */
+    public function setEnableResultCache($enabled);
 
-	/**
-	 * @param boolean $enabled
-	 */
-	public function setEnableResultCache( $enabled );
+    /**
+     * @param string $cacheKey
+     */
+    public function setCacheKey($cacheKey);
 
-	/**
-	 * @param string $cacheKey
-	 */
-	public function setCacheKey( $cacheKey );
+    /**
+     * @param int $lifetime
+     */
+    public function setLifetime($lifetime);
 
-	/**
-	 * @param int $lifetime
-	 */
-	public function setLifetime( $lifetime );
-
-	/**
-	 * @param boolean $enableHydrationCache
-	 */
-	public function setEnableHydrationCache( $enableHydrationCache );
+    /**
+     * @param boolean $enableHydrationCache
+     */
+    public function setEnableHydrationCache($enableHydrationCache);
 }

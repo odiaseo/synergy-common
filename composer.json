@@ -1,45 +1,45 @@
 {
-    "name": "synergy/common",
-    "description": "Library Abstract and concrete classes common to Synergy Modules",
-    "license": "BSD-3-Clause",
-    "keywords": [
-        "synergy library",
-        "abstract classes"
-    ],
-    "authors": [
-        {
-            "name": "Pele Odiase",
-            "email": "peleodiase@yahoo.co.uk"
-        }
-    ],
-    "require": {
-        "php": ">=5.4",
-        "zendframework/zendframework": "2.*",
-        "doctrine/doctrine-orm-module": "*",
-        "doctrine/doctrine-module": "*",
-        "doctrine/orm" : "*",
-        "gedmo/doctrine-extensions": ">=v2.2.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
-    "suggest": {
-        "ewgo/solarium-module": "For solr search aware models",
-        "monolog/monolog": "For enhanced logging features"
-    },
-    "autoload": {
-        "psr-0": {
-            "SynergyCommon": "src/",
-            "SynergyCommonTest": "tests/"
-        },
-        "classmap": [
-            "./tests/lib/Module.php",
-            "./Module.php"
-        ]
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
+  "name": "synergy/common",
+  "description": "Library Abstract and concrete classes common to Synergy Modules",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "synergy library",
+    "abstract classes"
+  ],
+  "authors": [
+    {
+      "name": "Pele Odiase",
+      "email": "peleodiase@yahoo.co.uk"
     }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "zendframework/zendframework": "2.*",
+    "doctrine/doctrine-orm-module": "*",
+    "doctrine/doctrine-module": "*",
+    "doctrine/orm": "*",
+    "gedmo/doctrine-extensions": ">=v2.2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "suggest": {
+    "ewgo/solarium-module": "For solr search aware models",
+    "monolog/monolog": "For enhanced logging features"
+  },
+  "autoload": {
+    "psr-0": {
+      "SynergyCommon": "src/",
+      "SynergyCommonTest": "tests/"
+    },
+    "classmap": [
+      "./tests/lib/Module.php",
+      "./Module.php"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
 }

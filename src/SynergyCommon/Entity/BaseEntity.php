@@ -12,7 +12,6 @@ use Zend\Session\Container;
  */
 abstract class BaseEntity extends AbstractEntity
 {
-    protected $_id;
     /**
      * @var bool
      */
@@ -120,15 +119,5 @@ abstract class BaseEntity extends AbstractEntity
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    public function getId()
-    {
-        return $this->_id;
-    }
-
-    public function setId($id)
-    {
-        $this->_id = $id;
     }
 }

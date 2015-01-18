@@ -2,9 +2,9 @@
 
 namespace SynergyCommon\Paginator\Adapter;
 
-use Zend\Paginator\Adapter\AdapterInterface;
 use Solarium\Client;
 use Solarium\QueryType\Select\Query\Query;
+use Zend\Paginator\Adapter\AdapterInterface;
 
 /**
  * Solarium result paginator

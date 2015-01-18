@@ -12,68 +12,78 @@ use SynergyCommon\Entity\AbstractEntity;
  * @ORM\Table(name="Session")
  *
  */
-class Session extends AbstractEntity {
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="string", length=32);
-	 */
-	protected $id;
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="string", length=3)
-	 */
-	protected $name;
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $data;
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	protected $modified;
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 */
-	protected $lifetime;
+class Session extends AbstractEntity
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="string", length=32);
+     */
+    protected $id;
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="string", length=3)
+     */
+    protected $name;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $data;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $modified;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $lifetime;
 
-	public function setData( $data ) {
-		$this->data = $data;
-	}
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 
-	public function getData() {
-		return $this->data;
-	}
+    public function getData()
+    {
+        return $this->data;
+    }
 
-	public function setId( $id ) {
-		$this->id = $id;
-	}
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
-	public function getId() {
-		return $this->id;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	public function setLifetime( $lifetime ) {
-		$this->lifetime = $lifetime;
-	}
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
+    }
 
-	public function getLifetime() {
-		return $this->lifetime;
-	}
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
 
-	public function setModified( $modified ) {
-		$this->modified = $modified;
-	}
+    public function setModified($modified)
+    {
+        $this->modified = $modified;
+    }
 
-	public function getModified() {
-		return $this->modified;
-	}
+    public function getModified()
+    {
+        return $this->modified;
+    }
 
-	public function setName( $name ) {
-		$this->name = $name;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	public function getName() {
-		return $this->name;
-	}
-
+    public function getName()
+    {
+        return $this->name;
+    }
 }

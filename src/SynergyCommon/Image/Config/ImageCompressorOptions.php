@@ -9,7 +9,6 @@ class ImageCompressorOptions
     /** @var \SynergyCommon\Image\TransferAdapterInterface */
     protected $_adapter;
 
-
     protected $_destinationDirectory;
 
     protected $_watchDirectory;
@@ -42,7 +41,6 @@ class ImageCompressorOptions
         return $this->_dimensions;
     }
 
-
     public function setJpegDirectory($jpegDirectory)
     {
         $this->_jpegDirectory = $jpegDirectory;
@@ -73,7 +71,6 @@ class ImageCompressorOptions
         return $this->_watchDirectory;
     }
 
-
     public function setJpegConverter($jpegConverter)
     {
         $this->_jpegConverter = $jpegConverter;
@@ -84,7 +81,6 @@ class ImageCompressorOptions
         return $this->_jpegConverter;
     }
 
-
     public function setDestinationDirectory($destinationDirectory)
     {
         $this->_destinationDirectory = $destinationDirectory;
@@ -94,7 +90,6 @@ class ImageCompressorOptions
     {
         return $this->_destinationDirectory;
     }
-
 
     public function setRemoteHost($remoteHost)
     {
@@ -158,6 +153,5 @@ class ImageCompressorOptions
     {
         return $this->_minQuality;
     }
-
 
 }

@@ -6,5 +6,6 @@ namespace SynergyCommon\Exception;
  *
  * @package SynergyCommon\Exception
  */
-class MemcacheNotAvailableException extends \Exception {
+class MemcacheNotAvailableException extends \Exception
+{
 }

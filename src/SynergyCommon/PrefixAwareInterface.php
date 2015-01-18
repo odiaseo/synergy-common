@@ -6,9 +6,10 @@ namespace SynergyCommon;
  *
  * @package SynergyCommon
  */
-interface PrefixAwareInterface {
-	/**
-	 * @return string
-	 */
-	public function getPrefix();
+interface PrefixAwareInterface
+{
+    /**
+     * @return string
+     */
+    public function getPrefix();
 }

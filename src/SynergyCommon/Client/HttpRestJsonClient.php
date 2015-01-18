@@ -40,8 +40,7 @@ class HttpRestJsonClient
         } else {
             $endpoint = $url;
         }
-        $headers = $this->_options->getHeaders();
-        $request->getHeaders()->addHeaders($headers);
+
         $request->setUri($endpoint);
         $request->setMethod($method);
 
