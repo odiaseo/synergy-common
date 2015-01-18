@@ -17,8 +17,12 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;
 
-class SynergyModuleListener
-    implements ListenerAggregateInterface
+/**
+ * Class SynergyModuleListener
+ *
+ * @package SynergyCommon\Event\Listener
+ */
+class SynergyModuleListener implements ListenerAggregateInterface
 {
     protected $listeners = array();
 

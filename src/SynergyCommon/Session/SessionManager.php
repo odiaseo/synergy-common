@@ -13,8 +13,7 @@ use Zend\Session\SessionManager as ZendSessionManager;
  *
  * @package SynergyCommon\Session
  */
-class SessionManager
-    implements FactoryInterface
+class SessionManager implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
