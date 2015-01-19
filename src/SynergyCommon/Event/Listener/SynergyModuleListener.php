@@ -42,9 +42,9 @@ class SynergyModuleListener implements ListenerAggregateInterface
             25
         );
 
-        //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 200);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initEntityManager'), -500);
+        //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initEntityManager'), 500);
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'setHeaders'), -100);
 
@@ -279,20 +279,26 @@ class SynergyModuleListener implements ListenerAggregateInterface
         /** @var $authService \Zend\Authentication\AuthenticationService */
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
         /** @var HttpResponse $response */
-        $response       = $event->getResponse();
-        $production     = (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production');
-        $serviceManager = $event->getApplication()->getServiceManager();
-        $authService    = $serviceManager->get('zfcuser_auth_service');
+        $response = $event->getResponse();
+        if ($response instanceof HttpResponse) {
+            $production     = (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production');
+            $serviceManager = $event->getApplication()->getServiceManager();
 
-        if ( ! $authService->hasIdentity() and
-            $production and $response instanceof HttpResponse and $response->isSuccess()
-        ) {
-            $age     = 60 * 60 * 6;
-            $expire  = new \DateTime('+6 hours');
-            $headers = $response->getHeaders();
-            $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
-                ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
-                ->addHeader(Pragma::fromString('Pragma: cache'));
+            if ($serviceManager->has('zfcuser_auth_service')) {
+                $authService = $serviceManager->get('zfcuser_auth_service');
+                $hasIdentity = $authService->hasIdentity();
+            } else {
+                $hasIdentity = false;
+            }
+
+            if ( ! $hasIdentity and $production and $response->isSuccess()) {
+                $age     = 60 * 60 * 6;
+                $expire  = new \DateTime('+6 hours');
+                $headers = $response->getHeaders();
+                $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
+                    ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
+                    ->addHeader(Pragma::fromString('Pragma: cache'));
+            }
         }
     }
 

@@ -364,6 +364,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
             $this->getEntityManager()->flush();
         } catch (\Exception $exception) {
             $this->getLogger()->logException($exception);
+            return false ;
         }
 
         return $entity;
