@@ -11,9 +11,13 @@ use Zend\Session\SessionManager as ZendSessionManager;
  *
  * @package SynergyCommon\Session
  */
-class SessionManagerFactory
-    implements FactoryInterface
+class SessionManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return ZendSessionManager
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('config');

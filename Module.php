@@ -9,6 +9,7 @@
 
 namespace SynergyCommon;
 
+use SynergyCommon\Session\SaveHandler\DoctrineSaveHandler;
 use Zend\Console\Request;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -47,7 +48,16 @@ class Module
 
         return array(
             'factories' => array(
-                'synergy\cache\status' => function ($serviceLocator) {
+                'common\model\session'          => 'SynergyCommon\Model\SessionModelFactory',
+                'session\doctrine\save\handler' => function ($serviceLocator) {
+                    /** @var ServiceLocatorInterface $serviceLocator */
+                    $config  = $serviceLocator->get('config');
+                    $model   = $serviceLocator->get($config['session']['config']['model']);
+                    $handler = new DoctrineSaveHandler($model);
+
+                    return $handler;
+                },
+                'synergy\cache\status'          => function ($serviceLocator) {
                     /** @var $authService \Zend\Authentication\AuthenticationService */
                     /** @var ServiceLocatorInterface $serviceLocator */
                     $request = $serviceLocator->get('request');

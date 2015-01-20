@@ -28,6 +28,7 @@ return array(
     ),
     'session'         => array(
         'config'       => array(
+            'model'   => 'common\model\session',
             'class'   => 'Zend\Session\Config\SessionConfig',
             'options' => array(
                 'name' => 'synergycommon',
@@ -45,10 +46,7 @@ return array(
         ),
         'lifetime'     => 7200,
         'storage'      => 'Zend\Session\Storage\SessionArrayStorage',
-        'validators'   => array(
-            //'Zend\Session\Validator\RemoteAddr',
-            //'Zend\Session\Validator\HttpUserAgent',
-        ),
+        'validators'   => array(),
     ),
     'synergy'         => array(
         'memcache' => array(

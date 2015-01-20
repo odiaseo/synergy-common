@@ -1,0 +1,28 @@
+<?php
+namespace SynergyCommon\Model;
+
+use SynergyCommon\Doctrine\CachedEntityManager;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+/**
+ * Class SessionModelFactory
+ *
+ * @package SynergyCommon\Model
+ */
+class SessionModelFactory implements FactoryInterface
+{
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $cacheStatus   = $serviceLocator->get('synergy\cache\status');
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+        $cachedManager = new CachedEntityManager($entityManager);
+        $model         = new SessionModel();
+        $model->setEntityManager($cachedManager);
+        $model->setEntity('SynergyCommon\Member\Entity\Session');
+        $model->setLogger($serviceLocator->get('logger'));
+        $model->setEnableResultCache($cacheStatus->enabled);
+
+        return $model;
+    }
+}

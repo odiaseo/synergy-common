@@ -1,10 +1,12 @@
 <?php
 namespace SynergyCommon\Model;
 
-use SynergyCommon\Model\AbstractModel;
-
-class SiteModel
-    extends AbstractModel
+/**
+ * Class SiteModel
+ *
+ * @package SynergyCommon\Model
+ */
+class SiteModel extends AbstractModel
 {
 
 }

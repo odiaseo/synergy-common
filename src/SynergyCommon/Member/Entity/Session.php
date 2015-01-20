@@ -16,12 +16,12 @@ class Session extends AbstractEntity
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=32);
+     * @ORM\Column(type="string", length=40);
      */
     protected $id;
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=3)
+     * @ORM\Column(type="string", length=25)
      */
     protected $name;
     /**

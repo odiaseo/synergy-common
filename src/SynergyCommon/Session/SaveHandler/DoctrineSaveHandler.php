@@ -15,8 +15,7 @@ use Zend\Session\SaveHandler\SaveHandlerInterface;
 /**
  * DB Table Gateway session save handler
  */
-class DoctrineSaveHandler
-    implements SaveHandlerInterface
+class DoctrineSaveHandler implements SaveHandlerInterface
 {
     /**
      * Session Save Path
@@ -67,7 +66,7 @@ class DoctrineSaveHandler
     {
         $this->sessionSavePath = $savePath;
         $this->sessionName     = $name;
-        $this->lifetime        = $this->_getLIfeTime();
+        $this->lifetime        = $this->getLifeTime();
 
         return true;
     }
@@ -85,27 +84,21 @@ class DoctrineSaveHandler
     /**
      * Read session data
      *
-     * @param string $id
+     * @param string $sessionId
      *
      * @return string
      */
-    public function read($id)
+    public function read($sessionId)
     {
-        $data = '';
-
         /** @var $row \SynergyCommon\Member\Entity\Session */
-        $row = $this->model->getRepository()->findOneBy(
-            array(
-                'id'   => $id,
-                'name' => $this->sessionName
-            )
-        );
+        $data = '';
+        $row  = $this->model->getSessionRecord($sessionId, $this->sessionName);
 
         if ($row) {
             if (($row->getModified() + $row->getLifetime()) > time()) {
                 $data = $row->getData();
             } else {
-                $this->destroy($id);
+                $this->destroy($sessionId);
             }
         }
 
@@ -115,12 +108,12 @@ class DoctrineSaveHandler
     /**
      * Write session data
      *
-     * @param string $id
+     * @param string $sessionId
      * @param string $data
      *
      * @return bool
      */
-    public function write($id, $data)
+    public function write($sessionId, $data)
     {
         $data = array(
             'modified' => time(),
@@ -128,19 +121,14 @@ class DoctrineSaveHandler
         );
 
         /** @var $row \SynergyCommon\Member\Entity\Session */
-        $row = $this->model->getRepository()->findOneBy(
-            array(
-                'id'   => $id,
-                'name' => $this->sessionName
-            )
-        );
+        $row = $this->model->getSessionRecord($sessionId, $this->sessionName);
 
         if ( ! $row) {
             $class = $this->model->getEntity();
             $row   = new $class();
 
             $data['lifetime'] = $this->lifetime;
-            $data['id']       = $id;
+            $data['id']       = $sessionId;
             $data['name']     = $this->sessionName;
         }
 
@@ -152,13 +140,13 @@ class DoctrineSaveHandler
     /**
      * Destroy session
      *
-     * @param  string $id
+     * @param  string $sessionId
      *
      * @return bool
      */
-    public function destroy($id)
+    public function destroy($sessionId)
     {
-        return (bool)$this->model->remove($id);
+        return (bool)$this->model->deleteSession($sessionId, $this->sessionName);
     }
 
     /**
@@ -173,9 +161,12 @@ class DoctrineSaveHandler
         return $this->model->collectGabage() ? true : false;
     }
 
-    protected function _getLIfeTime()
+    /**
+     * @return int|null|string
+     */
+    protected function getLifeTime()
     {
-        if ($this->lifetime) {
+        if ( ! $this->lifetime) {
             $this->lifetime = \ini_get('session.gc_maxlifetime');
         }
 
