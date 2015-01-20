@@ -46,8 +46,8 @@ return array(
         'lifetime'     => 7200,
         'storage'      => 'Zend\Session\Storage\SessionArrayStorage',
         'validators'   => array(
-            'Zend\Session\Validator\RemoteAddr',
-            'Zend\Session\Validator\HttpUserAgent',
+            //'Zend\Session\Validator\RemoteAddr',
+            //'Zend\Session\Validator\HttpUserAgent',
         ),
     ),
     'synergy'         => array(
