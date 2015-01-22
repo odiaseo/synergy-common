@@ -5,6 +5,7 @@ use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
+use SynergyCommon\Util\ConsolePrinterTrait;
 use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
@@ -16,6 +17,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
  */
 abstract class AbstractService implements ServiceManagerAwareInterface
 {
+    use ConsolePrinterTrait;
     /**
      * Print to console
      *
@@ -184,47 +186,6 @@ abstract class AbstractService implements ServiceManagerAwareInterface
         }
 
         return $this->_entityManager;
-    }
-
-    /**
-     * Print message to console
-     *
-     * @param      $msg
-     * @param int  $repeat
-     * @param bool $lineBreak
-     * @param int  $color
-     * @param null $bgColor
-     *
-     * @return \Zend\Console\Adapter\Windows
-     */
-    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GREEN, $bgColor = null)
-    {
-        /** @var $console \Zend\Console\Adapter\Windows */
-        $console = $this->getServiceManager()->get('console');
-        if ($this->getVerbose()) {
-            $msg  = is_array($msg) ? print_r($msg, true) : $msg;
-            $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
-            $msg  = "{$sign}$msg";
-            if ($lineBreak) {
-                $console->writeLine($msg, $color, $bgColor);
-            } else {
-                $console->write($msg, $color, $bgColor);
-            }
-        }
-
-        return $console;
-    }
-
-    /**
-     * @param      $msg
-     * @param int  $repeat
-     * @param bool $lineBreak
-     *
-     * @return \Zend\Console\Adapter\Windows
-     */
-    public function printErrorMessage($msg, $repeat = 1, $lineBreak = true)
-    {
-        return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::RED);
     }
 
     protected function _filterHostName($host)
