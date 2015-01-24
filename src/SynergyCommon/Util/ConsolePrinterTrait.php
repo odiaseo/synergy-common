@@ -23,7 +23,7 @@ trait ConsolePrinterTrait
      *
      * @return \Zend\Console\Adapter\Windows
      */
-    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::GREEN, $bgColor = null)
+    public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::WHITE, $bgColor = null)
     {
         /** @var $console \Zend\Console\Adapter\Windows */
         $console = $this->getServiceManager()->get('console');
@@ -51,6 +51,30 @@ trait ConsolePrinterTrait
     public function printErrorMessage($msg, $repeat = 1, $lineBreak = true)
     {
         return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::RED);
+    }
+
+    /**
+     * @param      $msg
+     * @param int  $repeat
+     * @param bool $lineBreak
+     *
+     * @return \Zend\Console\Adapter\Windows
+     */
+    public function printSuccessMessage($msg, $repeat = 1, $lineBreak = true)
+    {
+        return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::GREEN);
+    }
+
+    /**
+     * @param      $msg
+     * @param int  $repeat
+     * @param bool $lineBreak
+     *
+     * @return \Zend\Console\Adapter\Windows
+     */
+    public function printWarningMessage($msg, $repeat = 1, $lineBreak = true)
+    {
+        return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::LIGHT_YELLOW);
     }
 
     /**
