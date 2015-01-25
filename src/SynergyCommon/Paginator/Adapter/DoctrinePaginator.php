@@ -19,6 +19,8 @@ class DoctrinePaginator extends Paginator implements AdapterInterface
      * @param bool               $useOutputWalker
      * @param bool               $distinct
      */
+    protected $dataStore = array();
+
     public function __construct($query, $fetchJoinCollection = true, $useOutputWalker = false, $distinct = false)
     {
         if ($query instanceof QueryBuilder) {
@@ -30,9 +32,12 @@ class DoctrinePaginator extends Paginator implements AdapterInterface
 
     public function getItems($offset, $itemCountPerPage)
     {
-        $this->getQuery()->setFirstResult($offset);
-        $this->getQuery()->setMaxResults($itemCountPerPage);
+        if ( ! isset($this->dataStore[$offset])) {
+            $this->getQuery()->setFirstResult($offset);
+            $this->getQuery()->setMaxResults($itemCountPerPage);
+            $this->dataStore[$offset] = $this->getIterator();
+        }
 
-        return $this->getIterator();
+        return $this->dataStore[$offset];
     }
 }

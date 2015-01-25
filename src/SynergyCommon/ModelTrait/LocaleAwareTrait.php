@@ -65,12 +65,13 @@ trait LocaleAwareTrait
 
     public static function addHints(AbstractQuery $query)
     {
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, self::getCurrentLocale())
-            ->setHint(TranslatableListener::HINT_FALLBACK, 1)
-            ->setHint(
-                Query::HINT_CUSTOM_OUTPUT_WALKER,
-                'Gedmo\Translatable\Query\TreeWalker\TranslationWalker'
-            );
+        $language = self::getCurrentLocale();
+
+        if ($language != 'en') {
+            $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $language)
+                ->setHint(TranslatableListener::HINT_FALLBACK, 1)
+                ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker');
+        }
 
         return $query;
     }
