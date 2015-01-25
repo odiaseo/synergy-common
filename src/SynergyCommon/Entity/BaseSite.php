@@ -9,8 +9,7 @@ use SynergyCommon\Entity\AbstractEntity;
 /**
  * @ORM\MappedSuperclass
  */
-class BaseSite
-    extends AbstractEntity
+class BaseSite extends AbstractEntity
 {
     /**
      * @ORM\Id
