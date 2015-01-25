@@ -44,7 +44,7 @@ class SessionManagerFactory implements FactoryInterface
 
             /** @var $sessionSaveHandler \Zend\Session\SaveHandler\SaveHandlerInterface */
             $sessionSaveHandler = null;
-            if (isset($session['save_handler']) && $serviceLocator->has($session['save_handler'])) {
+            if (isset($session['save_handler']) and $serviceLocator->has($session['save_handler'])) {
                 $sessionSaveHandler = $serviceLocator->get($session['save_handler']);
             }
 

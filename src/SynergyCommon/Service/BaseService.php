@@ -359,7 +359,7 @@ class BaseService
                     if ( ! ($reflectionClass->isAbstract() || $class->isMappedSuperclass)) {
                         $name   = str_replace($class->namespace . '\\', '', $className);
                         $entity = new $className;
-                        if ($entity instanceof PrefixAwareInterface && ($prefix = $entity->getPrefix())) {
+                        if ($entity instanceof PrefixAwareInterface and ($prefix = $entity->getPrefix())) {
                             $name = trim($prefix, '-') . '-' . $name;
                         }
 

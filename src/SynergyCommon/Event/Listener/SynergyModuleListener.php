@@ -88,14 +88,14 @@ class SynergyModuleListener implements ListenerAggregateInterface
     public function handleException(MvcEvent $event)
     {
         $logException = false;
-        if ($event->isError() && static::$handled === false) {
+        if ($event->isError() and static::$handled === false) {
             $services = $event->getApplication()->getServiceManager();
 
             /** @var $request \Zend\Http\PhpEnvironment\Request */
             $request  = $event->getRequest();
             $callback = $this->getCallback();
 
-            if ($request instanceof Request && $request->isXmlHttpRequest()) {
+            if ($request instanceof Request and $request->isXmlHttpRequest()) {
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
                     array(
@@ -120,7 +120,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 $logException = true;
             }
 
-            if ($logException && $services->has('logger')) {
+            if ($logException and $services->has('logger')) {
                 /** @var $logget \Zend\Log\Logger */
                 $logger = $services->get('logger');
                 $uri    = '';
@@ -158,7 +158,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 /** @var $container \Zend\Session\Container */
                 $container = new Container($namespace, $session);
 
-                if ( ! isset($container->init) && php_sapi_name() != 'cli') {
+                if ( ! isset($container->init) and php_sapi_name() != 'cli') {
                     $session->regenerateId(true);
                     $container->init = 1;
                 }
@@ -236,7 +236,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
             $router         = $serviceManager->get('router');
-            if ($router && $router instanceof TranslatorAwareTreeRouteStack) {
+            if ($router and $router instanceof TranslatorAwareTreeRouteStack) {
                 if ($serviceManager->has('route\translator')) {
                     /** @var $translator \Zend\Mvc\I18n\Translator */
                     $translator = $serviceManager->get('route\translator');
@@ -260,7 +260,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function compressOutput(MvcEvent $event)
     {
-        if (defined('APPLICATION_ENV') && APPLICATION_ENV == 'production') {
+        if (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production') {
             $response = $event->getResponse();
 
             if ($response instanceof Response) {

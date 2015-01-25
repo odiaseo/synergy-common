@@ -83,7 +83,7 @@ class ImageCompressor
                         if ($adapter->copy($tmpFile, $destinationDirectory . $newFilename)) {
                             $logger->info('copied to ' . $destinationDirectory);
 
-                            if (unlink($sourceFile) && unlink($tmpFile)) {
+                            if (unlink($sourceFile) and unlink($tmpFile)) {
                                 $logger->info('source and temporary files deleted');
                             }
                         } else {

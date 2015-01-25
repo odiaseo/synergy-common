@@ -25,7 +25,7 @@ class DoctrineApcCacheFactory implements FactoryInterface
             if ($request instanceof Request) {
                 /** @var $event \Zend\Mvc\MvcEvent */
                 $event = $serviceLocator->get('application')->getMvcEvent();
-                if ($event && $rm = $event->getRouteMatch()) {
+                if ($event and $rm = $event->getRouteMatch()) {
                     $host = $rm->getParam('host');
                 }
             } else {

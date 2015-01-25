@@ -792,9 +792,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                         }
                     }
 
-                    if ($type == 'boolean' && ! (is_numeric($value) || is_bool($value))) {
+                    if ($type == 'boolean' and ! (is_numeric($value) or is_bool($value))) {
                         $value = ('true' === $value) ? 1 : 0;
-                    } elseif (is_string($value) && strpos($value, ',') !== false) {
+                    } elseif (is_string($value) and strpos($value, ',') !== false) {
                         $value = array_filter(explode(',', $value));
                     }
 
