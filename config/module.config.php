@@ -39,7 +39,7 @@ return array(
                 'adapter' => array(
                     'name'    => 'filesystem',
                     'options' => array(
-                        'cache_dir' => __DIR__ . '/../data/session',
+                        'cache_dir' => getcwd() . '/data/session',
                     )
                 )
             ),

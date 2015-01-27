@@ -70,7 +70,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 /** @var MvcEvent $event */
                 $exception = $event->getResult()->exception;
 
-                if ( ! $exception) {
+                if (!$exception) {
                     return;
                 } elseif ($services->has('logger')) {
                     $service = $services->get('logger');
@@ -142,26 +142,24 @@ class SynergyModuleListener implements ListenerAggregateInterface
         $app = $event->getApplication();
         $sm  = $app->getServiceManager();
 
-        if ($app->getRequest() instanceof Request) {
-            if ($sm->has('session_manager')) {
-                /** @var $session \Zend\Session\SessionManager */
-                $session = $sm->get('session_manager');
-                $session->start();
+        if ($sm->has('session_manager')) {
+            /** @var $session \Zend\Session\SessionManager */
+            $session = $sm->get('session_manager');
+            $session->start();
 
-                if ($sm->has('active\site')) {
-                    $site      = $sm->get('active\site');
-                    $namespace = $site->getSessionNamespace();
-                } else {
-                    $namespace = 'initialised';
-                }
+            if ($sm->has('active\site')) {
+                $site      = $sm->get('active\site');
+                $namespace = 'sess' . $site->getSessionNamespace();
+            } else {
+                $namespace = 'initialised';
+            }
 
-                /** @var $container \Zend\Session\Container */
-                $container = new Container($namespace, $session);
+            /** @var $container \Zend\Session\Container */
+            $container = new Container($namespace, $session);
 
-                if ( ! isset($container->init) and php_sapi_name() != 'cli') {
-                    $session->regenerateId(true);
-                    $container->init = 1;
-                }
+            if (!isset($container->init) and php_sapi_name() != 'cli') {
+                $session->regenerateId(true);
+                $container->init = 1;
             }
         }
     }
@@ -175,50 +173,46 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function initEntityManager(MvcEvent $event)
     {
-        if ( ! static::$initialised) {
-            /** @var $sm \Zend\ServiceManager\ServiceManager */
-            $sm = $event->getApplication()->getServiceManager();
+        /** @var $sm \Zend\ServiceManager\ServiceManager */
+        $sm = $event->getApplication()->getServiceManager();
 
-            if ($sm->has('active\site')) {
-                /** @var $site \SynergyCommon\Entity\BaseSite */
-                $site = $sm->get('active\site');
+        if ($sm->has('active\site')) {
+            /** @var $site \SynergyCommon\Entity\BaseSite */
+            $site = $sm->get('active\site');
 
-                $viewModel = $event->getViewModel();
-                $viewModel->setVariable('site', $site);
+            $viewModel = $event->getViewModel();
+            $viewModel->setVariable('site', $site);
 
-                /** @var $em \Doctrine\ORM\EntityManager */
-                $em = $sm->get('doctrine.entitymanager.orm_default');
+            /** @var $em \Doctrine\ORM\EntityManager */
+            $em = $sm->get('doctrine.entitymanager.orm_default');
 
-                //enable filters
-                /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
-                $em->getFilters()->enable("soft-delete");
-                $siteFilter = $em->getFilters()->enable("site-specific");
+            //enable filters
+            /** @var $siteFilter \SynergyCommon\Doctrine\Filter\SiteFilter */
+            $em->getFilters()->enable("soft-delete");
+            $siteFilter = $em->getFilters()->enable("site-specific");
 
-                $siteFilter->setSite($site);
-                $siteFilter->setServiceLocator($sm);
-                /** @var \SynergyCommon\Util\ErrorHandler $logger */
-                $logger = $sm->get('logger');
-                $siteFilter->setLogger($logger);
+            $siteFilter->setSite($site);
+            $siteFilter->setServiceLocator($sm);
+            /** @var \SynergyCommon\Util\ErrorHandler $logger */
+            $logger = $sm->get('logger');
+            $siteFilter->setLogger($logger);
 
-                foreach ($em->getEventManager()->getListeners() as $listeners) {
-                    foreach ($listeners as $listener) {
-                        if ($listener instanceof SiteAwareListener and ! $listener->hasSite()) {
-                            $listener->setSite($site);
-                        }
+            foreach ($em->getEventManager()->getListeners() as $listeners) {
+                foreach ($listeners as $listener) {
+                    if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
+                        $listener->setSite($site);
                     }
-                }
-
-                $config = $sm->get('config');
-                foreach ($config['doctrine']['configuration'] as $name => $data) {
-                    $proxyNamespace = $data['proxy_namespace'];
-                    $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
-                    $proxyDir       = getcwd() . DIRECTORY_SEPARATOR . $path;
-
-                    Autoloader::register($proxyDir, $proxyNamespace, array($logger, 'logProxyNotFound'));
                 }
             }
 
-            static::$initialised = true;
+            $config = $sm->get('config');
+            foreach ($config['doctrine']['configuration'] as $name => $data) {
+                $proxyNamespace = $data['proxy_namespace'];
+                $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
+                $proxyDir       = getcwd() . DIRECTORY_SEPARATOR . $path;
+
+                Autoloader::register($proxyDir, $proxyNamespace, array($logger, 'logProxyNotFound'));
+            }
 
             return null;
         }
@@ -291,7 +285,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 $hasIdentity = false;
             }
 
-            if ( ! $hasIdentity and $production and $response->isSuccess()) {
+            if (!$hasIdentity and $production and $response->isSuccess()) {
                 $age     = 60 * 60 * 6;
                 $expire  = new \DateTime('+6 hours');
                 $headers = $response->getHeaders();
