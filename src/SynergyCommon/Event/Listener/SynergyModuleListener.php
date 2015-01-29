@@ -142,7 +142,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
         $app = $event->getApplication();
         $sm  = $app->getServiceManager();
 
-        if ($sm->has('session_manager')) {
+        if (php_sapi_name() != 'cli' and $sm->has('session_manager')) {
             /** @var $session \Zend\Session\SessionManager */
             $session = $sm->get('session_manager');
             $session->start();
@@ -157,7 +157,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             /** @var $container \Zend\Session\Container */
             $container = new Container($namespace, $session);
 
-            if (!isset($container->init) and php_sapi_name() != 'cli') {
+            if (!isset($container->init)) {
                 $session->regenerateId(true);
                 $container->init = 1;
             }
