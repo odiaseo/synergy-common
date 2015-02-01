@@ -15,6 +15,8 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
     protected $_config;
     /** @var \Zend\ServiceManager\ServiceManager */
     protected $_serviceManager;
+    /** @var bool */
+    protected $verbose = true;
 
     /**
      * @return bool
@@ -106,6 +108,22 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
         }
 
         return true;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getVerbose()
+    {
+        return $this->verbose;
+    }
+
+    /**
+     * @param boolean $verbose
+     */
+    public function setVerbose($verbose)
+    {
+        $this->verbose = $verbose;
     }
 
     /**
