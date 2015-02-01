@@ -43,6 +43,6 @@ class RsyncAdapter implements TransferAdapterInterface
             $destination
         );
 
-        return \shell_exec($command) ? false : true;
+        return \shell_exec($command);
     }
 }

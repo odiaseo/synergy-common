@@ -51,8 +51,8 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
                 $this->printInfo(' >> adapter ' . get_class($adapter));
                 $this->printInfo(' >> coping original ... ' . $masterDirectory, 1, false);
 
-                if ($adapter->copy($sourceFile, $masterDirectory)) {
-                    $this->printInfo(' >> ... done');
+                if ($output = $adapter->copy($sourceFile, $masterDirectory)) {
+                    $this->printInfo(' >> ... done : ' . $output);
 
                     $arg     = \escapeshellarg($sourceFile);
                     $ext     = '-new.png';
@@ -79,16 +79,16 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
                                 );
 
                                 foreach ($convertedList as $convertedFile) {
-                                    $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
-                                    $this->printMessage('file converted to ' . $convertedFile);
+                                    $output = $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
+                                    $this->printMessage('file converted to ' . $convertedFile . ' : ' . $output);
                                     if (file_exists($convertedFile)) {
                                         unlink($convertedFile);
                                     }
                                 }
                             }
                         }
-                        if ($adapter->copy($tmpFile, $destinationDirectory . $newFilename)) {
-                            $this->printMessage('copied to ' . $destinationDirectory);
+                        if ($output = $adapter->copy($tmpFile, $destinationDirectory . $newFilename)) {
+                            $this->printMessage('copied to ' . $destinationDirectory . ' : ' . $output);
 
                             if (unlink($sourceFile) and unlink($tmpFile)) {
                                 $this->printMessage('source and temporary files deleted');
