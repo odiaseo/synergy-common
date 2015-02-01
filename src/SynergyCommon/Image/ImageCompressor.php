@@ -1,13 +1,14 @@
 <?php
 namespace SynergyCommon\Image;
 
-use Zend\Console\Request;
+use SynergyCommon\Util\ConsolePrinterTrait;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class ImageCompressor
-    implements ServiceManagerAwareInterface, CompressionInterface
+class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterface
 {
+    use ConsolePrinterTrait;
+
     /** @var \Zend\Log\LoggerInterface */
     protected $_logger;
     /** @var Config\ImageCompressorOptions */
@@ -15,10 +16,13 @@ class ImageCompressor
     /** @var \Zend\ServiceManager\ServiceManager */
     protected $_serviceManager;
 
+    /**
+     * @return bool
+     */
     public function compress()
     {
-        $logger = $this->getLogger() ?: $this;
-
+        $this->printWarningMessage('Method  ' . __FILE__);
+        $logger               = $this->getLogger() ?: $this;
         $watchDirectory       = rtrim($this->_config->getWatchDirectory(), '/') . '/';
         $destinationDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
         $jpegDirectory        = rtrim($this->_config->getJpegDirectory(), '/') . '/';
@@ -29,7 +33,7 @@ class ImageCompressor
 
         if ( ! file_exists($watchDirectory)) {
             mkdir($watchDirectory, 0775, true);
-            $logger->info('creating directory ' . $watchDirectory);
+            $this->printInfo('creating directory ' . $watchDirectory);
         }
 
         /** @var $file  \SplFileObject */
@@ -39,13 +43,14 @@ class ImageCompressor
                 continue;
             } elseif ($file->isFile()) {
                 $sourceFile = $file->getPathname();
-                $logger->info('processing ' . $sourceFile);
+                $this->printInfo(' >> Processing ' . $sourceFile);
 
                 $adapter = $this->getConfig()->getAdapter();
-                $logger->info('coping original ... ' . $masterDirectory);
+                $this->printInfo(' >> adapter ' . get_class($adapter));
+                $this->printInfo(' >> coping original ... ' . $masterDirectory, 1, false);
 
                 if ($adapter->copy($sourceFile, $masterDirectory)) {
-                    $logger->info(' ... done');
+                    $this->printInfo(' >> ... done');
 
                     $arg     = \escapeshellarg($sourceFile);
                     $ext     = '-new.png';
@@ -57,12 +62,12 @@ class ImageCompressor
                     if (file_exists($tmpFile)) {
                         $newFilename = basename($sourceFile);
 
-                        $logger->info($tmpFile . ' created');
+                        $this->printMessage($tmpFile . ' created');
 
                         $triArg     = escapeshellarg($tmpFile);
                         $triCommand = " xvfb-run -a trimage -f {$triArg}";
                         \exec($triCommand, $output, $return);
-                        $logger->info('compresed with trimage');
+                        $this->printMessage('compresed with trimage');
 
                         if ($converter = $this->_config->getJpegConverter()) {
                             $converter = $this->_serviceManager->get($converter);
@@ -73,7 +78,7 @@ class ImageCompressor
 
                                 foreach ($convertedList as $convertedFile) {
                                     $adapter->copy($convertedFile, $jpegDirectory . basename($convertedFile));
-                                    $logger->info('file converted to ' . $convertedFile);
+                                    $this->printMessage('file converted to ' . $convertedFile);
                                     if (file_exists($convertedFile)) {
                                         unlink($convertedFile);
                                     }
@@ -81,21 +86,21 @@ class ImageCompressor
                             }
                         }
                         if ($adapter->copy($tmpFile, $destinationDirectory . $newFilename)) {
-                            $logger->info('copied to ' . $destinationDirectory);
+                            $this->printMessage('copied to ' . $destinationDirectory);
 
                             if (unlink($sourceFile) and unlink($tmpFile)) {
-                                $logger->info('source and temporary files deleted');
+                                $this->printMessage('source and temporary files deleted');
                             }
                         } else {
-                            $logger->info(
+                            $this->printErrorMessage(
                                 'Unable to copy the compressed file to destination: ' . $destinationDirectory
                             );
                         }
                     } else {
-                        $logger->info('compression failed');
+                        $this->printErrorMessage('compression failed');
                     }
                 } else {
-                    $logger->info('unable to copy original file to master: ' . $masterDirectory);
+                    $this->printErrorMessage('unable to copy original file to master: ' . $masterDirectory);
                 }
             }
         }
@@ -104,15 +109,15 @@ class ImageCompressor
     }
 
     /**
-     * Output information if no logger is set
-     *
      * @param $text
+     *
+     * @return $this
      */
     public function info($text)
     {
-        if ($this->_serviceManager->get('request') instanceof Request) {
-            echo $text;
-        }
+        $this->printInfo($text);
+
+        return $this;
     }
 
     public function setLogger($logger)
