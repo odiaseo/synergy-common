@@ -144,4 +144,12 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
     {
         $this->_serviceManager = $serviceManager;
     }
+
+    /**
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->_serviceManager;
+    }
 }
