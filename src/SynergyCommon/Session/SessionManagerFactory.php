@@ -26,9 +26,9 @@ class SessionManagerFactory implements FactoryInterface
 
             $sessionConfig = null;
             if (isset($session['config'])) {
-                $class   = isset($session['config']['class'])
-                    ? $session['config']['class']
+                $class = isset($session['config']['class']) ? $session['config']['class']
                     : 'Zend\Session\Config\SessionConfig';
+
                 $options = isset($session['config']['options']) ? $session['config']['options']
                     : array();
                 /** @var $sessionConfig \Zend\Session\Config\SessionConfig */
