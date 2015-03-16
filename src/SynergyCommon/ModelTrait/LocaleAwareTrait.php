@@ -17,7 +17,11 @@ use Zend\Session\Container;
  */
 trait LocaleAwareTrait
 {
-    protected static $_locale = 'en_GB';
+    /** @var string */
+    protected static $_locale = null;
+
+    /** @var string */
+    protected static $namespace = 'synergy';
 
     /**
      * @param       $locale
@@ -83,11 +87,13 @@ trait LocaleAwareTrait
      */
     protected static function getCurrentLocale()
     {
-        $container = new Container();
+        $container = new Container(self::getNamespace());
         if ($container->offsetExists(AbstractModel::SESSION_LOCALE_KEY)) {
             $locale = $container->offsetGet(AbstractModel::SESSION_LOCALE_KEY);
-        } else {
+        } elseif (self::$_locale) {
             $locale = static::$_locale;
+        } else {
+            $locale = 'en_GB';
         }
 
         $localeData = \Locale::parseLocale($locale);
@@ -98,5 +104,21 @@ trait LocaleAwareTrait
     public function setLocale($locale)
     {
         self::$_locale = $locale;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getNamespace()
+    {
+        return self::$namespace;
+    }
+
+    /**
+     * @param string $namespace
+     */
+    public static function setNamespace($namespace)
+    {
+        self::$namespace = $namespace;
     }
 }
