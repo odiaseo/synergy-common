@@ -59,4 +59,8 @@ class CachedEntityManager implements CacheAwareQueryInterface
         return $return;
     }
 
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
 }
