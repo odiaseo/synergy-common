@@ -1,6 +1,11 @@
 <?php
+
+namespace SynergyCommon\Doctrine\Extension;
+
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
+use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\SqlWalker;
 use SynergyCommon\Doctrine\Extension;
 
 /**
@@ -15,15 +20,24 @@ use SynergyCommon\Doctrine\Extension;
 
 /**
  * Mysql RAND() implementation for Doctrine2
+ * Class RandFunction
  */
 class Rand extends FunctionNode
 {
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
+    /**
+     * @param SqlWalker $sqlWalker
+     *
+     * @return string
+     */
+    public function getSql(SqlWalker $sqlWalker)
     {
         return 'RAND()';
     }
 
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
+    /**
+     * @param Parser $parser
+     */
+    public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
