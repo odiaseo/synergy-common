@@ -364,7 +364,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
             $this->getEntityManager()->flush();
         } catch (\Exception $exception) {
             $this->getLogger()->logException($exception);
-            return false ;
+
+            return false;
         }
 
         return $entity;
@@ -650,7 +651,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                 }
             }
 
-            if ( ! $error) {
+            if (!$error) {
                 return $this->save($entity);
             }
         } catch (\Exception $e) {
@@ -792,7 +793,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                         }
                     }
 
-                    if ($type == 'boolean' and ! (is_numeric($value) or is_bool($value))) {
+                    if ($type == 'boolean' and !(is_numeric($value) or is_bool($value))) {
                         $value = ('true' === $value) ? 1 : 0;
                     } elseif (is_string($value) and strpos($value, ',') !== false) {
                         $value = array_filter(explode(',', $value));
@@ -848,7 +849,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                 ) {
 
                     $method = 'set' . ucfirst($param);
-                    $value  = ($value == 'null' or (empty($value) and ! is_numeric($value))) ? null : $value;
+                    $value  = ($value == 'null' or (empty($value) and !is_numeric($value))) ? null : $value;
 
                     if (isset($mapping->associationMappings[$param])) {
                         $target = $mapping->associationMappings[$param]['targetEntity'];
@@ -941,7 +942,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         $result = array_filter(
             $item,
             function ($value) {
-                return (\is_bool($value) or \is_numeric($value) or ! empty($value));
+                return (\is_bool($value) or \is_numeric($value) or !empty($value));
             }
         );
 
@@ -1009,7 +1010,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function getOptions()
     {
-        if ( ! $this->_options) {
+        if (!$this->_options) {
             $this->_options = new ModelOptions();
         }
 
@@ -1059,7 +1060,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
         $result = array_filter(
             $data, function ($v) {
-            return (\is_bool($v) or \is_numeric($v) or ! empty($v));
+            return (\is_bool($v) or \is_numeric($v) or !empty($v));
         }
         );
 
@@ -1191,11 +1192,11 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         /** @var $repo \Gedmo\Tree\Entity\Repository\NestedTreeRepository */
         $repo = $this->getRepository();
 
-        if ( ! $node = $this->findObject($id)) {
+        if (!$node = $this->findObject($id)) {
             throw new InvalidEntityException(sprintf('Object with ID #%d was not ofund: ', $id));
         }
 
-        if ( ! $referenceNode = $this->findObject($referenceNodeId)) {
+        if (!$referenceNode = $this->findObject($referenceNodeId)) {
             throw new InvalidEntityException(sprintf('Object with ID #%d was not ofund: ', $referenceNodeId));
         }
 

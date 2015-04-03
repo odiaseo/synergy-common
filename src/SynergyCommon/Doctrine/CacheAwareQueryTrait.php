@@ -25,7 +25,7 @@ trait CacheAwareQueryTrait
     protected $enableHydrationCache = false;
 
     /** @var int */
-    protected $lifetime = 14400;
+    protected $cacheLifetime = 14400;
     /** @var  string */
     protected $cacheKey;
 
@@ -37,7 +37,7 @@ trait CacheAwareQueryTrait
     public function setCacheFlag(AbstractQuery $query)
     {
         if ($this->enableResultCache) {
-            $query->useResultCache(true, $this->lifetime);
+            $query->useResultCache(true, $this->cacheLifetime);
             if ($this->cacheKey) {
                 $query->setResultCacheId($this->cacheKey);
             }
@@ -82,7 +82,7 @@ trait CacheAwareQueryTrait
      */
     public function setLifetime($lifetime)
     {
-        $this->lifetime = $lifetime;
+        $this->cacheLifetime = $lifetime;
     }
 
     /**
