@@ -495,6 +495,33 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      * @param       $idField
      * @param       $idValue
      * @param array $returnFields
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getFieldsByQueryBuilder($idField, $idValue, array $returnFields)
+    {
+        $select = array();
+        $alias  = $this->getAlias();
+        foreach ($returnFields as $f) {
+            $select[] = $alias . '.' . $f;
+        }
+
+        $query = $this->_entityManager
+            ->createQueryBuilder()
+            ->select(implode(',', $select))
+            ->from($this->_entity, $alias)
+            ->where("e.$idField = :val")
+            ->setParameter(":val", $idValue);
+
+        return $query;
+    }
+
+    /**
+     * Returns a subset of fields based on the criteria
+     *
+     * @param       $idField
+     * @param       $idValue
+     * @param array $returnFields
      * @param null  $limit
      * @param int   $mode
      *
@@ -504,29 +531,18 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
     public function getFieldsBy(
         $idField, $idValue, array $returnFields, $limit = null, $mode = AbstractQuery::HYDRATE_OBJECT
     ) {
-        $select = array();
-        foreach ($returnFields as $f) {
-            $select[] = 'e.' . $f;
-        }
-
-        $query = $this->_entityManager
-            ->createQueryBuilder()
-            ->select(implode(',', $select))
-            ->from($this->_entity, 'e')
-            ->where("e.$idField = :val")
-            ->setParameter(":val", $idValue)
-            ->getQuery();
+        $query = $this->getFieldsByQueryBuilder($idField, $idValue, $returnFields);
 
         if ($limit == 1) {
             try {
-                return $query->getSingleResult($mode);
+                return $query->getQuery()->getSingleResult($mode);
             } catch (NoResultException $e) {
                 return null;
             }
         } elseif ($limit) {
-            $query->setMaxResults($limit);
+            $query->getMaxResults($limit);
 
-            return $query->getArrayResult();
+            return $query->getQuery()->getArrayResult();
         }
 
         return array();
