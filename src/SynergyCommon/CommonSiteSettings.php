@@ -57,6 +57,9 @@ class CommonSiteSettings extends AbstractOptions
     protected $joinedOnly = 0;
     /** @var  string */
     protected $affPublisherId;
+    protected $groupOnToken;
+    protected $groupOnCode;
+    protected $groupOnAffId;
 
     public function __construct($options = null, $mode = true)
     {
@@ -64,11 +67,59 @@ class CommonSiteSettings extends AbstractOptions
         $data = array();
         if ($options) {
             foreach ($options as $key => $value) {
-                $newKey        = str_replace('-', '_', $key);
+                $newKey = str_replace('-', '_', $key);
                 $data[$newKey] = $value;
             }
         }
         parent::__construct($data);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroupOnCode()
+    {
+        return $this->groupOnCode;
+    }
+
+    /**
+     * @param mixed $groupOnCode
+     */
+    public function setGroupOnCode($groupOnCode)
+    {
+        $this->groupOnCode = $groupOnCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroupOnAffId()
+    {
+        return $this->groupOnAffId;
+    }
+
+    /**
+     * @param mixed $groupOnAffId
+     */
+    public function setGroupOnAffId($groupOnAffId)
+    {
+        $this->groupOnAffId = $groupOnAffId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroupOnToken()
+    {
+        return $this->groupOnToken;
+    }
+
+    /**
+     * @param mixed $groupOnToken
+     */
+    public function setGroupOnToken($groupOnToken)
+    {
+        $this->groupOnToken = $groupOnToken;
     }
 
     /**

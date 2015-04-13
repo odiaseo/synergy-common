@@ -18,14 +18,14 @@ class BaseService
     /**
      * Find a enity by ID
      *
-     * @param       $id
+     * @param       $entityId
      * @param array $options
      *
      * @return array
      */
-    public function fetchOne($id, $options = array())
+    public function fetchOne($entityId, $options = array())
     {
-        $options['filter'] = array('id' => $id);
+        $options['filter'] = array('id' => $entityId);
         unset($options['page']);
         unset($options['perPage']);
 
