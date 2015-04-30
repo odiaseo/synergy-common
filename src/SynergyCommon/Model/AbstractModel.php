@@ -31,27 +31,27 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
     use CacheAwareQueryTrait;
 
-    const EQUAL                 = 'eq';
-    const NOT_EQUAL             = 'ne';
-    const LESS_THAN             = 'lt';
-    const LESS_THAN_OR_EQUAL    = 'lte';
-    const GREATER_THAN          = 'gt';
+    const EQUAL = 'eq';
+    const NOT_EQUAL = 'ne';
+    const LESS_THAN = 'lt';
+    const LESS_THAN_OR_EQUAL = 'lte';
+    const GREATER_THAN = 'gt';
     const GREATER_THAN_OR_EQUAL = 'gte';
-    const BEGIN_WITH            = 'bw';
-    const LIKE                  = 'lk';
-    const NOT_BEGIN_WITH        = 'nb';
-    const END_WITH              = 'ew';
-    const NOT_END_WITH          = 'en';
-    const CONTAIN               = 'cn';
-    const NOT_CONTAIN           = 'nc';
-    const IN                    = 'in';
-    const NOT_IN                = 'ni';
+    const BEGIN_WITH = 'bw';
+    const LIKE = 'lk';
+    const NOT_BEGIN_WITH = 'nb';
+    const END_WITH = 'ew';
+    const NOT_END_WITH = 'en';
+    const CONTAIN = 'cn';
+    const NOT_CONTAIN = 'nc';
+    const IN = 'in';
+    const NOT_IN = 'ni';
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE           = 15;
-    const INDEX_PER_PAGE     = 50;
-    const DB_DATE_FORMAT     = 'Y-m-d H:i:s';
+    const PER_PAGE = 15;
+    const INDEX_PER_PAGE = 50;
+    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
     const SESSION_LOCALE_KEY = 'active_locale';
     protected $fields
         = [
@@ -156,7 +156,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function getObjectArrayDataByIds(
         $idList, $returnFields = array(), $addCategory = false, $addMerchant = false, array $order = null
-    ) {
+    )
+    {
         $returnFields = array_merge($this->fields, $returnFields);
         $returnFields = array_unique($returnFields);
         $select       = array();
@@ -257,16 +258,18 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         $alias        = $alias ?: $this->getAlias();
         $queryBuilder = $queryBuilder ?: $this->getEntityManager()->createQueryBuilder();
         $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
-
+        $count        = 0;
         foreach ($param as $key => $value) {
             if (is_array($value)) {
                 $query->andWhere(
                     $queryBuilder->expr()->in($alias . '.' . $key, $value)
                 );
             } else {
+                $placeHolder = ':' . $key . ++$count;
                 $query->andWhere(
-                    $queryBuilder->expr()->eq($alias . '.' . $key, $queryBuilder->expr()->literal($value))
+                    $queryBuilder->expr()->eq($alias . '.' . $key, $placeHolder)
                 );
+                $query->setParameter($placeHolder, $value);
             }
         }
 
@@ -303,7 +306,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function findOneTranslatedBy(
         array $param, QueryBuilder $queryBuilder = null, $mode = AbstractQuery::HYDRATE_OBJECT
-    ) {
+    )
+    {
         try {
             $query = $this->getFindByQueryBuilder($param, $queryBuilder);
             $query->setMaxResults(1);
@@ -398,11 +402,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                     'description' => isset($item['description']) ? $item['description'] : $item['title']
                 );
             }
-
         }
 
         return $list;
-
     }
 
     public static function getUniqueGridIdentifier(array $options)
@@ -530,7 +532,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function getFieldsBy(
         $idField, $idValue, array $returnFields, $limit = null, $mode = AbstractQuery::HYDRATE_OBJECT
-    ) {
+    )
+    {
         $query = $this->getFieldsByQueryBuilder($idField, $idValue, $returnFields);
 
         if ($limit == 1) {
@@ -633,7 +636,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                             $value = $value ? new \DateTime($value) : null;
                         }
                         $entity->$method($value);
-
                     } elseif (isset($mapping->associationMappings[$param])) {
                         $target = $mapping->associationMappings[$param]['targetEntity'];
 
@@ -662,7 +664,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
                             $entity->$method($foreignEntity);
                         }
-
                     }
                 }
             }
@@ -675,7 +676,10 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
             $error   = true;
         }
 
-        return array($error, $message);
+        return array(
+            $error,
+            $message
+        );
     }
 
     public function getOrm()
@@ -840,7 +844,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                         $this->_qb->setParameter($placeHolder, $this->_setWildCardInValue($expression, $value));
                     }
                 }
-
             }
         }
     }
@@ -910,7 +913,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
                                 );
                             }
                         }
-
                     } else {
                         $type = $mapping->fieldMappings[$param]['type'];
                         if ($type == 'datetime' || $type == 'date') {
@@ -1114,7 +1116,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         }
 
         return false;
-
     }
 
     /**
