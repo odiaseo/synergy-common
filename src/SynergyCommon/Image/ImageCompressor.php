@@ -5,6 +5,11 @@ use SynergyCommon\Util\ConsolePrinterTrait;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
+/**
+ * Class ImageCompressor
+ *
+ * @package SynergyCommon\Image
+ */
 class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterface
 {
     use ConsolePrinterTrait;
