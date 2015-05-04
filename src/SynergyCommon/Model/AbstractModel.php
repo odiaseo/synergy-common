@@ -31,27 +31,27 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
     use CacheAwareQueryTrait;
 
-    const EQUAL = 'eq';
-    const NOT_EQUAL = 'ne';
-    const LESS_THAN = 'lt';
-    const LESS_THAN_OR_EQUAL = 'lte';
-    const GREATER_THAN = 'gt';
+    const EQUAL                 = 'eq';
+    const NOT_EQUAL             = 'ne';
+    const LESS_THAN             = 'lt';
+    const LESS_THAN_OR_EQUAL    = 'lte';
+    const GREATER_THAN          = 'gt';
     const GREATER_THAN_OR_EQUAL = 'gte';
-    const BEGIN_WITH = 'bw';
-    const LIKE = 'lk';
-    const NOT_BEGIN_WITH = 'nb';
-    const END_WITH = 'ew';
-    const NOT_END_WITH = 'en';
-    const CONTAIN = 'cn';
-    const NOT_CONTAIN = 'nc';
-    const IN = 'in';
-    const NOT_IN = 'ni';
+    const BEGIN_WITH            = 'bw';
+    const LIKE                  = 'lk';
+    const NOT_BEGIN_WITH        = 'nb';
+    const END_WITH              = 'ew';
+    const NOT_END_WITH          = 'en';
+    const CONTAIN               = 'cn';
+    const NOT_CONTAIN           = 'nc';
+    const IN                    = 'in';
+    const NOT_IN                = 'ni';
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE = 15;
-    const INDEX_PER_PAGE = 50;
-    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    const PER_PAGE           = 15;
+    const INDEX_PER_PAGE     = 50;
+    const DB_DATE_FORMAT     = 'Y-m-d H:i:s';
     const SESSION_LOCALE_KEY = 'active_locale';
     protected $fields
         = [
@@ -277,17 +277,35 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
     }
 
     /**
-     * @param     $params
-     * @param     $limit
-     * @param int $mode
+     * @param      $params
+     * @param      $limit
+     * @param int  $mode
+     * @param bool $paginate
+     * @param int  $page
      *
-     * @return array|null
+     * @return array|null|\Zend\Paginator\Paginator
      */
-    public function findItemsByCriteria($params, $limit, $mode = AbstractQuery::HYDRATE_OBJECT)
+    public function findItemsByCriteria(
+        $params,
+        $limit,
+        $mode = AbstractQuery::HYDRATE_OBJECT,
+        $paginate = false,
+        $page = 1
+    )
     {
         try {
             $query = $this->getFindByQueryBuilder($params);
             $query->setMaxResults($limit);
+
+            if ($paginate) {
+
+                $adapter   = new DoctrinePaginator($query);
+                $paginator = new \Zend\Paginator\Paginator($adapter);
+                $paginator->setCurrentPageNumber($page);
+                $paginator->setItemCountPerPage($limit);
+
+                return $paginator;
+            }
 
             return $query->getQuery()->getResult($mode);
         } catch (\Exception $exception) {
