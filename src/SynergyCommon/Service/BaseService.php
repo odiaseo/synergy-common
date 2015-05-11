@@ -208,7 +208,7 @@ class BaseService
 
             $return = $this->listAssociation($entityKey, $entityId, $subEntity);
 
-            if ( ! $return['error']) {
+            if (!$return['error']) {
                 $return['message'] = sprintf(
                     '%s #%d successfully updated', ucfirst($this->getEntityKey()), $entity->getId()
                 );
@@ -230,7 +230,7 @@ class BaseService
     {
         $return = $this->associateEntity($entityKey, $entityId, $subEntity);
 
-        if ( ! $return['error']) {
+        if (!$return['error']) {
 
             $return['mwssage'] = sprintf(
                 '%s associated with %s ID #%d successfully deleted', $subEntity, $entityKey, $entityId
@@ -312,21 +312,16 @@ class BaseService
         $config   = $this->getServiceManager()->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
-        if ( ! static::$checked) {
+        if (!is_readable($filename)) {
+            $refresh = true;
+        } else {
+            $lifetime = $config['synergy']['entity_cache_lifetime'];
+            $fileTime = (int)filemtime($filename);
+            $refresh  = ((time() - $fileTime) > $lifetime);
+        }
 
-            if ( ! file_exists($filename)) {
-                $refresh = true;
-            } else {
-                $lifetime = $config['synergy']['entity_cache_lifetime'];
-                $fileTime = (int)filemtime($filename);
-                $refresh  = ((time() - $fileTime) > $lifetime);
-            }
-
-            if ($refresh) {
-                $this->_createEntityCache($filename);
-            }
-
-            static::$checked = true;
+        if ($refresh) {
+            $this->_createEntityCache($filename);
         }
 
         return $filename;
@@ -356,7 +351,7 @@ class BaseService
                 foreach ($classes as $class) {
                     $className       = $class->getName();
                     $reflectionClass = new \ReflectionClass($className);
-                    if ( ! ($reflectionClass->isAbstract() || $class->isMappedSuperclass)) {
+                    if (!($reflectionClass->isAbstract() || $class->isMappedSuperclass)) {
                         $name   = str_replace($class->namespace . '\\', '', $className);
                         $entity = new $className;
                         if ($entity instanceof PrefixAwareInterface and ($prefix = $entity->getPrefix())) {
@@ -373,7 +368,7 @@ class BaseService
         ksort($output);
         $data = '<?php return ' . var_export($output, true) . ';';
 
-        if ( ! is_dir(dirname($filename))) {
+        if (!is_dir(dirname($filename))) {
             @mkdir(dirname($filename), 0755, true);
         }
 
