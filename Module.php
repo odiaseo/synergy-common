@@ -63,9 +63,9 @@ class Module
                     $request = $serviceLocator->get('request');
                     $config  = $serviceLocator->get('config');
 
-                    if ($request instanceof Request) {
+                    if ($request instanceof Request or php_sapi_name() == 'cli') {
                         $enabled = false;
-                    } elseif (isset($config['enable_result_cache'])) {
+                    } elseif (array_key_exists('enable_result_cache', $config)) {
                         $enabled = $config['enable_result_cache'];
                     } else {
                         $enabled = false;
