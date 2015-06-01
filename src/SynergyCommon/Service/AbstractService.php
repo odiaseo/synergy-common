@@ -6,6 +6,7 @@ use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
 use SynergyCommon\Util\ConsolePrinterTrait;
+use SynergyCommon\Util\CurlRequestTrait;
 use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
@@ -17,7 +18,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
  */
 abstract class AbstractService implements ServiceManagerAwareInterface
 {
-    use ConsolePrinterTrait;
+    use CurlRequestTrait;
     /**
      * Print to console
      *
@@ -181,7 +182,7 @@ abstract class AbstractService implements ServiceManagerAwareInterface
      */
     public function getEntityManager()
     {
-        if ( ! $this->_entityManager) {
+        if (!$this->_entityManager) {
             $this->_entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
         }
 
@@ -234,5 +235,4 @@ abstract class AbstractService implements ServiceManagerAwareInterface
     {
         return $this->_serviceManager;
     }
-
 }
