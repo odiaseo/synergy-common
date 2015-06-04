@@ -27,17 +27,19 @@ trait ConsolePrinterTrait
     {
         /** @var $console \Zend\Console\Adapter\Windows */
         $console = $this->getServiceManager()->get('console');
-        $msg     = is_array($msg) ? print_r($msg, true) : $msg;
-        if ($this->getVerbose()) {
-            $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
-            $msg  = "{$sign}$msg";
-            if ($lineBreak) {
-                $console->writeLine($msg, $color, $bgColor);
-            } else {
-                $console->write($msg, $color, $bgColor);
+        if (php_sapi_name() == 'cli') {
+            $msg = is_array($msg) ? print_r($msg, true) : $msg;
+            if ($this->getVerbose()) {
+                $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
+                $msg  = "{$sign}$msg";
+                if ($lineBreak) {
+                    $console->writeLine($msg, $color, $bgColor);
+                } else {
+                    $console->write($msg, $color, $bgColor);
+                }
+            } elseif ($this->getServiceManager()->has('logger')) {
+                $this->getServiceManager()->get('logger')->info($msg);
             }
-        } elseif ($this->getServiceManager()->has('logger')) {
-            $this->getServiceManager()->get('logger')->info($msg);
         }
 
         return $console;
