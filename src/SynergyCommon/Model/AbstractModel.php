@@ -293,8 +293,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         $page = 1
     )
     {
+        $query = $this->getFindByQueryBuilder($params);
         try {
-            $query = $this->getFindByQueryBuilder($params);
             $query->setMaxResults($limit);
 
             if ($paginate) {
@@ -309,6 +309,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
 
             return $query->getQuery()->getResult($mode);
         } catch (\Exception $exception) {
+            $this->getLogger()->err($query->getDQL());
             $this->getLogger()->err($exception->getMessage());
 
             return null;
@@ -326,14 +327,15 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         array $param, QueryBuilder $queryBuilder = null, $mode = AbstractQuery::HYDRATE_OBJECT
     )
     {
+        $query = $this->getFindByQueryBuilder($param, $queryBuilder);
         try {
-            $query = $this->getFindByQueryBuilder($param, $queryBuilder);
             $query->setMaxResults(1);
             $query->setEnableHydrationCache($this->enableResultCache);
             $query = LocaleAwareTrait::addHints($query->getQuery());
 
             return $query->getOneOrNullResult($mode);
         } catch (\Exception $exception) {
+            $this->getLogger()->err($query->getDQL());
             $this->getLogger()->err($exception->getMessage());
 
             return null;

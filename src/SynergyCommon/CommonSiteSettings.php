@@ -61,17 +61,35 @@ class CommonSiteSettings extends AbstractOptions
     protected $groupOnCode;
     protected $groupOnAffId;
 
+    protected $cjWebsiteId; //commission Junction site id
+
     public function __construct($options = null, $mode = true)
     {
         $this->setStrictMode($mode);
         $data = array();
         if ($options) {
             foreach ($options as $key => $value) {
-                $newKey = str_replace('-', '_', $key);
+                $newKey        = str_replace('-', '_', $key);
                 $data[$newKey] = $value;
             }
         }
         parent::__construct($data);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCjWebsiteId()
+    {
+        return $this->cjWebsiteId;
+    }
+
+    /**
+     * @param mixed $cjWebsiteId
+     */
+    public function setCjWebsiteId($cjWebsiteId)
+    {
+        $this->cjWebsiteId = $cjWebsiteId;
     }
 
     /**

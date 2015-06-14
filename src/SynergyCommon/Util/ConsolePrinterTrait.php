@@ -27,9 +27,10 @@ trait ConsolePrinterTrait
     {
         /** @var $console \Zend\Console\Adapter\Windows */
         $console = $this->getServiceManager()->get('console');
-        if (php_sapi_name() == 'cli') {
-            $msg = is_array($msg) ? print_r($msg, true) : $msg;
-            if ($this->getVerbose()) {
+        if ($this->getVerbose()) {
+            if (php_sapi_name() == 'cli') {
+                $msg = is_array($msg) ? print_r($msg, true) : $msg;
+
                 $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
                 $msg  = "{$sign}$msg";
                 if ($lineBreak) {
