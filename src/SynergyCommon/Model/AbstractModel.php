@@ -158,6 +158,10 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         $idList, $returnFields = array(), $addCategory = false, $addMerchant = false, array $order = null
     )
     {
+        if (empty($idList)) {
+            return $idList;
+        }
+
         $returnFields = array_merge($this->fields, $returnFields);
         $returnFields = array_unique($returnFields);
         $select       = array();
@@ -496,6 +500,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function getItemListByIds(array $idList, array $order = null, $mode = AbstractQuery::HYDRATE_OBJECT)
     {
+        if (empty($idList)) {
+            return $idList;
+        }
         $entity = $this->getEntity();
         $qb     = $this->getEntityManager()->createQueryBuilder();
 
