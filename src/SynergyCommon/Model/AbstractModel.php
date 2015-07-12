@@ -204,7 +204,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
             $query->orderBy('e.' . key($order), current($order));
         }
 
-        $query->setEnableHydrationCache(true);
+        $query->setEnableHydrationCache($this->enableResultCache);
         $query = $query->getQuery();
         if ($addCategory) {
             $query = $this->addHints($query);
