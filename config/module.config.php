@@ -59,6 +59,9 @@ return array(
                     'User-Agent' => 'Synergy Afifiliate Platform v1.0',
                 ),
             )
+        ),
+        'logger'   => array(
+            'priority' => \Zend\Log\Logger::DEBUG
         )
     )
 );

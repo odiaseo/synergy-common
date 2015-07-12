@@ -33,17 +33,18 @@ class LoggerFactory implements FactoryInterface
             $namespace = $config['synergy']['logger']['namespace'];
         }
 
+        $priority = $config['synergy']['logger']['priority'];
         $filename = rtrim($directory, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'app.log';
         $handler  = new ErrorHandler();
 
         if (class_exists('Monolog\Logger')) {
-            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5);
+            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5, $priority);
             $logger = new \Monolog\Logger($namespace, array($stream));
         } else {
             $logger   = new Logger();
             $resource = fopen($filename, 'w');
             $writer   = new Stream($resource);
-            $logger->addWriter($writer);
+            $logger->addWriter($writer, $priority);
         }
         $handler->setServiceLocator($serviceLocator);
         $handler->setLogger($logger);

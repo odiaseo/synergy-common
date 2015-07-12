@@ -21,7 +21,8 @@
     "gedmo/doctrine-extensions": ">=v2.2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "*",
+    "monolog/monolog": "dev-master"
   },
   "suggest": {
     "ewgo/solarium-module": "For solr search aware models",
