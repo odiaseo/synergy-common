@@ -221,5 +221,13 @@ abstract class AbstractEntity
         return $this->inputFilter;
     }
 
+    protected function removeWhiteSpace($value)
+    {
+        $value = str_replace(array("\n", "\r"), ' ', $value);
+        $value = preg_replace('/\s+/', ' ', $value);
+
+        return trim($value);
+    }
+
     abstract public function getId();
 }
