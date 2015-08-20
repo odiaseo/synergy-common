@@ -31,8 +31,9 @@ trait ConsolePrinterTrait
             if (php_sapi_name() == 'cli') {
                 $msg = is_array($msg) ? print_r($msg, true) : $msg;
 
-                $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
-                $msg  = "{$sign}$msg";
+                $sign = $repeat ? str_repeat("\t", $repeat) : '';
+                $sign .= ' ';
+                $msg = "{$sign}$msg";
                 if ($lineBreak) {
                     $console->writeLine($msg, $color, $bgColor);
                 } else {
