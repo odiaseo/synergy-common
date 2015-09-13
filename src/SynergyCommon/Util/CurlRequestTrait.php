@@ -27,6 +27,7 @@ trait CurlRequestTrait
         curl_setopt($curlHandle, CURLOPT_URL, $url);
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
 
         if ($postData) {
