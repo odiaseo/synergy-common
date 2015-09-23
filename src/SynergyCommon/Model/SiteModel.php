@@ -8,5 +8,4 @@ namespace SynergyCommon\Model;
  */
 class SiteModel extends AbstractModel
 {
-
 }
