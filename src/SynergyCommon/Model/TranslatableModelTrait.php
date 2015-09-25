@@ -12,13 +12,14 @@ use Zend\Paginator\Paginator;
 trait TranslatableModelTrait
 {
     /**
-     * @param     $locale
-     * @param int $page
-     * @param int $perPage
+     * @param        $locale
+     * @param int    $page
+     * @param int    $perPage
+     * @param string $orderBy
      *
      * @return Paginator
      */
-    public function getTranslatableRecords($locale, $page = 1, $perPage = 15)
+    public function getTranslatableRecords($locale, $page = 1, $perPage = 15, $orderBy = '')
     {
         /** @var $this self | AbstractModel */
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -31,6 +32,10 @@ trait TranslatableModelTrait
                     ':locale' => $locale
                 ]
             );
+
+        if ($orderBy) {
+            $query->orderBy('e.' . $orderBy);
+        }
 
         $adapter = new DoctrinePaginator($query);
         $pager   = new Paginator($adapter);
