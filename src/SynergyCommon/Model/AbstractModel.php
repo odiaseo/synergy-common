@@ -293,7 +293,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
      */
     public function findItemsByCriteria(
         $params,
-        $limit,
+        $limit = null,
         $mode = AbstractQuery::HYDRATE_OBJECT,
         $paginate = false,
         $page = 1
