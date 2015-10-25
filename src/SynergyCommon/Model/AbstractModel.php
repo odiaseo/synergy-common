@@ -264,7 +264,11 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
         $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
         $count        = 0;
         foreach ($param as $key => $value) {
-            if ($value) {
+            if (is_null($value)) {
+                $query->andWhere(
+                    $queryBuilder->expr()->isNull($alias . '.' . $key)
+                );
+            } else {
                 if (is_array($value)) {
                     $query->andWhere(
                         $queryBuilder->expr()->in($alias . '.' . $key, $value)
