@@ -62,6 +62,7 @@ class CommonSiteSettings extends AbstractOptions
     protected $groupOnAffId;
 
     protected $cjWebsiteId; //commission Junction site id
+    protected $daisyConMediaId = '';
 
     public function __construct($options = null, $mode = true)
     {
@@ -74,6 +75,22 @@ class CommonSiteSettings extends AbstractOptions
             }
         }
         parent::__construct($data);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDaisyConMediaId()
+    {
+        return $this->daisyConMediaId;
+    }
+
+    /**
+     * @param string $daisyConMediaId
+     */
+    public function setDaisyConMediaId($daisyConMediaId)
+    {
+        $this->daisyConMediaId = $daisyConMediaId;
     }
 
     /**
