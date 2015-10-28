@@ -14,7 +14,7 @@ trait CurlRequestTrait
 
     public function curlRequest($url, $postData = '', array $header = null, $contentType = '')
     {
-        $this->printMessage('>> Processing curl request ... ', 1, false);
+        $this->printMessage(' >> Processing curl request ... ', 1, false);
 
         $header   = $header ?: array();
         $header[] = 'Accept-Charset: UTF-8';
@@ -43,7 +43,7 @@ trait CurlRequestTrait
             $this->printErrorMessage($curlError);
             throw new RuntimeException($curlError);
         } else {
-            $this->printMessage('done');
+            $this->printSuccessMessage('done');
         }
 
         curl_close($curlHandle);

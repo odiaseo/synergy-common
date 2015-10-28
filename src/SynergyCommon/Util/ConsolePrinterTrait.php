@@ -26,8 +26,8 @@ trait ConsolePrinterTrait
     public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::WHITE, $bgColor = null)
     {
         /** @var $console \Zend\Console\Adapter\Windows */
-        $console = $this->getServiceManager()->get('console');
-        if ($this->getVerbose()) {
+        $console = $this->getInternalLocator()->get('console');
+        if ($this->isVerbose()) {
             if (php_sapi_name() == 'cli') {
                 $msg = is_array($msg) ? print_r($msg, true) : $msg;
 
@@ -40,7 +40,7 @@ trait ConsolePrinterTrait
                     $console->write($msg, $color, $bgColor);
                 }
             } elseif ($this->getServiceManager()->has('logger')) {
-                $this->getServiceManager()->get('logger')->info($msg);
+                $this->getInternalLocator()->get('logger')->info($msg);
             }
         }
 
@@ -93,5 +93,28 @@ trait ConsolePrinterTrait
     public function printInfo($msg, $repeat = 1, $lineBreak = true)
     {
         return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::LIGHT_BLUE);
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getInternalLocator()
+    {
+        if (method_exists($this, 'getServiceManager')) {
+            return $this->getServiceManager();
+        } elseif (method_exists($this, 'getServiceLocator')) {
+            return $this->getServiceLocator();
+        }
+
+        return null;
+    }
+
+    protected function isVerbose()
+    {
+        if (method_exists($this, 'getVerbose')) {
+            return $this->getVerbose();
+        }
+
+        return true;
     }
 }
