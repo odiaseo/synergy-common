@@ -35,7 +35,7 @@ class RsyncAdapter implements TransferAdapterInterface
         $password = $password ? ':' . $password : '';
 //'rsync -avi --ignore-existing %s %s%s@%s:%s'
         $command = sprintf(
-            'rsync --ignore-existing --remove-source-files -avi %s %s%s@%s:%s',
+            'rsync -avi %s %s%s@%s:%s',
             $filename,
             $this->_options->getRemoteUser(),
             $password,
