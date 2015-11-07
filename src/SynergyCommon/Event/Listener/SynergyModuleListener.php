@@ -202,6 +202,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
                         $listener->setSite($site);
                     }
+
+                    if ($listener instanceof TranslatableListener) {
+                        $listener->setDefaultLocale('en_GB');
+                    }
                 }
             }
 
