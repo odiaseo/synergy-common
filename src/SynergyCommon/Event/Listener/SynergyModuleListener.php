@@ -2,7 +2,6 @@
 namespace SynergyCommon\Event\Listener;
 
 use Doctrine\Common\Proxy\Autoloader;
-use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -202,10 +201,11 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
                         $listener->setSite($site);
                     }
-
-                    if ($listener instanceof TranslatableListener) {
-                        $listener->setDefaultLocale('en_GB');
-                    }
+                    /*
+                                        if ($listener instanceof TranslatableListener) {
+                                            $listener->setDefaultLocale('en_GB');
+                                        }
+                    */
                 }
             }
 
