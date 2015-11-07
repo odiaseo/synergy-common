@@ -1,9 +1,14 @@
 <?php
 namespace SynergyCommon;
-
+/**
+ * Class Util
+ *
+ * @package SynergyCommon
+ */
 class Util
 {
 
+    const DEFAULT_LOCALE = 'en_GB';
     /**
      * Ensure string is returned
      *

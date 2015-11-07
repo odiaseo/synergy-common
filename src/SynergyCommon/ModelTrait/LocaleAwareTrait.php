@@ -6,6 +6,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\Model\AbstractModel;
+use SynergyCommon\Util;
 use Zend\Session\Container;
 
 /**
@@ -71,7 +72,7 @@ trait LocaleAwareTrait
     {
         $language = self::getCurrentLocale();
 
-        if ($language != 'en') {
+        if ($language != Util::DEFAULT_LOCALE) {
             $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $language)
                 ->setHint(TranslatableListener::HINT_FALLBACK, 1)
                 ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\Translatable\Query\TreeWalker\TranslationWalker');
@@ -93,12 +94,10 @@ trait LocaleAwareTrait
         } elseif (self::$_locale) {
             $locale = static::$_locale;
         } else {
-            $locale = 'en_GB';
+            $locale = Util::DEFAULT_LOCALE;
         }
 
-        $localeData = \Locale::parseLocale($locale);
-
-        return $localeData['language'];
+        return $locale;
     }
 
     public function setLocale($locale)
