@@ -34,9 +34,13 @@ class BaseSite extends AbstractEntity
      */
     protected $isSubDomain = 0;
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=15)
      */
     protected $locale = 'en_US';
+    /**
+     * @ORM\Column(type="string", length=15, name="i18n_locale", nullable=true)
+     */
+    protected $i18nLocale;
     /**
      * @var \datetime createdAt
      * @Gedmo\Timestampable(on="create")
@@ -49,6 +53,22 @@ class BaseSite extends AbstractEntity
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getI18nLocale()
+    {
+        return $this->i18nLocale;
+    }
+
+    /**
+     * @param mixed $i18nLocale
+     */
+    public function setI18nLocale($i18nLocale)
+    {
+        $this->i18nLocale = $i18nLocale;
+    }
 
     /**
      * @return mixed

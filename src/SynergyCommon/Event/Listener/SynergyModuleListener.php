@@ -2,6 +2,7 @@
 namespace SynergyCommon\Event\Listener;
 
 use Doctrine\Common\Proxy\Autoloader;
+use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -47,7 +48,6 @@ class SynergyModuleListener implements ListenerAggregateInterface
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initEntityManager'), -500);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'setHeaders'), -100);
-
     }
 
     public function detach(EventManagerInterface $events)
@@ -305,5 +305,4 @@ class SynergyModuleListener implements ListenerAggregateInterface
     {
         return $this->callback;
     }
-
 }
