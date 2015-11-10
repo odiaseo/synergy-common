@@ -4,7 +4,6 @@ namespace SynergyCommon\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use SynergyCommon\Entity\AbstractEntity;
 
 /**
  * @ORM\MappedSuperclass
@@ -34,6 +33,14 @@ class BaseSite extends AbstractEntity
      */
     protected $isSubDomain = 0;
     /**
+     * @ORM\Column(type="integer", name="offer_count", options={"default"=0})
+     */
+    protected $offerCount = 0;
+    /**
+     * @ORM\Column(type="integer", name="voucher_count", options={"default"=0})
+     */
+    protected $voucherCount = 0;
+    /**
      * @ORM\Column(type="string", length=15)
      */
     protected $locale = 'en_US';
@@ -53,6 +60,38 @@ class BaseSite extends AbstractEntity
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getOfferCount()
+    {
+        return $this->offerCount;
+    }
+
+    /**
+     * @param mixed $offerCount
+     */
+    public function setOfferCount($offerCount)
+    {
+        $this->offerCount = $offerCount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVoucherCount()
+    {
+        return $this->voucherCount;
+    }
+
+    /**
+     * @param mixed $voucherCount
+     */
+    public function setVoucherCount($voucherCount)
+    {
+        $this->voucherCount = $voucherCount;
+    }
 
     /**
      * @return mixed
