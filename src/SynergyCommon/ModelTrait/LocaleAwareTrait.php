@@ -70,15 +70,16 @@ trait LocaleAwareTrait
 
     /**
      * @param       $locale
+     * @param       $entity
      *
      * @return QueryBuilder
      */
-    public function getTranslationsByLocale($locale)
+    public function getTranslationsByLocale($entity, $locale)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $query   = $builder
-            ->select('e')
-            ->from($this->getEntity(), 'e')
+            ->select('e, t')
+            ->from($entity, 'e')
             ->innerJoin(
                 'e.translations', 't', 'WITH',
                 $builder->expr()->eq('t.locale', ':locale')
