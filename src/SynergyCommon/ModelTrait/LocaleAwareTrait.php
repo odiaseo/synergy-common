@@ -68,6 +68,25 @@ trait LocaleAwareTrait
         return $query;
     }
 
+    /**
+     * @param       $locale
+     *
+     * @return QueryBuilder
+     */
+    public function getTranslationsByLocale($locale)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $query   = $builder
+            ->select('e')
+            ->from($this->getEntity(), 'e')
+            ->innerJoin(
+                'e.translations', 't', 'WITH',
+                $builder->expr()->eq('t.locale', ':locale')
+            )->setParameters(array(':locale' => $locale));
+
+        return $query->getQuery()->execute();
+    }
+
     public static function addHints(AbstractQuery $query)
     {
         $language = self::getCurrentLocale();
