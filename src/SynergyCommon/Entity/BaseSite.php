@@ -206,4 +206,31 @@ class BaseSite extends AbstractEntity
     {
         return $this->updatedAt;
     }
+
+    /**
+     * Get sum of all offers
+     *
+     * @return mixed
+     */
+    public function sumOfferCount()
+    {
+        $count = $this->getOfferCount();
+        if ($this->getParent()) {
+            $count += $this->getParent()->getOfferCount();
+        }
+
+        if ($this->getLinkedSites()->count()) {
+            foreach ($this->getLinkedSites() as $linked) {
+                $count += $linked->getOfferCount();
+            }
+        }
+
+        if ($this->getSubDomains()->count()) {
+            foreach ($this->getSubDomains() as $linked) {
+                $count += $linked->getOfferCount();
+            }
+        }
+
+        return $count;
+    }
 }
