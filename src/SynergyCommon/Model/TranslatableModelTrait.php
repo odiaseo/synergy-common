@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommon\Model;
 
+use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use Zend\Paginator\Paginator;
 
