@@ -7,6 +7,11 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
+/**
+ * Class SiteFilter
+ *
+ * @package SynergyCommon\Doctrine\Filter
+ */
 class SiteFilter extends SQLFilter
 {
     use ServiceLocatorAwareTrait;
@@ -14,11 +19,17 @@ class SiteFilter extends SQLFilter
     /**
      * @var \SynergyCommon\Entity\BaseSite
      */
-    protected $_site;
+    protected $site;
 
     /** @var \Zend\Log\Logger */
-    protected $_logger;
+    protected $logger;
 
+    /**
+     * @param ClassMetadata $targetEntity
+     * @param string        $targetTableAlias
+     *
+     * @return string
+     */
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
         if (isset($targetEntity->associationMappings['site'])
@@ -50,26 +61,26 @@ class SiteFilter extends SQLFilter
 
     public function setSite($site)
     {
-        $this->_site = $site;
+        $this->site = $site;
 
         return $this;
     }
 
     public function getSite()
     {
-        return $this->_site;
+        return $this->site;
     }
 
     public function setLogger($logger)
     {
-        $this->_logger = $logger;
+        $this->logger = $logger;
 
         return $this;
     }
 
     public function getLogger()
     {
-        return $this->_logger;
+        return $this->logger;
     }
 
     /**
