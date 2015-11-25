@@ -2,7 +2,9 @@
 namespace SynergyCommon\Util;
 
 use SynergyCommon\Util;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\Request;
+use Zend\Log\Logger;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -15,7 +17,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
 {
 
     use ServiceLocatorAwareTrait;
-
+    /** @var  Logger */
     private $logger;
 
     public function logException(\Exception $e)
@@ -33,6 +35,16 @@ class ErrorHandler implements ServiceLocatorAwareInterface
         }
 
         return $this;
+    }
+
+    public function log($priority, $message, $extra = [])
+    {
+        $request = $this->getServiceLocator()->get('request');
+        if ($request instanceof Request) {
+            $extra[] = 'uri: ' . $request->getUriString();
+        }
+
+        return $this->logger->log($priority, $message, $extra);
     }
 
     /**
