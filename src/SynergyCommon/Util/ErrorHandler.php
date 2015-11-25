@@ -3,7 +3,6 @@ namespace SynergyCommon\Util;
 
 use SynergyCommon\Util;
 use Zend\Http\PhpEnvironment\Request;
-use Zend\Http\Request;
 use Zend\Log\Logger;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
