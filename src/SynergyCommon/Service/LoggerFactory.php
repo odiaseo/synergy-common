@@ -38,7 +38,7 @@ class LoggerFactory implements FactoryInterface
         $handler  = new ErrorHandler();
 
         if (class_exists('Monolog\Logger')) {
-            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5, $priority);
+            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5, $priority, true, 0777);
             $logger = new \Monolog\Logger($namespace, array($stream));
         } else {
             $logger   = new Logger();
