@@ -79,6 +79,32 @@ trait TranslatableModelTrait
      * @param $entity
      * @param $transId
      * @param $field
+     * @param $content
+     *
+     * @return mixed
+     */
+    public function getFieldTranslations($entity, $transId, $field)
+    {
+        /** @var $this self | AbstractModel */
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $query   = $builder->select(['e.content', 'e.locale', 'e.id'])
+            ->from($entity, 'e')
+            ->where('e.object = :id')
+            ->andWhere('e.field = :field')
+            ->setParameters(
+                [
+                    ':id'    => $transId,
+                    ':field' => $field,
+                ]
+            );
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param $entity
+     * @param $transId
+     * @param $field
      *
      * @return mixed
      */
