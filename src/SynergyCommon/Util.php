@@ -9,6 +9,7 @@ class Util
 {
 
     const DEFAULT_LOCALE = 'en_GB';
+
     /**
      * Ensure string is returned
      *
@@ -23,10 +24,19 @@ class Util
         } elseif (is_bool($value)) {
             return $value ? 1 : 0;
         } elseif (is_array($value)) {
-            return implode(',', array_filter($value));
+            return implode(', ', array_filter($value));
         } else {
-            return (string)$value;
+            return trim(self::removeLineBreaks((string)$value), '!');
         }
+    }
+
+    public static function removeLineBreaks($text, $replacement = ' ')
+    {
+        $data = \preg_replace('#[\r\n]+#', $replacement, $text);
+        $data = \preg_replace('#\[p{C}\p{Z}]+#', ' ', $data);
+        $data = \preg_replace('#\s+#', ' ', $data);
+
+        return trim($data);
     }
 
     /**

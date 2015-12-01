@@ -18,6 +18,8 @@ use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class AbstractModel
@@ -26,10 +28,11 @@ use Zend\InputFilter\InputFilter;
  * @method setEnableResultCache()
  * @package SynergyCommon\Model
  */
-class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface
+class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface
 {
 
     use CacheAwareQueryTrait;
+    use ServiceLocatorAwareTrait;
 
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';
