@@ -2,8 +2,8 @@
 
 namespace SynergyCommon\Doctrine\Event;
 
-use AffiliateManager\Util;
 use Gedmo\Sluggable\SluggableListener as GedmoListener;
+use SynergyCommon\Util;
 
 /**
  * Class SluggableListener
@@ -19,13 +19,13 @@ class SluggableListener extends GedmoListener
 
         $this->setTransliterator(
             function ($text) {
-                return Util::urlize($text);
+                return Util::urlize($text, [], false);
             }
         );
 
         $this->setUrlizer(
             function ($text) {
-                return Util::urlize($text);
+                return Util::urlize($text, [], false);
             }
         );
     }
