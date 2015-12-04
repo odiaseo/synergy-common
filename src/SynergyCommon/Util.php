@@ -1011,6 +1011,8 @@ class Util
                     'offer could not be found',
                     'campaign has been deactivated',
                     'this link is not active',
+                    'This page cannot be found',
+                    'this shop is currently unavailable',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
@@ -1071,6 +1073,7 @@ class Util
         @curl_exec($ch);
         if (@curl_errno($ch)) {   // should be 0
             @curl_close($ch);
+            $error = curl_error($ch);
 
             return false;
         }
