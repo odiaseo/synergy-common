@@ -342,6 +342,7 @@ class Util
                 '.pt',
                 'Fiesta',
                 'affiliate',
+                'Affiliate',
                 '(Global)',
                 '(AU)',
                 '(NZ)',
