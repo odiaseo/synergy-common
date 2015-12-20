@@ -473,6 +473,7 @@ class Util
                 $name = 'Light in the Box';
                 break;
             case 'shoes':
+            case 'vision direct':
                 $name = $original;
                 break;
         }
