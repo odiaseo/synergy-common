@@ -372,6 +372,9 @@ class Util
                 'Campaign',
                 'Mexico',
                 'Portugal',
+                'APK',
+                'Android',
+                'CPI',
                 'CPL',
                 'CPS',
                 'CPA',
@@ -999,7 +1002,10 @@ class Util
                 if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
                     return false;
                 }
+            } elseif (stripos($body, '<html') === false) {
+                return false;
             }
+
             if ($body) {
                 $texts = [
                     'no relationship',
