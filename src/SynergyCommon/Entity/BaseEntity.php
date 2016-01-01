@@ -4,6 +4,7 @@ namespace SynergyCommon\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use SynergyCommon\Entity\AbstractEntity;
+use SynergyCommon\Util;
 use Zend\Session\Container;
 
 /**
@@ -85,7 +86,7 @@ abstract class BaseEntity extends AbstractEntity
      */
     public function getTimezone()
     {
-        if ( ! $this->timezone) {
+        if (!$this->timezone) {
             $date           = new \DateTime('now');
             $this->timezone = $date->getTimezone()->getName();
         }
@@ -119,5 +120,16 @@ abstract class BaseEntity extends AbstractEntity
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function removeLineBreaks()
+    {
+        if (!empty($this->description)) {
+            $this->description = Util::removeLineBreaks($this->description);
+        }
     }
 }
