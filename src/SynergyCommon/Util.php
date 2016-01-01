@@ -185,9 +185,8 @@ class Util
         $data = \preg_replace('#[\r\n]+#', $replacement, $text);
         $data = \preg_replace('#\[p{C}\p{Z}]+#', ' ', $data);
         $data = \preg_replace('#\s+#', ' ', $data);
-        $data = \str_replace(['<br>'], ' ', $data);
 
-        return trim($data);
+        return trim($data, '<br> ');
     }
 
     /**
