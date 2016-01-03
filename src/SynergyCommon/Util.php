@@ -183,7 +183,7 @@ class Util
     public static function removeLineBreaks($text, $replacement = ' ')
     {
         //$data = \preg_replace('#[\r\n]+#', $replacement, $text);
-        $data = \preg_replace('/[\p{C}\p{Z}]+/iu', $replacement, $data);
+        $data = \preg_replace('/[\p{C}\p{Z}]+/iu', $replacement, $text);
         $data = \preg_replace('#\s+#', $replacement, $data);
 
         return trim($data, '<br> ');
