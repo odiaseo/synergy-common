@@ -182,11 +182,14 @@ class Util
 
     public static function removeLineBreaks($text, $replacement = ' ')
     {
-        //$data = \preg_replace('#[\r\n]+#', $replacement, $text);
-        $data = \preg_replace('/[\p{C}\p{Z}]+/iu', $replacement, $text);
-        $data = \preg_replace('#\s+#', $replacement, $data);
+        if (is_string($text)) {
+            //$data = \preg_replace('#[\r\n]+#', $replacement, $text);
+            $data = \preg_replace('/[\p{C}\p{Z}]+/iu', $replacement, $text);
+            $data = \preg_replace('#\s+#', $replacement, $data);
 
-        return trim($data, '<br> ');
+            return trim($data, '<br> ');
+        }
+        return '';
     }
 
     /**
@@ -501,7 +504,7 @@ class Util
     /**
      * @param       $data
      * @param array $options
-     * @param bool  $firstPart
+     * @param bool $firstPart
      *
      * @return string
      */
@@ -655,8 +658,8 @@ class Util
      *
      * @param        $filename
      * @param string $separator
-     * @param int    $offSet
-     * @param bool   $sort
+     * @param int $offSet
+     * @param bool $sort
      *
      * @return array
      */
