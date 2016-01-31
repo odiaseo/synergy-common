@@ -826,7 +826,8 @@ class Util
 
         $paths = parse_url($url);
         if (isset($paths['host'])) {
-            $clean = sprintf('%s://%s', $paths['scheme'], $paths['host']);
+            $path  = isset($paths['path']) ? $paths['path'] : '';
+            $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
 
             return $clean;
         }
