@@ -829,7 +829,7 @@ class Util
             $path  = isset($paths['path']) ? $paths['path'] : '';
             $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
 
-            return $clean;
+            return rtrim($clean, '/');
         }
 
         return '';
@@ -1031,6 +1031,7 @@ class Util
                     'this link is not active',
                     'This page cannot be found',
                     'this shop is currently unavailable',
+                    'Welcome to TradeTracker',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
