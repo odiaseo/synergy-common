@@ -58,7 +58,7 @@ class BasePage extends BaseEntity
      */
     protected $routeName = 'application';
     /**
-     * @Gedmo\Slug(fields={"title"}, updatable=true)
+     * @Gedmo\Slug(fields={"title"}, updatable=false)
      * @ORM\Column(name="privilege", type="string", nullable=false, unique=false, length=50)
      */
     protected $privilege;
