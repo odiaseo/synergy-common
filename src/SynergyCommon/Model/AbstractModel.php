@@ -151,8 +151,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     /**
      * @param array $idList
      * @param array $returnFields
-     * @param bool  $addCategory
-     * @param bool  $addMerchant
+     * @param bool $addCategory
+     * @param bool $addMerchant
      * @param array $order
      *
      * @return array
@@ -235,7 +235,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     /**
      * @param array $params
      * @param array $params
-     * @param int   $mode
+     * @param int $mode
      *
      * @return mixed|null
      */
@@ -254,9 +254,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     }
 
     /**
-     * @param array        $param
+     * @param array $param
      * @param QueryBuilder $queryBuilder
-     * @param null         $alias
+     * @param null $alias
      *
      * @return QueryBuilder
      */
@@ -267,22 +267,22 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
         $count        = 0;
         foreach ($param as $key => $value) {
-            if (is_null($value)) {
+            if (is_null($value) or $value == 'null') {
                 $query->andWhere(
                     $queryBuilder->expr()->isNull($alias . '.' . $key)
                 );
-            } else {
-                if (is_array($value)) {
+            } elseif (is_array($value)) {
+                if (count($value)) {
                     $query->andWhere(
                         $queryBuilder->expr()->in($alias . '.' . $key, $value)
                     );
-                } else {
-                    $placeHolder = ':' . $key . ++$count;
-                    $query->andWhere(
-                        $queryBuilder->expr()->eq($alias . '.' . $key, $placeHolder)
-                    );
-                    $query->setParameter($placeHolder, $value);
                 }
+            } else {
+                $placeHolder = ':' . $key . ++$count;
+                $query->andWhere(
+                    $queryBuilder->expr()->eq($alias . '.' . $key, $placeHolder)
+                );
+                $query->setParameter($placeHolder, $value);
             }
         }
 
@@ -292,9 +292,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     /**
      * @param      $params
      * @param      $limit
-     * @param int  $mode
+     * @param int $mode
      * @param bool $paginate
-     * @param int  $page
+     * @param int $page
      *
      * @return array|null|\Zend\Paginator\Paginator
      */
@@ -330,9 +330,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     }
 
     /**
-     * @param array        $param
+     * @param array $param
      * @param QueryBuilder $queryBuilder
-     * @param int          $mode
+     * @param int $mode
      *
      * @return mixed|null
      */
@@ -503,7 +503,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     /**
      * @param array $idList
      * @param array $order
-     * @param int   $mode
+     * @param int $mode
      *
      * @return array
      */
@@ -560,8 +560,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
      * @param       $idField
      * @param       $idValue
      * @param array $returnFields
-     * @param null  $limit
-     * @param int   $mode
+     * @param null $limit
+     * @param int $mode
      *
      * @return array|mixed|null
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -1007,7 +1007,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
      * Place wildcard filtering in value
      *
      * @param string $expression expression to filter
-     * @param string $value      value to add wildcard to
+     * @param string $value value to add wildcard to
      *
      * @return string
      */
@@ -1159,7 +1159,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
      *
      * @param array $data
      * @param array $columns
-     * @param bool  $escape
+     * @param bool $escape
      *
      * @return array
      */
