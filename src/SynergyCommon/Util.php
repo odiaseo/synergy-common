@@ -243,12 +243,13 @@ class Util
     {
         $original = $text;
         if ($firstPart) {
-            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|'];
+            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
             $separators = [
                 'closing',
                 'via',
                 'loja',
                 'ihr',
+                '.com-'
             ];
             $regex      = '/\b(?:' . implode('|', $separators) . ')\b/i';
             $text       = preg_replace($regex, '<>', $text);
@@ -385,7 +386,10 @@ class Util
                 'CPV',
                 'CPI',
                 'U.S.',
+                'Mac only',
                 'Nederland',
+                'Sweden',
+                'Polska',
                 '*suspended*',
                 'suspended',
                 'Scandinavia',
@@ -491,7 +495,7 @@ class Util
             $name = $original;
         }
 
-        if (strlen($name) < 3) {
+        if (strlen($name) <= 5) {
             $name = trim($original);
         }
 
