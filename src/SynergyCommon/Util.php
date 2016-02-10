@@ -399,6 +399,7 @@ class Util
                 'Italia',
                 'Hungary',
                 'DACH',
+                'Affiliate Team',
                 'Gutschein Gewinnspiel',
                 'Gutschein',
                 'Gewinnspiel',
@@ -441,7 +442,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global)$/i',
+                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk)$/i',
                             'replacement' => '',
                         ),
                     ),
@@ -497,7 +498,7 @@ class Util
             $name = $original;
         }
 
-        if (strlen($name) <= 5) {
+        if (strlen($name) <= 3) {
             $name = trim($original);
         }
 
