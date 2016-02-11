@@ -498,7 +498,7 @@ class Util
             $name = $original;
         }
 
-        if (strlen($name) <= 3) {
+        if (strlen($name) < 3) {
             $name = trim($original);
         }
 
