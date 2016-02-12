@@ -831,6 +831,9 @@ class Util
             return '';
         }
 
+        if (self::isTrackingDomain($url)) {
+            return '';
+        }
         $paths = parse_url($url);
         if (isset($paths['host'])) {
             $path  = isset($paths['path']) ? $paths['path'] : '';
@@ -840,6 +843,23 @@ class Util
         }
 
         return '';
+    }
+
+    public static function isTrackingDomain($url)
+    {
+        $invalidDomain = [
+            'track.condatix.de',
+            'kl.adspirit.de',
+            'tycoonpartner.adspirit.net',
+            'bit.ly',
+
+        ];
+        foreach ($invalidDomain as $dom) {
+            if (stripos($url, $dom) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function getMerchantLinkFromDeepLink($deepLink)

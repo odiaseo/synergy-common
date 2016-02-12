@@ -43,7 +43,7 @@ trait CurlRequestTrait
             $this->printErrorMessage($curlError);
             throw new RuntimeException($curlError);
         } else {
-            // $this->printSuccessMessage('done');
+            $this->printSuccessMessage('done');
         }
 
         curl_close($curlHandle);
