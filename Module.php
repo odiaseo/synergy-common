@@ -47,7 +47,7 @@ class Module
     {
 
         return array(
-            'factories' => array(
+            'factories'  => array(
                 'common\model\session'          => 'SynergyCommon\Model\SessionModelFactory',
                 'session\doctrine\save\handler' => function ($serviceLocator) {
                     /** @var ServiceLocatorInterface $serviceLocator */
@@ -75,6 +75,24 @@ class Module
 
                     return (object)$return;
                 }
+            )
+        );
+    }
+
+    public function getViewHelperConfig()
+    {
+        return [
+            'invokables' => array(
+                'googleCaptcha' => 'SynergyCommon\View\Helper\GoogleCaptcha',
+            ),
+        ];
+    }
+
+    public function getFormElementConfig()
+    {
+        return array(
+            'invokables' => array(
+                'GoogleCaptcha' => 'SynergyCommon\Form\Element\GoogleCaptcha'
             )
         );
     }
