@@ -5,6 +5,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use SynergyCommon\Util as CommonUtil;
 use Zend\Filter\FilterChain;
 use Zend\Filter\Word\CamelCaseToSeparator;
+use Zend\Form\Form;
 use Zend\Validator\Uri;
 
 /**
@@ -1434,5 +1435,29 @@ class Util
         }
 
         return $url;
+    }
+
+    /**
+     * @param Form $form
+     * @return string
+     */
+    public static function renderFormErrors(Form $form)
+    {
+
+        if ($errorMessages = $form->getMessages()) {
+            $html = '<ol class="form-errors" id="form-error">';
+
+            foreach ($errorMessages as $element => $message) {
+                $input = $form->get($element);
+                if (is_array($message)) {
+                    $field = key($message);
+                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
+                } else {
+                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message . '</li>';
+                }
+            }
+            return $html . '</ol>';
+        }
+        return '';
     }
 }

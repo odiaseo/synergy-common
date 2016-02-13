@@ -17,10 +17,10 @@ class RenderGoogleCaptcha extends AbstractHelper
      */
     public function render(ElementInterface $element)
     {
-        $attributes                 = $element->getAttributes();
-        $attributes['class']        = 'g-recaptcha';
+        $attributes          = $element->getAttributes();
+        $attributes['class'] = 'g-recaptcha';
         //$attributes['data-size']    = 'compact';
-        $attributes['data-sitekey'] = $element->getOption('site_key');
+        $attributes['data-sitekey'] = $element->getOption('siteKey');
 
         return sprintf(
             '<div %s></div>',

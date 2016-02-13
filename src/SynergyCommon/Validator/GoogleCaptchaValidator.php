@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommon\Validator;
 
+use Zend\Captcha\ReCaptcha;
 use Zend\Validator\AbstractValidator;
 
 /**
@@ -9,61 +10,33 @@ use Zend\Validator\AbstractValidator;
  */
 class GoogleCaptchaValidator extends AbstractValidator
 {
-
-    private $siteKey;
-    private $secretKey;
-    private $remoteIp;
+    const END_POINT = 'https://www.google.com/recaptcha/api/siteverify';
 
     public function isValid($value)
     {
-        return true;
-    }
+        try {
+            $postData   = [
+                'secret'   => $this->getOption('secretKey'),
+                'response' => $value,
+                'remoteip' => $this->getOption('remoteIp'),
+            ];
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, self::END_POINT);
+            curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curlHandle, CURLOPT_POST, true);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $postData);
+            $curlResponse = curl_exec($curlHandle);
 
-    /**
-     * @return mixed
-     */
-    public function getRemoteIp()
-    {
-        return $this->remoteIp;
-    }
+            $data = json_decode($curlResponse, true);
+            if (isset($data['success']) and $data['success']) {
+                return true;
+            }
+        } catch (\Exception $exception) {
+        }
 
-    /**
-     * @param mixed $remoteIp
-     */
-    public function setRemoteIp($remoteIp)
-    {
-        $this->remoteIp = $remoteIp;
-    }
+        $this->error(ReCaptcha::ERR_CAPTCHA);
 
-    /**
-     * @return mixed
-     */
-    public function getSiteKey()
-    {
-        return $this->siteKey;
-    }
-
-    /**
-     * @param mixed $siteKey
-     */
-    public function setSiteKey($siteKey)
-    {
-        $this->siteKey = $siteKey;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSecretKey()
-    {
-        return $this->secretKey;
-    }
-
-    /**
-     * @param mixed $secretKey
-     */
-    public function setSecretKey($secretKey)
-    {
-        $this->secretKey = $secretKey;
+        return false;
     }
 }

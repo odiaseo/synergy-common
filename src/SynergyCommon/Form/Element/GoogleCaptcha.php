@@ -27,11 +27,7 @@ class GoogleCaptcha extends Element implements InputProviderInterface
             'validators' => array(
                 [
                     'name'    => 'SynergyCommon\Validator\GoogleCaptchaValidator',
-                    'options' => [
-                        'site_key'   => $this->getOption('site_key'),
-                        'secret_key' => $this->getOption('secret_key'),
-                        'remote_ip'  => $this->getOption('remote_ip'),
-                    ]
+                    'options' => $this->getOptions()
                 ]
             ),
         ];
