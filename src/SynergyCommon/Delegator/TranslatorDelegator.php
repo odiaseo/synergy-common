@@ -2,6 +2,7 @@
 namespace SynergyCommon\Delegator;
 
 use Zend\I18n\Translator\Resources;
+use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\DelegatorFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -20,16 +21,20 @@ class TranslatorDelegator implements DelegatorFactoryInterface
      */
     public function createDelegatorWithName(ServiceLocatorInterface $services, $name, $requestedName, $callback)
     {
+        /** @var Translator $translator */
         $translator = $callback();
+        $locale     = $translator->getLocale();
+        $language   = \Locale::parseLocale($locale)['language'];
+
         $translator->addTranslationFilePattern(
             'phpArray',
             Resources::getBasePath(),
-            Resources::getPatternForValidator()
+            sprintf(Resources::getPatternForValidator(), $language)
         );
         $translator->addTranslationFilePattern(
             'phpArray',
             Resources::getBasePath(),
-            Resources::getPatternForCaptcha()
+            sprintf(Resources::getPatternForCaptcha(), $language)
         );
 
         return $translator;
