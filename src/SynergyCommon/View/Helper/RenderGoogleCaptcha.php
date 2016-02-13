@@ -9,23 +9,22 @@ use Zend\Form\View\Helper\AbstractHelper;
  * Class FormPlainText
  * @package SynergyCommon\View\Helper
  */
-class GoogleCaptcha extends AbstractHelper
+class RenderGoogleCaptcha extends AbstractHelper
 {
     /**
-     * Render a form <input> element from the provided $element
-     *
      * @param  ElementInterface $element
      * @return string
      */
     public function render(ElementInterface $element)
     {
-        $attributes          = $element->getAttributes();
-        $attributes['class'] = 'g-recaptcha';
+        $attributes                 = $element->getAttributes();
+        $attributes['class']        = 'g-recaptcha';
+        //$attributes['data-size']    = 'compact';
+        $attributes['data-sitekey'] = $element->getOption('site_key');
 
         return sprintf(
-            '<div %s%s',
-            $this->createAttributesString($attributes),
-            '></div>'
+            '<div %s></div>',
+            $this->createAttributesString($attributes)
         );
     }
 

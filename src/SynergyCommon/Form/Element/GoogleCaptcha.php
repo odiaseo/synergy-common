@@ -1,5 +1,5 @@
 <?php
-namespace SynergyComm\Form\Element;
+namespace SynergyCommon\Form\Element;
 
 use Zend\Form\Element;
 use Zend\InputFilter\InputProviderInterface;
@@ -11,6 +11,8 @@ use Zend\Validator\ValidatorInterface;
  */
 class GoogleCaptcha extends Element implements InputProviderInterface
 {
+    const RESPONSE_KEY = 'g-recaptcha-response';
+
     /**
      * @return array
      */
