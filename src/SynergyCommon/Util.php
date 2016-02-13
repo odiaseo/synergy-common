@@ -277,7 +277,7 @@ class Util
             $text
         );
 
-        $text = str_replace(
+        $text = str_ireplace(
             array(
                 '(US & CA)',
                 'US  CA',
@@ -382,6 +382,8 @@ class Util
                 'CPI',
                 'CPL',
                 'CPS',
+                'Cps',
+                'Cpa',
                 'CPA',
                 'CPR',
                 'CPV',
