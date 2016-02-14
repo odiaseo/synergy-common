@@ -257,7 +257,7 @@ class Util
             $text       = self::getFirstPartFromString($text, $sepList);
         }
 
-        $text = str_replace(
+        $text = str_ireplace(
             array(
                 "'s",
                 'hoteles',
