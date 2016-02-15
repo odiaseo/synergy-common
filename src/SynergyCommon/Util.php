@@ -367,6 +367,7 @@ class Util
                 'Cashback',
                 '(Public)',
                 'BEFR',
+                'Partnerm',
                 'BeFR',
                 'Be NL',
                 'Benl',
