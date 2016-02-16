@@ -508,6 +508,7 @@ class Util
 
         $camelFilter = new CamelCaseToSeparator(' ');
         $name        = $camelFilter->filter($name);
+        $name        = trim($name, ' &-!,._');
 
         return $name;
     }
