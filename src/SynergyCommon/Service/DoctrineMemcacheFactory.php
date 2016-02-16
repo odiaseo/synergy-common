@@ -32,11 +32,14 @@ class DoctrineMemcacheFactory
             $prefix = preg_replace('/[^a-z0-9]/i', '', $host);
 
             if (extension_loaded('memcached')) {
+                /** @var MemcachedCache $cache */
                 $cache    = new MemcachedCache();
                 $memcache = new \Memcached();
+                $cache->setMemcached($memcache);
             } else {
                 $cache    = new MemcacheCache();
                 $memcache = new \Memcache();
+                $cache->setMemcache($memcache);
             }
 
             if (!$memcache->getServerList()) {
@@ -52,7 +55,7 @@ class DoctrineMemcacheFactory
                  $serviceLocator->get('logger')->logException($exception);
                  throw $exception;
              }*/
-            $cache->setMemcache($memcache);
+
             $cache->setNamespace($prefix);
         } else {
             $cache = new ArrayCache();
