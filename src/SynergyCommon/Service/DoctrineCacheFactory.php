@@ -20,13 +20,14 @@ class DoctrineCacheFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceManager)
     {
-        $appEnv = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
-        $status = $serviceManager->get('synergy\cache\status');
+        $appEnv      = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
+        $status      = $serviceManager->get('synergy\cache\status');
+        $hasMemcache = (extension_loaded('memcache') or extension_loaded('memcached'));
 
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
-        if ( ! $status->enabled) {
+        if (!$status->enabled) {
             return $serviceManager->get('doctrine.cache.array');
-        } elseif ($appEnv == 'production' and extension_loaded('memcache')) {
+        } elseif ($appEnv == 'production' and $hasMemcache) {
             return $serviceManager->get('doctrine.cache.synergy_memcache');
         } elseif ($appEnv == 'production' and extension_loaded('apc')) {
             return $serviceManager->get('doctrine.cache.synergy_apc');

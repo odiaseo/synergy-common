@@ -3,6 +3,7 @@ namespace SynergyCommon\Service;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\MemcachedCache;
 use SynergyCommon\Exception\MemcacheNotAvailableException;
 use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
@@ -30,16 +31,27 @@ class DoctrineMemcacheFactory
 
             $prefix = preg_replace('/[^a-z0-9]/i', '', $host);
 
-            $cache          = new MemcacheCache();
-            $memcache       = new \Memcache();
-            $config         = $serviceLocator->get('config');
-            $memcacheConfig = $config['synergy']['memcache'];
-            $connected      = $memcache->connect($memcacheConfig['host'], $memcacheConfig['port']);
-            if ( ! $connected) {
-                throw new MemcacheNotAvailableException(
-                    'Cannot connect to server ' . $memcacheConfig['host'] . ':' . $memcacheConfig['port']
-                );
+            if (extension_loaded('memcached')) {
+                $cache    = new MemcachedCache();
+                $memcache = new \Memcached();
+            } else {
+                $cache    = new MemcacheCache();
+                $memcache = new \Memcache();
             }
+
+            if (!$memcache->getServerList()) {
+                $config         = $serviceLocator->get('config');
+                $memcacheConfig = $config['synergy']['memcache'];
+                $memcache->addserver($memcacheConfig['host'], $memcacheConfig['port']);
+            }
+            /* $connected      = $memcache->connect($memcacheConfig['host'], $memcacheConfig['port']);
+             if (!$connected) {
+                 $exception = new MemcacheNotAvailableException(
+                     'Cannot connect to server ' . $memcacheConfig['host'] . ':' . $memcacheConfig['port']
+                 );
+                 $serviceLocator->get('logger')->logException($exception);
+                 throw $exception;
+             }*/
             $cache->setMemcache($memcache);
             $cache->setNamespace($prefix);
         } else {
