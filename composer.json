@@ -19,7 +19,7 @@
     "doctrine/doctrine-orm-module": "*",
     "doctrine/doctrine-module": "*",
     "doctrine/orm": "*",
-    "gedmo/doctrine-extensions": ">=v2.2.0"
+    "gedmo/doctrine-extensions": "^2.4"
   },
   "require-dev": {
     "phpunit/phpunit": "*",
