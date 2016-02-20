@@ -78,4 +78,22 @@ class Module
             )
         );
     }
+
+    public function getViewHelperConfig()
+    {
+        return [
+            'invokables' => array(
+                'renderGoogleCaptcha' => 'SynergyCommon\View\Helper\RenderGoogleCaptcha',
+            ),
+        ];
+    }
+
+    public function getFormElementConfig()
+    {
+        return array(
+            'invokables' => array(
+                'GoogleCaptcha' => 'SynergyCommon\Form\Element\GoogleCaptcha'
+            )
+        );
+    }
 }

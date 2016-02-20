@@ -17,6 +17,7 @@ return array(
         'invokables'         => array(
             'synergycommon\entity\licence' => 'SynergyCommon\Entity\BaseLicence',
             'synergycommon\entity\site'    => 'SynergyCommon\Entity\BaseSite',
+            'TranslatorDelegator'          => 'SynergyCommon\Delegator\TranslatorDelegator',
         ),
         'factories'          => array(
             'logger'                              => 'SynergyCommon\Service\LoggerFactory',
@@ -24,7 +25,15 @@ return array(
             'doctrine.cache.synergy_apc'          => 'SynergyCommon\Service\DoctrineApcCacheFactory',
             'doctrine.cache.cache\factory'        => 'SynergyCommon\Service\DoctrineCacheFactory',
             'doctrine.cache.result\cache\factory' => 'SynergyCommon\Service\DoctrineResultCacheFactory',
-        )
+        ),
+        'delegators'         => [
+            'translator'    => [
+                'TranslatorDelegator',
+            ],
+            'MvcTranslator' => [
+                'TranslatorDelegator',
+            ],
+        ],
     ),
     'session'         => array(
         'config'       => array(

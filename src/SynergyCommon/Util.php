@@ -5,6 +5,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use SynergyCommon\Util as CommonUtil;
 use Zend\Filter\FilterChain;
 use Zend\Filter\Word\CamelCaseToSeparator;
+use Zend\Form\Form;
 use Zend\Validator\Uri;
 
 /**
@@ -243,19 +244,20 @@ class Util
     {
         $original = $text;
         if ($firstPart) {
-            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|'];
+            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
             $separators = [
                 'closing',
                 'via',
                 'loja',
                 'ihr',
+                '.com-'
             ];
             $regex      = '/\b(?:' . implode('|', $separators) . ')\b/i';
             $text       = preg_replace($regex, '<>', $text);
             $text       = self::getFirstPartFromString($text, $sepList);
         }
 
-        $text = str_replace(
+        $text = str_ireplace(
             array(
                 "'s",
                 'hoteles',
@@ -275,7 +277,7 @@ class Util
             $text
         );
 
-        $text = str_replace(
+        $text = str_ireplace(
             array(
                 '(US & CA)',
                 'US  CA',
@@ -365,6 +367,7 @@ class Util
                 'Cashback',
                 '(Public)',
                 'BEFR',
+                'Partnerm',
                 'BeFR',
                 'Be NL',
                 'Benl',
@@ -380,12 +383,19 @@ class Util
                 'CPI',
                 'CPL',
                 'CPS',
+                'Cps',
+                'Cpa',
                 'CPA',
                 'CPR',
                 'CPV',
                 'CPI',
                 'U.S.',
+                '.comcz',
+                'Mac only',
+                'Per Sale',
                 'Nederland',
+                'Sweden',
+                'Polska',
                 '*suspended*',
                 'suspended',
                 'Scandinavia',
@@ -393,6 +403,7 @@ class Util
                 'Italia',
                 'Hungary',
                 'DACH',
+                'Affiliate Team',
                 'Gutschein Gewinnspiel',
                 'Gutschein',
                 'Gewinnspiel',
@@ -435,7 +446,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global)$/i',
+                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk)$/i',
                             'replacement' => '',
                         ),
                     ),
@@ -497,6 +508,7 @@ class Util
 
         $camelFilter = new CamelCaseToSeparator(' ');
         $name        = $camelFilter->filter($name);
+        $name        = trim($name, ' &-!,._');
 
         return $name;
     }
@@ -824,6 +836,9 @@ class Util
             return '';
         }
 
+        if (self::isTrackingDomain($url)) {
+            return '';
+        }
         $paths = parse_url($url);
         if (isset($paths['host'])) {
             $path  = isset($paths['path']) ? $paths['path'] : '';
@@ -833,6 +848,23 @@ class Util
         }
 
         return '';
+    }
+
+    public static function isTrackingDomain($url)
+    {
+        $invalidDomain = [
+            'track.condatix.de',
+            'kl.adspirit.de',
+            'tycoonpartner.adspirit.net',
+            'bit.ly',
+
+        ];
+        foreach ($invalidDomain as $dom) {
+            if (stripos($url, $dom) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function getMerchantLinkFromDeepLink($deepLink)
@@ -1032,6 +1064,7 @@ class Util
                     'This page cannot be found',
                     'this shop is currently unavailable',
                     'Welcome to TradeTracker',
+                    'product is no longer available via this affiliate link',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
@@ -1406,5 +1439,29 @@ class Util
         }
 
         return $url;
+    }
+
+    /**
+     * @param Form $form
+     * @return string
+     */
+    public static function renderFormErrors(Form $form)
+    {
+
+        if ($errorMessages = $form->getMessages()) {
+            $html = '<ol class="form-errors" id="form-error">';
+
+            foreach ($errorMessages as $element => $message) {
+                $input = $form->get($element);
+                if (is_array($message)) {
+                    $field = key($message);
+                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
+                } else {
+                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message . '</li>';
+                }
+            }
+            return $html . '</ol>';
+        }
+        return '';
     }
 }
