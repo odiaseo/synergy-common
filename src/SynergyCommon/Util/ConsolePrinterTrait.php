@@ -16,9 +16,9 @@ trait ConsolePrinterTrait
      * Print message to console
      *
      * @param      $msg
-     * @param int  $repeat
+     * @param int $repeat
      * @param bool $lineBreak
-     * @param int  $color
+     * @param int $color
      * @param null $bgColor
      *
      * @return \Zend\Console\Adapter\Windows
@@ -49,7 +49,7 @@ trait ConsolePrinterTrait
 
     /**
      * @param      $msg
-     * @param int  $repeat
+     * @param int $repeat
      * @param bool $lineBreak
      *
      * @return \Zend\Console\Adapter\Windows
@@ -61,7 +61,7 @@ trait ConsolePrinterTrait
 
     /**
      * @param      $msg
-     * @param int  $repeat
+     * @param int $repeat
      * @param bool $lineBreak
      *
      * @return \Zend\Console\Adapter\Windows
@@ -73,7 +73,7 @@ trait ConsolePrinterTrait
 
     /**
      * @param      $msg
-     * @param int  $repeat
+     * @param int $repeat
      * @param bool $lineBreak
      *
      * @return \Zend\Console\Adapter\Windows
@@ -85,7 +85,19 @@ trait ConsolePrinterTrait
 
     /**
      * @param      $msg
-     * @param int  $repeat
+     * @param int $repeat
+     * @param bool $lineBreak
+     *
+     * @return \Zend\Console\Adapter\Windows
+     */
+    public function printProgressMessage($msg, $repeat = 1, $lineBreak = true)
+    {
+        return $this->printMessage($msg, $repeat, $lineBreak, ColorInterface::LIGHT_MAGENTA);
+    }
+
+    /**
+     * @param      $msg
+     * @param int $repeat
      * @param bool $lineBreak
      *
      * @return \Zend\Console\Adapter\Windows

@@ -35,6 +35,8 @@ trait CurlRequestTrait
             curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $postData);
         }
 
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
+
         $curlResponse = curl_exec($curlHandle);
         $curlErrno    = curl_errno($curlHandle);
 

@@ -2,6 +2,7 @@
 namespace SynergyCommon\Event\Listener;
 
 use Doctrine\Common\Proxy\Autoloader;
+use Doctrine\ORM\EntityManager;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -201,11 +202,6 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
                         $listener->setSite($site);
                     }
-                    /*
-                                        if ($listener instanceof TranslatableListener) {
-                                            $listener->setDefaultLocale('en_GB');
-                                        }
-                    */
                 }
             }
 
@@ -218,7 +214,18 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 Autoloader::register($proxyDir, $proxyNamespace, array($logger, 'logProxyNotFound'));
             }
 
+            $this->setCliTimeout($em);
+
             return null;
+        }
+    }
+
+    private function setCliTimeout(EntityManager $entityManager)
+    {
+        if (php_sapi_name() == 'cli' and APPLICATION_ENV == 'production') {
+            $init      = ' SET session wait_timeout=28800; set innodb_lock_wait_timeout=6000;';
+            $statement = $entityManager->getConnection()->prepare($init);
+            $statement->execute();
         }
     }
 
