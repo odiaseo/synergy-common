@@ -270,7 +270,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             if ($response instanceof Response) {
                 $content = $response->getBody();
-                $content = preg_replace('/(?<=>)\s+|\s+(?=<)/', ' ', $content);
+                $content = preg_replace('/(?<=>)\s+|\s+(?=<)|\s+/', ' ', $content);
                 $response->setContent($content);
             }
         }
