@@ -265,7 +265,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function compressOutput(MvcEvent $event)
     {
-        if (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production') {
+        $config = $event->getApplication()->getServiceManager()->get('config');
+        if (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production' and $config['synergy']['compress_output']) {
             $response = $event->getResponse();
 
             if ($response instanceof Response) {

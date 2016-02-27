@@ -58,18 +58,19 @@ return array(
         'validators'   => array(),
     ),
     'synergy'         => array(
-        'memcache' => array(
+        'compress_output' => true,
+        'memcache'        => array(
             'host' => '127.0.0.1',
             'port' => 11211
         ),
-        'api'      => array(
+        'api'             => array(
             'options' => array(
                 'headers' => array(
                     'User-Agent' => 'Synergy Afifiliate Platform v1.0',
                 ),
             )
         ),
-        'logger'   => array(
+        'logger'          => array(
             'priority' => \Zend\Log\Logger::DEBUG
         )
     )
