@@ -492,6 +492,7 @@ class Util
             case 'light box':
                 $name = 'Light in the Box';
                 break;
+            case 'blue':
             case 'shoes':
             case 'vision direct':
                 $name = $original;
