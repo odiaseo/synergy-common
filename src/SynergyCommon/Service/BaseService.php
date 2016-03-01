@@ -6,8 +6,7 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\PrefixAwareInterface;
 use Zend\Filter\Word\CamelCaseToDash;
 
-class BaseService
-    extends AbstractService
+class BaseService extends AbstractService
 {
 
     /** @var \SynergyCommon\Util\ErrorHandler */
@@ -38,7 +37,6 @@ class BaseService
                 'message' => '',
                 'content' => $this->_formatResult($row, $model->getOptions()->getFields(), $this->getEntityKey())
             );
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -84,7 +82,6 @@ class BaseService
                     'rows'      => $offers
                 )
             );
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -182,7 +179,6 @@ class BaseService
                     ),
                 'content' => $rows
             );
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -192,7 +188,6 @@ class BaseService
         }
 
         return $return;
-
     }
 
     public function associateEntity($entityKey, $entityId, $subEntity, $ids = '')
@@ -213,7 +208,6 @@ class BaseService
                     '%s #%d successfully updated', ucfirst($this->getEntityKey()), $entity->getId()
                 );
             }
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -223,7 +217,6 @@ class BaseService
         }
 
         return $return;
-
     }
 
     public function deleteAssociation($entityKey, $entityId, $subEntity)
@@ -267,7 +260,6 @@ class BaseService
                 ),
                 'content' => $this->_formatResult($offer, $model->getOptions()->getFields(), $this->getEntityKey())
             );
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -296,7 +288,6 @@ class BaseService
                 'error'   => false,
                 'message' => sprintf('%s #%d successfully deleted', ucfirst($this->getEntityKey()), $id)
             );
-
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,
@@ -432,5 +423,4 @@ class BaseService
 
         return null;
     }
-
 }

@@ -56,6 +56,7 @@ class AbstractServiceFactory
             $service = new BaseService();
         }
 
+        $service->setServiceManager($serviceLocator);
         $service->setEntityKey($serviceId);
 
         return $service;

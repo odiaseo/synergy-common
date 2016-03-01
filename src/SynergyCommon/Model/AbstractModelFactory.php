@@ -61,7 +61,7 @@ class AbstractModelFactory
 
         $logger = $serviceLocator->get('logger');
         $model->setLogger($logger);
-
+        $model->setServiceLocator($serviceLocator);
         $model->setEntityManager($serviceLocator->get('doctrine.entitymanager.' . $model->getOrm()));
 
         return $model;
