@@ -9,9 +9,14 @@
 
 namespace SynergyCommon;
 
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Session\SaveHandler\DoctrineSaveHandler;
 use Zend\Console\Request;
+use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class Module
