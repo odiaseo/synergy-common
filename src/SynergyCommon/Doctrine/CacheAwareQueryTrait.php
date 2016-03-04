@@ -38,7 +38,7 @@ trait CacheAwareQueryTrait
     {
         if ($this->enableResultCache) {
             $query->useResultCache(true, $this->cacheLifetime);
-            $query->setCacheable(true);
+            //$query->setCacheable(true);
             if ($this->cacheKey) {
                 $query->setResultCacheId($this->cacheKey);
             }
