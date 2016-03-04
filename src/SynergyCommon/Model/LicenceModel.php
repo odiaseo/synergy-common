@@ -1,10 +1,10 @@
 <?php
 namespace SynergyCommon\Model;
-
-use SynergyCommon\Model\AbstractModel;
-
-class LicenceModel
-    extends AbstractModel
+/**
+ * Class LicenceModel
+ * @package SynergyCommon\Model
+ */
+class LicenceModel extends AbstractModel
 {
 
 }

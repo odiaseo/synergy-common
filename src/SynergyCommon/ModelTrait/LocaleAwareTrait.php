@@ -26,7 +26,7 @@ trait LocaleAwareTrait
 
     /**
      * @param       $locale
-     * @param null  $limit
+     * @param null $limit
      * @param array $ids
      *
      * @return mixed
@@ -40,7 +40,7 @@ trait LocaleAwareTrait
 
     /**
      * @param       $locale
-     * @param null  $limit
+     * @param null $limit
      * @param array $ids
      *
      * @return QueryBuilder

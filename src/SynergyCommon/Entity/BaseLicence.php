@@ -2,7 +2,6 @@
 namespace SynergyCommon\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SynergyCommon\Entity\AbstractEntity;
 
 /**
  * @ORM\MappedSuperclass
@@ -81,5 +80,4 @@ class BaseLicence extends AbstractEntity
     {
         return $this->title;
     }
-
 }

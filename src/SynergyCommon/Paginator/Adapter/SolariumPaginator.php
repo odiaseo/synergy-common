@@ -92,5 +92,4 @@ class SolariumPaginator implements AdapterInterface
     {
         return $this->_solrResult;
     }
-
 }

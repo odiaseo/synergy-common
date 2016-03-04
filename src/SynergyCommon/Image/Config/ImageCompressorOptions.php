@@ -3,8 +3,11 @@ namespace SynergyCommon\Image\Config;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ImageCompressorOptions
-    extends AbstractOptions
+/**
+ * Class ImageCompressorOptions
+ * @package SynergyCommon\Image\Config
+ */
+class ImageCompressorOptions extends AbstractOptions
 {
     /** @var \SynergyCommon\Image\TransferAdapterInterface */
     protected $_adapter;
@@ -153,5 +156,4 @@ class ImageCompressorOptions
     {
         return $this->_minQuality;
     }
-
 }

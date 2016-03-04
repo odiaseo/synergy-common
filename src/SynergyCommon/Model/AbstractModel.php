@@ -138,7 +138,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         return $this->_entity;
     }
 
-    public function  getEntityManager()
+    public function getEntityManager()
     {
         return $this->_entityManager;
     }
@@ -1266,7 +1266,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
             case 'first':
                 $done = $repo->persistAsFirstChildOf($node, $referenceNode);
                 break;
-            default :
+            default:
                 throw new InvalidArgumentException(
                     sprintf(
                         'Invalid direction {%s) found. Direction should be either after, before, first or last.',

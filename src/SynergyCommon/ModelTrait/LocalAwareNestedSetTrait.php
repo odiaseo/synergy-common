@@ -3,8 +3,6 @@ namespace SynergyCommon\ModelTrait;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
-use Gedmo\Translatable\TranslatableListener;
-use SynergyCommon\ModelTrait\LocaleAwareTrait;
 
 /**
  * Class NestedSetRepository
@@ -18,16 +16,17 @@ trait LocalAwareNestedSetTrait
     /**
      * Gets nodes query
      *
-     * @param null  $node
-     * @param bool  $direct
+     * @param null $node
+     * @param bool $direct
      * @param array $options
-     * @param bool  $includeNode
+     * @param bool $includeNode
      *
      * @return AbstractQuery|Query
      */
     public function getNodesHierarchyQuery(
         $node = null, $direct = false, array $options = array(), $includeNode = false
-    ) {
+    )
+    {
         $query = parent::getNodesHierarchyQuery($node, $direct, $options, $includeNode);
 
         return self::addHints($query);
@@ -35,7 +34,8 @@ trait LocalAwareNestedSetTrait
 
     public function childrenQuery(
         $node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false
-    ) {
+    )
+    {
         $query = parent::childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
 
         return self::addHints($query);

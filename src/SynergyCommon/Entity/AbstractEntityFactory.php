@@ -5,8 +5,11 @@ use SynergyCommon\Exception\InvalidEntityException;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AbstractEntityFactory
-    implements AbstractFactoryInterface
+/**
+ * Class AbstractEntityFactory
+ * @package SynergyCommon\Entity
+ */
+class AbstractEntityFactory implements AbstractFactoryInterface
 {
 
     protected $_configPrefix;
@@ -57,6 +60,5 @@ class AbstractEntityFactory
         } else {
             throw new InvalidEntityException('Invalid entity: ' . $entityName);
         }
-
     }
 }

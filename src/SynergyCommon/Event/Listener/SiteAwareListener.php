@@ -2,7 +2,6 @@
 
 namespace SynergyCommon\Event\Listener;
 
-use Doctrine\Common\EventArgs;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -72,7 +71,7 @@ class SiteAwareListener
 
     public function getSite()
     {
-        if ( ! $this->_site instanceof BaseSite) {
+        if (!$this->_site instanceof BaseSite) {
             throw new Exception(
                 basename(__CLASS__)
                 . ": No valid site found. Ensure that the listener is initialised with a valid site."
@@ -86,5 +85,4 @@ class SiteAwareListener
     {
         return $this->_site ? true : false;
     }
-
 }

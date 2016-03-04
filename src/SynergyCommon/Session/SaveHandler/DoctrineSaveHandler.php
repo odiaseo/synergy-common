@@ -46,7 +46,7 @@ class DoctrineSaveHandler implements SaveHandlerInterface
 
     /**
      * @param SessionModel $model
-     * @param null         $lifetime
+     * @param null $lifetime
      */
     public function __construct(SessionModel $model, $lifetime = null)
     {
@@ -123,7 +123,7 @@ class DoctrineSaveHandler implements SaveHandlerInterface
         /** @var $row \SynergyCommon\Member\Entity\Session */
         $row = $this->model->getSessionRecord($sessionId, $this->sessionName);
 
-        if ( ! $row) {
+        if (!$row) {
             $class = $this->model->getEntity();
             $row   = new $class();
 
@@ -166,7 +166,7 @@ class DoctrineSaveHandler implements SaveHandlerInterface
      */
     protected function getLifeTime()
     {
-        if ( ! $this->lifetime) {
+        if (!$this->lifetime) {
             $this->lifetime = \ini_get('session.gc_maxlifetime');
         }
 

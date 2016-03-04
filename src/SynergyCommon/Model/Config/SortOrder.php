@@ -4,8 +4,11 @@ namespace SynergyCommon\Model\Config;
 
 use Zend\Stdlib\AbstractOptions;
 
-class SortOrder
-    extends AbstractOptions
+/**
+ * Class SortOrder
+ * @package SynergyCommon\Model\Config
+ */
+class SortOrder extends AbstractOptions
 {
     protected $_field;
     protected $_direction;
@@ -29,5 +32,4 @@ class SortOrder
     {
         return $this->_field;
     }
-
 }

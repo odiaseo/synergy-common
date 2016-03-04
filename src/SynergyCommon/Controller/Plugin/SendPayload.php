@@ -11,8 +11,7 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
  *
  * @package SynergyCommon\Controller\Plugin
  */
-class SendPayload
-    extends AbstractPlugin
+class SendPayload extends AbstractPlugin
 {
     /**
      * Accept header criteria
@@ -41,7 +40,7 @@ class SendPayload
         $viewModel = $controller->acceptableViewModelSelector($this->_acceptCriteria);
 
         if (isset($payload['error']) and $payload['error'] == true) {
-            if ( ! empty($payload['code'])) {
+            if (!empty($payload['code'])) {
                 $response->setStatusCode($payload['code']);
             } else {
                 $response->setStatusCode(Response::STATUS_CODE_400);
@@ -50,7 +49,7 @@ class SendPayload
 
         if (isset($payload['content'])) {
             $viewModel->setVariables($payload['content']);
-        } elseif ( ! empty($payload)) {
+        } elseif (!empty($payload)) {
             $viewModel->setVariables($payload);
         }
 

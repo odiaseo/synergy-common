@@ -114,5 +114,4 @@ class HttpRestJsonClient
     {
         return $this->httpClient;
     }
-
 }

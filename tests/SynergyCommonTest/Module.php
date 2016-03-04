@@ -13,6 +13,10 @@ use SynergyCommon\Event\Listener\SynergyModuleListener;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Class Module
+ * @package SynergyCommonTest
+ */
 class Module
 {
     public function onBootstrap(MvcEvent $e)

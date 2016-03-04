@@ -4,8 +4,11 @@ namespace SynergyCommon\Controller;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\Mvc\Controller\AbstractRestfulController;
 
-class BaseRestfulController
-    extends AbstractRestfulController
+/**
+ * Class BaseRestfulController
+ * @package SynergyCommon\Controller
+ */
+class BaseRestfulController extends AbstractRestfulController
 {
     /**
      * Service manager alias to concrate service class
@@ -36,7 +39,6 @@ class BaseRestfulController
      *
      * Example
      * curl -X GET -H "Accept: application/json"
-     * "affiliate-manager.com/affiliate/merchant/5?merchant_fields=id,title,isActive&category_fields=id,title,createdAt&filter\[isActive\]=0"
      *
      * @param mixed $id
      * @method GET
@@ -60,7 +62,6 @@ class BaseRestfulController
      * Return a list
      * Example
      * curl -X GET -H "Accept: application/json"
-     * "affiliate-manager.com/affiliate/merchant?merchant_fields=id,title,isActive&category_fields=id,title,createdAt&filter\[isActive\]=0"
      *
      * @method GET
      * @endpoint /affiliate/:entity
@@ -159,7 +160,7 @@ class BaseRestfulController
         $viewModel = $this->acceptableViewModelSelector($this->_acceptCriteria);
 
         if (isset($payload['error']) and $payload['error'] == true) {
-            if ( ! empty($payload['code'])) {
+            if (!empty($payload['code'])) {
                 $response->setStatusCode($payload['code']);
             } else {
                 $response->setStatusCode(Response::STATUS_CODE_400);
@@ -168,7 +169,7 @@ class BaseRestfulController
 
         if (isset($payload['content'])) {
             $viewModel->setVariables($payload['content']);
-        } elseif ( ! empty($payload)) {
+        } elseif (!empty($payload)) {
             $viewModel->setVariables($payload);
         }
 
@@ -186,5 +187,4 @@ class BaseRestfulController
 
         return $this->getServiceLocator()->get($serviceKey);
     }
-
 }

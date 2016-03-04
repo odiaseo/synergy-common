@@ -26,7 +26,7 @@ class SiteFilter extends SQLFilter
 
     /**
      * @param ClassMetadata $targetEntity
-     * @param string        $targetTableAlias
+     * @param string $targetTableAlias
      *
      * @return string
      */

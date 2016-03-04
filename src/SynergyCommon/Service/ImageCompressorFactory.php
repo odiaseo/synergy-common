@@ -7,8 +7,11 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
-class ImageCompressorFactory
-    implements FactoryInterface
+/**
+ * Class ImageCompressorFactory
+ * @package SynergyCommon\Service
+ */
+class ImageCompressorFactory implements FactoryInterface
 {
 
     public function createService(ServiceLocatorInterface $serviceLocator)
@@ -37,6 +40,5 @@ class ImageCompressorFactory
         }
 
         return $service;
-
     }
 }

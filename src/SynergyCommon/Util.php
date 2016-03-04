@@ -1126,8 +1126,6 @@ class Util
         @curl_exec($ch);
         if (@curl_errno($ch)) {   // should be 0
             @curl_close($ch);
-            $error = curl_error($ch);
-
             return false;
         }
         $code = @curl_getinfo(

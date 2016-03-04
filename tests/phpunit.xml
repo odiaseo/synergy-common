@@ -3,17 +3,17 @@
 
     <testsuites>
         <testsuite name="Synergy Common Test Suite">
-            <directory suffix="Test.php">./lib</directory>
+            <directory suffix="Test.php">./SynergyCommonTest</directory>
         </testsuite>
     </testsuites>
     <php>
-        <includePath>../lib</includePath>
+        <includePath>./SynergyCommonTest</includePath>
         <includePath>../vendor</includePath>
-        <includePath>lib</includePath>
+        <includePath>../src</includePath>
     </php>
     <filter>
         <whitelist>
-            <directory suffix=".php">../lib</directory>
+            <directory suffix=".php">../src</directory>
         </whitelist>
     </filter>
 </phpunit>

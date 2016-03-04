@@ -1,13 +1,15 @@
 <?php
 namespace SynergyCommon\Model;
 
-use SynergyCommon\Exception\InvalidEntityException;
 use Zend\Log\Formatter\Base;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AbstractModelFactory
-    implements AbstractFactoryInterface
+/**
+ * Class AbstractModelFactory
+ * @package SynergyCommon\Model
+ */
+class AbstractModelFactory implements AbstractFactoryInterface
 {
 
     protected $_configPrefix;

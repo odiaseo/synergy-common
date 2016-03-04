@@ -5,12 +5,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
 
+/**
+ * Class UTCDateTimeType
+ * @package SynergyCommon\Doctrine\Type
+ */
 class UTCDateTimeType extends DateTimeType
 {
     static private $utc = null;
 
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param AbstractPlatform $platform
      *
      * @return mixed|null
@@ -31,7 +35,7 @@ class UTCDateTimeType extends DateTimeType
     }
 
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param AbstractPlatform $platform
      *
      * @return \DateTime|mixed|null
@@ -48,7 +52,7 @@ class UTCDateTimeType extends DateTimeType
             $value,
             (self::$utc) ? self::$utc : (self::$utc = new \DateTimeZone('UTC'))
         );
-        if ( ! $val) {
+        if (!$val) {
             throw ConversionException::conversionFailed($value, $this->getName());
         }
 

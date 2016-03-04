@@ -122,7 +122,7 @@ class MicroData
             'WPHeader'
         );
 
-        if ( ! in_array($property, $valid)
+        if (!in_array($property, $valid)
             and $this->_sm->getServiceLocator()->has('logger')
         ) {
             /** @var $logger \SynergyCommon\Util\ErrorHandler */
@@ -131,7 +131,6 @@ class MicroData
         }
 
         return true;
-
     }
 
     public function setEnabled($enabled)

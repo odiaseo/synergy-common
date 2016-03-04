@@ -29,5 +29,4 @@ class ClientOptions
     {
         return $this->_headers;
     }
-
 }

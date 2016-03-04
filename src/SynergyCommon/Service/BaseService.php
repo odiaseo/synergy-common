@@ -6,6 +6,10 @@ use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\PrefixAwareInterface;
 use Zend\Filter\Word\CamelCaseToDash;
 
+/**
+ * Class BaseService
+ * @package SynergyCommon\Service
+ */
 class BaseService extends AbstractService
 {
 

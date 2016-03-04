@@ -4,13 +4,15 @@ namespace SynergyCommon\Service;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
-use SynergyCommon\Exception\MemcacheNotAvailableException;
 use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DoctrineMemcacheFactory
-    implements FactoryInterface
+/**
+ * Class DoctrineMemcacheFactory
+ * @package SynergyCommon\Service
+ */
+class DoctrineMemcacheFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

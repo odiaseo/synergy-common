@@ -244,16 +244,6 @@ class BasePage extends BaseEntity
         return $this->lft;
     }
 
-    public function setPageThemes($pageThemes)
-    {
-        $this->pageThemes = $pageThemes;
-    }
-
-    public function getPageThemes()
-    {
-        return $this->pageThemes;
-    }
-
     public function setParameters($parameters)
     {
         $this->parameters = $parameters;

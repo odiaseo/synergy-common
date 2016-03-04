@@ -62,7 +62,7 @@ class Inflector
     {
         static $cache = array();
 
-        if ( ! isset($cache[$word])) {
+        if (!isset($cache[$word])) {
             $word         = preg_replace('/[$]/', '', $word);
             $classify     = preg_replace_callback(
                 '~(_?)([-_])([\w])~', array("Doctrine_Inflector", "classifyCallback"), ucfirst(strtolower($word))
@@ -137,7 +137,7 @@ class Inflector
      */
     public static function unaccent($string)
     {
-        if ( ! preg_match('/[\x80-\xff]/', $string)) {
+        if (!preg_match('/[\x80-\xff]/', $string)) {
             return $string;
         }
 

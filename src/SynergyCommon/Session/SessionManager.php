@@ -58,7 +58,6 @@ class SessionManager implements FactoryInterface
                 foreach ($session['validators'] as $validator) {
                     $validator = new $validator();
                     $chain->attach('session.validate', array($validator, 'isValid'));
-
                 }
             }
         } else {

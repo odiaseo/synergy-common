@@ -8,7 +8,6 @@ use Doctrine\ORM\Proxy\Proxy;
 use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 use Zend\InputFilter\InputFilter;
-use Zend\Session\Container;
 
 /**
  * Class AbstractEntity
@@ -99,7 +98,6 @@ abstract class AbstractEntity
                                 $list[$key][$propName] = $v;
                             }
                         }
-
                     } elseif (is_object($value)) {
                         $list[$key] = $this->toArray($value);
                     } else {

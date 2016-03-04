@@ -29,7 +29,6 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
     public function compress()
     {
         $this->printWarningMessage('Method  ' . __FILE__);
-        $logger               = $this->getLogger() ?: $this;
         $watchDirectory       = rtrim($this->_config->getWatchDirectory(), '/') . '/';
         $destinationDirectory = rtrim($this->_config->getDestinationDirectory(), '/') . '/';
         $jpegDirectory        = rtrim($this->_config->getJpegDirectory(), '/') . '/';
@@ -38,7 +37,7 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
         $min = $this->_config->getMinQuality();
         $max = $this->_config->getMaxQuality();
 
-        if ( ! file_exists($watchDirectory)) {
+        if (!file_exists($watchDirectory)) {
             mkdir($watchDirectory, 0775, true);
             $this->printInfo('creating directory ' . $watchDirectory);
         }

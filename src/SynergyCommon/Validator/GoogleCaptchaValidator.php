@@ -33,6 +33,7 @@ class GoogleCaptchaValidator extends AbstractValidator
                 return true;
             }
         } catch (\Exception $exception) {
+            //not required
         }
 
         $this->error(ReCaptcha::ERR_CAPTCHA);

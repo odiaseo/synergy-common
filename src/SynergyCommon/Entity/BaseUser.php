@@ -2,13 +2,11 @@
 namespace SynergyCommon\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SynergyCommon\Entity\BaseEntity;
 
 /**
  * @ORM\MappedSuperclass
  */
-class BaseUser
-    extends BaseEntity
+class BaseUser extends BaseEntity
 {
     /**
      * @ORM\Id
@@ -264,5 +262,4 @@ class BaseUser
     {
         return $this->visits;
     }
-
 }

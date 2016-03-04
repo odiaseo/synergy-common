@@ -5,8 +5,11 @@ use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ActiveClientSiteFactory
-    implements FactoryInterface
+/**
+ * Class ActiveClientSiteFactory
+ * @package SynergyCommon\Service
+ */
+class ActiveClientSiteFactory implements FactoryInterface
 {
     const STIE_KEY = 'active-site';
 
@@ -25,7 +28,7 @@ class ActiveClientSiteFactory
         }
         $host = str_replace(array('http://', 'https://', 'www.'), '', $host);
 
-        if ( ! $site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
+        if (!$site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
             throw new \InvalidArgumentException("Site {$host} is not registered");
         }
 

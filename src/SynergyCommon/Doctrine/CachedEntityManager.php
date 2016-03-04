@@ -21,7 +21,7 @@ class CachedEntityManager implements CacheAwareQueryInterface
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param bool                   $enableCache
+     * @param bool $enableCache
      */
     public function __construct(EntityManagerInterface $entityManager, $enableCache = false)
     {

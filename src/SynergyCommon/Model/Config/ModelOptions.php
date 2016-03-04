@@ -4,8 +4,11 @@ namespace SynergyCommon\Model\Config;
 use Doctrine\ORM\AbstractQuery;
 use Zend\Stdlib\AbstractOptions;
 
-class ModelOptions
-    extends AbstractOptions
+/**
+ * Class ModelOptions
+ * @package SynergyCommon\Model\Config
+ */
+class ModelOptions extends AbstractOptions
 {
     /**
      * Additional ata

@@ -3,9 +3,11 @@ namespace SynergyCommon\Service;
 
 use Zend\Json\Json;
 
-class BaseApiService
-    extends BaseService
-    implements ClientAwareInterface
+/**
+ * Class BaseApiService
+ * @package SynergyCommon\Service
+ */
+class BaseApiService extends BaseService implements ClientAwareInterface
 {
 
     /**
@@ -18,7 +20,7 @@ class BaseApiService
      *
      * @param        $url
      * @param string $method HTTP Method (GET, POST, DELETE, PUT)
-     * @param null   $params
+     * @param null $params
      *
      * @return array
      */
@@ -63,7 +65,7 @@ class BaseApiService
      */
     public function getSiteDetails($domain = null)
     {
-        if ( ! $domain) {
+        if (!$domain) {
             /** @var $request \Zend\Http\PhpEnvironment\Request */
             $request = $this->getServiceManager()->get('application')->getRequest();
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
@@ -78,14 +80,15 @@ class BaseApiService
      * @param       $fundtionName
      * @param       $method
      * @param array $functionFaramters
-     * @param null  $entity
+     * @param null $entity
      * @param array $options
      *
      * @return mixed
      */
     public function executeRemoteFunction(
         $fundtionName, $method, $functionFaramters = array(), $entity = null, $options = array()
-    ) {
+    )
+    {
         $url = sprintf('/affiliate/apifunction/%s/%s', $entity, $fundtionName);
         if ($options) {
             $url = $url . '?' . \http_build_query($options);
@@ -95,5 +98,4 @@ class BaseApiService
             $url, $method, array('params' => $functionFaramters)
         );
     }
-
 }

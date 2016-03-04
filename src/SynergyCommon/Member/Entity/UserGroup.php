@@ -57,5 +57,4 @@ class UserGroup extends AbstractEntity
     {
         return $this->title;
     }
-
 }

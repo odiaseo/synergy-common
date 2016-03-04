@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Model;
 
-use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use Zend\Paginator\Paginator;
 
@@ -14,8 +13,8 @@ trait TranslatableModelTrait
 {
     /**
      * @param        $locale
-     * @param int    $page
-     * @param int    $perPage
+     * @param int $page
+     * @param int $perPage
      * @param string $orderBy
      *
      * @return Paginator
@@ -79,7 +78,6 @@ trait TranslatableModelTrait
      * @param $entity
      * @param $transId
      * @param $field
-     * @param $content
      *
      * @return mixed
      */

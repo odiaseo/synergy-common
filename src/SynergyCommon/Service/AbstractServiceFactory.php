@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Service;
 
-use SynergyCommon\Service\BaseService;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
