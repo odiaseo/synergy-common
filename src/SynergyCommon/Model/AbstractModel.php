@@ -20,12 +20,14 @@ use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Session\Container;
 
 /**
  * Class AbstractModel
  *
  * @method setEnableHydrationCache()
  * @method setEnableResultCache()
+ * @method \SynergyCommon\Doctrine\CachedEntityManager | \Doctrine\ORM\EntityManager getEntityManager()
  * @package SynergyCommon\Model
  */
 class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface
@@ -52,10 +54,14 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE           = 15;
-    const INDEX_PER_PAGE     = 50;
-    const DB_DATE_FORMAT     = 'Y-m-d H:i:s';
-    const SESSION_LOCALE_KEY = 'active_locale';
+    const PER_PAGE            = 15;
+    const INDEX_PER_PAGE      = 50;
+    const DB_DATE_FORMAT      = 'Y-m-d H:i:s';
+    const DB_DATE_ONLY_FORMAT = 'Y-m-d';
+    const SESSION_LOCALE_KEY  = 'active_locale';
+
+    const FILTER_SESSION_KEY = 'disableQueryFilter';
+
     protected $fields
         = [
             'id',
@@ -344,6 +350,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         try {
             $query->setMaxResults(1);
             $query->setEnableHydrationCache($this->enableResultCache);
+            $query->setCacheable($this->enableResultCache);
             $query = LocaleAwareTrait::addHints($query->getQuery());
 
             return $query->getOneOrNullResult($mode);
@@ -1331,5 +1338,10 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     public function getIdentity()
     {
         return $this->_identity;
+    }
+
+    protected function disableSiteFilter()
+    {
+        (new Container())->offsetSet(self::FILTER_SESSION_KEY, true);
     }
 }
