@@ -4,6 +4,7 @@ namespace SynergyCommon\Service;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
+use SynergyCommon\Exception\MemcacheNotAvailableException;
 use Zend\Console\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -20,6 +21,8 @@ class DoctrineMemcacheFactory implements FactoryInterface
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $serviceLocator->get('application')->getRequest();
         $status  = $serviceLocator->get('synergy\cache\status');
+        $config  = $serviceLocator->get('config');
+
         if ($status->enabled) {
             if ($request instanceof Request) {
                 /** @var $event \Zend\Mvc\MvcEvent */
@@ -31,32 +34,31 @@ class DoctrineMemcacheFactory implements FactoryInterface
                 $host = $request->getServer('HTTP_HOST');
             }
 
-            $prefix = preg_replace('/[^a-z0-9]/i', '', $host);
-
+            $prefix         = preg_replace('/[^a-z0-9]/i', '', $host);
+            $memcacheConfig = $config['synergy']['memcache'];
             if (extension_loaded('memcached')) {
                 /** @var MemcachedCache $cache */
                 $cache    = new MemcachedCache();
                 $memcache = new \Memcached();
                 $cache->setMemcached($memcache);
+
+                if (!$memcache->getServerList()) {
+                    $memcache->addserver($memcacheConfig['host'], $memcacheConfig['port']);
+                }
             } else {
                 $cache    = new MemcacheCache();
                 $memcache = new \Memcache();
                 $cache->setMemcache($memcache);
-            }
 
-            if (!$memcache->getServerList()) {
-                $config         = $serviceLocator->get('config');
-                $memcacheConfig = $config['synergy']['memcache'];
-                $memcache->addserver($memcacheConfig['host'], $memcacheConfig['port']);
+                $connected = $memcache->connect($memcacheConfig['host'], $memcacheConfig['port']);
+                if (!$connected) {
+                    $exception = new MemcacheNotAvailableException(
+                        'Cannot connect to server ' . $memcacheConfig['host'] . ':' . $memcacheConfig['port']
+                    );
+                    $serviceLocator->get('logger')->logException($exception);
+                    throw $exception;
+                }
             }
-            /* $connected      = $memcache->connect($memcacheConfig['host'], $memcacheConfig['port']);
-             if (!$connected) {
-                 $exception = new MemcacheNotAvailableException(
-                     'Cannot connect to server ' . $memcacheConfig['host'] . ':' . $memcacheConfig['port']
-                 );
-                 $serviceLocator->get('logger')->logException($exception);
-                 throw $exception;
-             }*/
 
             $cache->setNamespace($prefix);
         } else {

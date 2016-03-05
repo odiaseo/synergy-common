@@ -59,6 +59,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
     const DB_DATE_FORMAT      = 'Y-m-d H:i:s';
     const DB_DATE_ONLY_FORMAT = 'Y-m-d';
     const SESSION_LOCALE_KEY  = 'active_locale';
+    const SESSION_SITE_KEY    = 'active_site';
 
     const FILTER_SESSION_KEY = 'disableQueryFilter';
 
