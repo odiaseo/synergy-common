@@ -3,9 +3,12 @@ namespace SynergyCommon;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use SynergyCommon\Util as CommonUtil;
+use Zend\Console\Request as ConsoleRequest;
 use Zend\Filter\FilterChain;
 use Zend\Filter\Word\CamelCaseToSeparator;
 use Zend\Form\Form;
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Mvc\MvcEvent;
 use Zend\Validator\Uri;
 
 /**
@@ -16,8 +19,9 @@ use Zend\Validator\Uri;
 class Util
 {
 
-    const DEFAULT_LOCALE = 'en_GB';
-    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    const DEFAULT_LOCALE    = 'en_GB';
+    const DB_DATE_FORMAT    = 'Y-m-d H:i:s';
+    const CLIENT_DOMAIN_KEY = 'client_domain';
 
     protected static $_enablePrint = false;
 
@@ -912,11 +916,16 @@ class Util
      */
     public static function cleanDomain($domain)
     {
+        //remove port number
+
+        list($domain,) = explode(':', $domain);
+
         return str_replace(
             array(
                 'http://',
                 'https://',
-                'www.'
+                'www.',
+                'admin.'
             ),
             '',
             $domain
@@ -1462,5 +1471,31 @@ class Util
             return $html . '</ol>';
         }
         return '';
+    }
+
+    /**
+     * @param $request
+     * @param MvcEvent $event
+     * @return array
+     */
+    public static function getDomainFromRequest($request, MvcEvent $event = null)
+    {
+        $isConsole = false;
+        $host      = null;
+        if ($request instanceof ConsoleRequest) {
+            $isConsole = true;
+            /** @var $routeMatch \Zend\Mvc\Router\RouteMatch */
+            if ($event and $routeMatch = $event->getRouteMatch()) {
+                $host = $routeMatch->getParam('host', $routeMatch->getParam(self::CLIENT_DOMAIN_KEY, null));
+            }
+        } elseif ($request instanceof Request and $uri = $request->getUri()) {
+            /** @var $request \Zend\Http\PhpEnvironment\Request */
+            $host = $uri->getHost();
+        } else {
+            /** @var $request \Zend\Http\PhpEnvironment\Request */
+            $host = $request->getServer('HTTP_HOST', $request->getQuery(self::CLIENT_DOMAIN_KEY, null));
+        }
+
+        return [$isConsole, self::cleanDomain($host)];
     }
 }
