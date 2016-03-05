@@ -351,7 +351,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         try {
             $query->setMaxResults(1);
             $query->setEnableHydrationCache($this->enableResultCache);
-            $query->setCacheable($this->enableResultCache);
             $query = LocaleAwareTrait::addHints($query->getQuery());
 
             return $query->getOneOrNullResult($mode);
