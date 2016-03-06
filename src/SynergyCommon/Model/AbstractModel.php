@@ -344,7 +344,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
      * @return mixed|null
      */
     public function findOneTranslatedBy(
-        array $param, QueryBuilder $queryBuilder = null, $mode = AbstractQuery::HYDRATE_OBJECT
+        array $param,
+        QueryBuilder $queryBuilder = null,
+        $mode = AbstractQuery::HYDRATE_OBJECT
     )
     {
         $query = $this->getFindByQueryBuilder($param, $queryBuilder);

@@ -139,16 +139,16 @@ class SynergyModuleListener implements ListenerAggregateInterface
     public function initSession(MvcEvent $event)
     {
         /** @var $e \Zend\Mvc\MvcEvent */
-        $app = $event->getApplication();
-        $sm  = $app->getServiceManager();
+        $app            = $event->getApplication();
+        $serviceManager = $app->getServiceManager();
 
-        if (php_sapi_name() != 'cli' and $sm->has('session_manager')) {
+        if (php_sapi_name() != 'cli' and $serviceManager->has('session_manager')) {
             /** @var $session \Zend\Session\SessionManager */
-            $session = $sm->get('session_manager');
+            $session = $serviceManager->get('session_manager');
             $session->start();
 
-            if ($sm->has('active\site')) {
-                $site      = $sm->get('active\site');
+            if ($serviceManager->has('active\site')) {
+                $site      = $serviceManager->get('active\site');
                 $namespace = 'sess' . $site->getSessionNamespace();
             } else {
                 $namespace = 'initialised';
@@ -158,8 +158,39 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $container = new Container($namespace, $session);
 
             if (!isset($container->init)) {
+
+                $request = $serviceManager->get('Request');
+
                 $session->regenerateId(true);
-                $container->init = 1;
+                $container->init          = 1;
+                $container->remoteAddr    = $request->getServer()->get('REMOTE_ADDR');
+                $container->httpUserAgent = $request->getServer()->get('HTTP_USER_AGENT');
+
+                $config = $serviceManager->get('Config');
+                if (empty($config['session'])) {
+                    return;
+                }
+
+                $sessionConfig = $config['session'];
+
+                if (isset($sessionConfig['validators'])) {
+                    $chain = $session->getValidatorChain();
+
+                    foreach ($sessionConfig['validators'] as $validator) {
+                        switch ($validator) {
+                            case 'Zend\Session\Validator\HttpUserAgent':
+                                $validator = new $validator($container->httpUserAgent);
+                                break;
+                            case 'Zend\Session\Validator\RemoteAddr':
+                                $validator = new $validator($container->remoteAddr);
+                                break;
+                            default:
+                                $validator = new $validator();
+                        }
+
+                        $chain->attach('session.validate', array($validator, 'isValid'));
+                    }
+                }
             }
         }
     }

@@ -40,7 +40,12 @@ return array(
             'model'   => 'common\model\session',
             'class'   => 'Zend\Session\Config\SessionConfig',
             'options' => array(
-                'name' => 'synergycommon',
+                'name'                => 'synergycommon',
+                'remember_me_seconds' => 1800,
+            ),
+            'validators' => array(
+                'Zend\Session\Validator\RemoteAddr',
+                'Zend\Session\Validator\HttpUserAgent',
             ),
         ),
         'save_handler' => array(

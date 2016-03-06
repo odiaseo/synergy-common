@@ -42,7 +42,8 @@ class Module
             'factories' => array(
                 'common\model\session'          => 'SynergyCommon\Model\SessionModelFactory',
                 'session\doctrine\save\handler' => DoctrineSessionSaveHandlerFactory::class,
-                'synergy\cache\status'          => CacheStatusFactory::class
+                'session\memcache\save\handler' => DoctrineSessionSaveHandlerFactory::class,
+                'synergy\cache\status'          => CacheStatusFactory::class,
             )
         );
     }
