@@ -1075,6 +1075,8 @@ class Util
                     'this shop is currently unavailable',
                     'Welcome to TradeTracker',
                     'product is no longer available via this affiliate link',
+                    'Campaign is not Active',
+                    'Unfortunately we cannot redirect you to the website requested'
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
