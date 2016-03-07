@@ -2,6 +2,9 @@
 namespace SynergyCommon\Doctrine;
 
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
+use SynergyCommon\Model\AbstractModel;
+use SynergyCommon\ModelTrait\LocaleAwareTrait;
+use Zend\Session\Container;
 
 /**
  * Class QueryBuilder
@@ -11,6 +14,8 @@ use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 class QueryBuilder extends DoctrineQueryBuilder implements CacheAwareQueryInterface
 {
 
+    const HINT_LINKED_SITES = 'synergy.linked.sites';
+
     use CacheAwareQueryTrait;
 
     /**
@@ -18,7 +23,12 @@ class QueryBuilder extends DoctrineQueryBuilder implements CacheAwareQueryInterf
      */
     public function getQuery()
     {
-        return $this->setCacheFlag(parent::getQuery());
+        $container = new Container(LocaleAwareTrait::getNamespace());
+        $siteId    = $container->offsetGet(AbstractModel::SESSION_ALLOWED_SITE_KEY);
+        $query     = $this->setCacheFlag(parent::getQuery());
+        $query->setHint(self::HINT_LINKED_SITES, $siteId);
+
+        return $query;
     }
 
     /**

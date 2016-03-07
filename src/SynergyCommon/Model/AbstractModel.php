@@ -25,9 +25,8 @@ use Zend\Session\Container;
 /**
  * Class AbstractModel
  *
- * @method setEnableHydrationCache()
- * @method setEnableResultCache()
- * @method \SynergyCommon\Doctrine\CachedEntityManager | \Doctrine\ORM\EntityManager getEntityManager()
+ * @method setEnableHydrationCache($mode)
+ * @method setEnableResultCache($mode)
  * @package SynergyCommon\Model
  */
 class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface
@@ -54,12 +53,12 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
 
     const DEFAULT_EXPRESSION = self::EQUAL;
 
-    const PER_PAGE            = 15;
-    const INDEX_PER_PAGE      = 50;
-    const DB_DATE_FORMAT      = 'Y-m-d H:i:s';
-    const DB_DATE_ONLY_FORMAT = 'Y-m-d';
-    const SESSION_LOCALE_KEY  = 'active_locale';
-    const SESSION_SITE_KEY    = 'active_site';
+    const PER_PAGE                 = 15;
+    const INDEX_PER_PAGE           = 50;
+    const DB_DATE_FORMAT           = 'Y-m-d H:i:s';
+    const DB_DATE_ONLY_FORMAT      = 'Y-m-d';
+    const SESSION_LOCALE_KEY       = 'active_locale';
+    const SESSION_ALLOWED_SITE_KEY = 'allowed_sites';
 
     const FILTER_SESSION_KEY = 'disableQueryFilter';
 
@@ -145,6 +144,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         return $this->_entity;
     }
 
+    /**
+     * @return \Doctrine\ORM\EntityManager |  \SynergyCommon\Doctrine\CachedEntityManager
+     */
     public function getEntityManager()
     {
         return $this->_entityManager;
