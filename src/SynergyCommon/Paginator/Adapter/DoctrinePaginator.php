@@ -21,7 +21,7 @@ class DoctrinePaginator extends Paginator implements AdapterInterface
      */
     protected $dataStore = array();
 
-    public function __construct($query, $fetchJoinCollection = true, $useOutputWalker = false, $distinct = false)
+    public function __construct($query, $fetchJoinCollection = false, $useOutputWalker = false, $distinct = false)
     {
         if ($query instanceof QueryBuilder) {
             $query->distinct($distinct);
