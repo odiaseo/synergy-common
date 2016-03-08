@@ -6,6 +6,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use SynergyCommon\CacheAwareInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\Doctrine\QueryBuilder;
@@ -29,7 +30,8 @@ use Zend\Session\Container;
  * @method setEnableResultCache($mode)
  * @package SynergyCommon\Model
  */
-class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface
+class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface,
+    CacheAwareInterface
 {
 
     use CacheAwareQueryTrait;
@@ -68,6 +70,26 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
             'title',
             'slug'
         ];
+    protected $cache;
+
+    /**
+     * @return mixed
+     */
+    public function getCache()
+    {
+        if (is_string($this->cache)) {
+            $this->cache = $this->getServiceLocator()->get($this->cache);
+        }
+        return $this->cache;
+    }
+
+    /**
+     * @param string $cache
+     */
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
+    }
 
     /**
      * Mapping human-readable constants to DQL operatores

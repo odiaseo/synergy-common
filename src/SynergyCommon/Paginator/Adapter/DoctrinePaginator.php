@@ -2,8 +2,10 @@
 namespace SynergyCommon\Paginator\Adapter;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use SynergyCommon\Paginator\IdentityProviderInterface;
 use Zend\Paginator\Adapter\AdapterInterface;
 
 /**
@@ -11,7 +13,7 @@ use Zend\Paginator\Adapter\AdapterInterface;
  *
  * @package SynergyCommon\Paginator\Adapter
  */
-class DoctrinePaginator extends Paginator implements AdapterInterface
+class DoctrinePaginator extends Paginator implements AdapterInterface, IdentityProviderInterface
 {
     /**
      * @param Query|QueryBuilder $query
@@ -19,7 +21,6 @@ class DoctrinePaginator extends Paginator implements AdapterInterface
      * @param bool $useOutputWalker
      * @param bool $distinct
      */
-    protected $dataStore = array();
 
     public function __construct($query, $fetchJoinCollection = false, $useOutputWalker = false, $distinct = false)
     {
@@ -32,12 +33,33 @@ class DoctrinePaginator extends Paginator implements AdapterInterface
 
     public function getItems($offset, $itemCountPerPage)
     {
-        if (!isset($this->dataStore[$offset])) {
-            $this->getQuery()->setFirstResult($offset);
-            $this->getQuery()->setMaxResults($itemCountPerPage);
-            $this->dataStore[$offset] = $this->getIterator();
-        }
+        $this->getQuery()->setFirstResult($offset);
+        $this->getQuery()->setMaxResults($itemCountPerPage);
+        return $this->getIterator();
+    }
 
-        return $this->dataStore[$offset];
+    /**
+     * Generates a string of currently query to use for the cache second level cache.
+     *
+     * @return string
+     */
+    public function getUniqueIdentifier()
+    {
+        $query  = $this->getQuery();
+        $sql    = $query->getSQL();
+        $hints  = $query->getHints();
+        $params = array_map(function (Parameter $parameter) use ($query) {
+            // Small optimization
+            // Does not invoke processParameterValue for scalar values
+            if (is_scalar($value = $parameter->getValue())) {
+                return $value;
+            }
+
+            return $query->processParameterValue($value);
+        }, $query->parameters->getValues());
+
+        ksort($hints);
+
+        return sha1($sql . '-' . serialize($params) . '-' . serialize($hints));
     }
 }
