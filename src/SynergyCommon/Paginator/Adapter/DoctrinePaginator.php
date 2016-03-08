@@ -56,7 +56,7 @@ class DoctrinePaginator extends Paginator implements AdapterInterface, IdentityP
             }
 
             return $query->processParameterValue($value);
-        }, $query->parameters->getValues());
+        }, $query->getParameters()->getValues());
 
         ksort($hints);
 
