@@ -222,8 +222,8 @@ trait NestedSetRepositoryTrait
             $builder->select('node.title, node.slug, node.level, node.parameters, node.routeName');
 
             $pathQuery = $builder->getQuery();
-            $pathQuery = $this->setCacheFlag($pathQuery);
             $this->setEnableHydrationCache($this->enableResultCache);
+            $pathQuery = $this->setCacheFlag($pathQuery);
 
             if ($this->isTranslatable($this)) {
                 LocaleAwareTrait::addHints($query);

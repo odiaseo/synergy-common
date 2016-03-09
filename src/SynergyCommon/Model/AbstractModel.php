@@ -561,12 +561,10 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
 
     /**
      * Returns a subset of fields based on the criteria
-     *
-     * @param       $idField
-     * @param       $idValue
+     * @param $idField
+     * @param $idValue
      * @param array $returnFields
-     *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     public function getFieldsByQueryBuilder($idField, $idValue, array $returnFields)
     {
@@ -576,14 +574,14 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
             $select[] = $alias . '.' . $f;
         }
 
-        $query = $this->_entityManager
-            ->createQueryBuilder()
-            ->select(implode(',', $select))
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder->select(implode(',', $select))
             ->from($this->_entity, $alias)
             ->where("e.$idField = :val")
             ->setParameter(":val", $idValue);
 
-        return $query;
+        return $builder;
     }
 
     /**
