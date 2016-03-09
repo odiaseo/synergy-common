@@ -2,6 +2,9 @@
 namespace SynergyCommon\Model;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Repository\DefaultRepositoryFactory;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use Zend\Navigation\Navigation;
@@ -24,21 +27,20 @@ trait NestedSetRepositoryTrait
      */
     public function getTreeStructure($rootLevel = 1)
     {
-        $entityManager = $this->getEntityManager();
+        /** @var NestedTreeRepository  | self | AbstractModel $this */
         $meta          = $this->getClassMetadata();
         $config        = $this->listener->getConfiguration($this->_em, $meta->name);
+        $entityManager = $this->getEntityManager();
+        $builder       = $entityManager->createQueryBuilder();
 
-        $query = $entityManager
-            ->createQueryBuilder()
-            ->select('e')
+        $builder->select('e')
             ->from($config['useObjectClass'], 'e')
             ->where('e.level > :level')
             ->setParameter(':level', $rootLevel - 1)
-            ->orderBy('e.root, e.lft', 'ASC')
-            ->getQuery();
+            ->orderBy('e.root, e.lft', 'ASC');
 
-        $query = $this->setCacheFlag($query);
-        $this->setEnableHydrationCache($this->enableResultCache);
+        $builder->setEnableHydrationCache($this->enableResultCache);
+        $query = $builder->getQuery();
 
         if ($this->isTranslatable($this)) {
             $query = LocaleAwareTrait::addHints($query);
@@ -47,13 +49,17 @@ trait NestedSetRepositoryTrait
         return $query->getArrayResult();
     }
 
+    /**
+     * @return mixed
+     */
     public function getRootMenu()
     {
+        /** @var EntityRepository  | self | AbstractModel $this */
+        /** @var $query \Doctrine\ORM\Query */
+        /** @var NestedTreeRepository  | self | AbstractModel $this */
         $meta   = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->_em, $meta->name);
-
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        /** @var $query \Doctrine\ORM\Query */
+        $qb     = $this->getEntityManager()->createQueryBuilder();
 
         $query = $qb->select('e')
             ->from($config['useObjectClass'], 'e')
@@ -71,13 +77,17 @@ trait NestedSetRepositoryTrait
         return $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
     }
 
+    /**
+     * @param $pageId
+     * @return mixed
+     */
     public function getRootMenuById($pageId)
     {
+        /** @var $query \Doctrine\ORM\Query */
+        /** @var NestedTreeRepository  | self | AbstractModel $this */
         $meta   = $this->getClassMetadata();
         $config = $this->listener->getConfiguration($this->_em, $meta->name);
-
-        $qb = $this->_em->createQueryBuilder();
-        /** @var $query \Doctrine\ORM\Query */
+        $qb     = $this->_em->createQueryBuilder();
 
         $query = $qb->select('e')
             ->from($config['useObjectClass'], 'e')
@@ -95,6 +105,11 @@ trait NestedSetRepositoryTrait
         return $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
     }
 
+    /**
+     * @param $arrs
+     * @param string $depth_key
+     * @return array
+     */
     public function nestify($arrs, $depth_key = 'level')
     {
         $nested = array();
@@ -118,6 +133,11 @@ trait NestedSetRepositoryTrait
         return $nested;
     }
 
+    /**
+     * @param $menus
+     * @param $routeMatch
+     * @return Navigation
+     */
     public function getNavigationContainer($menus, $routeMatch)
     {
         $nestedMenus = $this->toHierarchy($menus, $routeMatch);
@@ -125,6 +145,12 @@ trait NestedSetRepositoryTrait
         return new Navigation($nestedMenus);
     }
 
+    /**
+     * @param $collection
+     * @param string $childKey
+     * @param null $callback
+     * @return array
+     */
     public function toHierarchy($collection, $childKey = 'pages', $callback = null)
     {
         // Trees mapped
@@ -174,14 +200,13 @@ trait NestedSetRepositoryTrait
      */
     public function getBreadcrumbPath($slug)
     {
-        ///** @var $this self |  \PageBuilder\Model\PageRepository */
-        $meta   = $this->getClassMetadata();
-        $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
+        /** @var NestedTreeRepository  | self | AbstractModel $this */
         $path   = array();
+        $meta   = $this->getClassMetadata();
+        $config = $this->listener->getConfiguration($this->_em, $meta->name);
+        $qb     = $this->getEntityManager()->createQueryBuilder();
 
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $query
-            = $qb->select('e')
+        $query = $qb->select('e')
             ->from($config['useObjectClass'], 'e')
             ->where('e.slug = :slug')
             ->setParameter(':slug', $slug)
@@ -201,7 +226,7 @@ trait NestedSetRepositoryTrait
             $this->setEnableHydrationCache($this->enableResultCache);
 
             if ($this->isTranslatable($this)) {
-                $this->addHints($pathQuery);
+                LocaleAwareTrait::addHints($query);
             }
             $path = $pathQuery->getArrayResult();
         }
@@ -209,6 +234,10 @@ trait NestedSetRepositoryTrait
         return $path;
     }
 
+    /**
+     * @param $class
+     * @return bool
+     */
     protected function isTranslatable($class)
     {
         $reflection = new \ReflectionClass($class);

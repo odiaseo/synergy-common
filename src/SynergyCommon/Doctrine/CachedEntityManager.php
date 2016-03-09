@@ -8,7 +8,6 @@ use SynergyCommon\Util;
 
 /**
  * Class CachedEntityManager
- *
  * @package Application\Doctrine
  */
 class CachedEntityManager implements CacheAwareQueryInterface
@@ -32,7 +31,7 @@ class CachedEntityManager implements CacheAwareQueryInterface
     /**
      * Create a QueryBuilder instance
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function createQueryBuilder()
     {

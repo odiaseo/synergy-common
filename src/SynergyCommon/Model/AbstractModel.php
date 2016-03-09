@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use SynergyCommon\CacheAwareInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
+use SynergyCommon\Doctrine\ModelCacheAwareTrait;
 use SynergyCommon\Doctrine\QueryBuilder;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
@@ -26,16 +27,12 @@ use Zend\Session\Container;
 /**
  * Class AbstractModel
  *
- * @method setEnableHydrationCache($mode)
- * @method setEnableResultCache($mode)
  * @package SynergyCommon\Model
  */
-class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, ServiceLocatorAwareInterface,
-    CacheAwareInterface
+class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface, CacheAwareInterface
 {
-
-    use CacheAwareQueryTrait;
     use ServiceLocatorAwareTrait;
+    use ModelCacheAwareTrait;
 
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';
@@ -215,7 +212,9 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
         $select = implode(',', $select);
         $entity = $this->getEntity();
         $qb     = $this->getEntityManager()->createQueryBuilder();
-        $query  = $qb->select($select)
+        $qb->setEnableHydrationCache($this->enableResultCache);
+
+        $query = $qb->select($select)
             ->setParameter(':id', $idList)
             ->from($entity, 'e');
 
@@ -238,10 +237,10 @@ class AbstractModel implements NestedsetInterface, CacheAwareQueryInterface, Ser
             $query->orderBy('e.' . key($order), current($order));
         }
 
-        $query->setEnableHydrationCache($this->enableResultCache);
         $query = $query->getQuery();
+
         if ($addCategory) {
-            $query = $this->addHints($query);
+            $query = LocaleAwareTrait::addHints($query);
         }
 
         if (is_array($idList)) {

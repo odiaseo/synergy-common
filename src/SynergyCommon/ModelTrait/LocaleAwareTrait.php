@@ -6,14 +6,15 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\Model\AbstractModel;
+use SynergyCommon\Model\NestedSetRepositoryTrait;
 use SynergyCommon\Util;
 use Zend\Session\Container;
 
 /**
  * Class LocateAwareTrait
  * @method getEntity()
- * @method \Doctrine\ORM\EntityManager getEntityManager()
- * @method NestedSetRepository getRepository()
+ * @method \SynergyCommon\Doctrine\CachedEntityManager getEntityManager()
+ * @method NestedSetRepositoryTrait getRepository()
 
  */
 trait LocaleAwareTrait
