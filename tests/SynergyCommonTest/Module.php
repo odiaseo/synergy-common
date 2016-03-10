@@ -19,10 +19,10 @@ use Zend\Mvc\MvcEvent;
  */
 class Module
 {
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $event)
     {
         /** @var $eventManager \Zend\EventManager\EventManager */
-        $eventManager        = $e->getApplication()->getEventManager();
+        $eventManager        = $event->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
@@ -31,7 +31,7 @@ class Module
 
     public function getConfig()
     {
-        return include __DIR__ . '/../test.config.php';
+        return include __DIR__ . '/config/test.config.php';
     }
 
     public function getAutoloaderConfig()
