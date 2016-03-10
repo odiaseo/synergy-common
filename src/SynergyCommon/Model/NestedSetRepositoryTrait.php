@@ -39,7 +39,6 @@ trait NestedSetRepositoryTrait
             ->setParameter(':level', $rootLevel - 1)
             ->orderBy('e.root, e.lft', 'ASC');
 
-        $builder->setEnableHydrationCache($this->enableResultCache);
         $query = $builder->getQuery();
 
         if ($this->isTranslatable($this)) {

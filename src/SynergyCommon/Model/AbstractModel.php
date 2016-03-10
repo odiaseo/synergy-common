@@ -375,13 +375,15 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
         $query = $this->getFindByQueryBuilder($param, $queryBuilder);
         try {
             $query->setMaxResults(1);
-            $query->setEnableHydrationCache($this->enableResultCache);
+            if ($mode == AbstractQuery::HYDRATE_ARRAY) {
+                $query->setEnableHydrationCache($this->enableResultCache);
+            }
             $query = LocaleAwareTrait::addHints($query->getQuery());
 
             return $query->getOneOrNullResult($mode);
         } catch (\Exception $exception) {
             $this->getLogger()->err($query->getDQL());
-            $this->getLogger()->err($exception->getMessage());
+            $this->getLogger()->logException($exception);
 
             return null;
         }

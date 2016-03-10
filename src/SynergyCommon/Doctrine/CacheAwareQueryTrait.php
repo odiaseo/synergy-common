@@ -53,8 +53,11 @@ trait CacheAwareQueryTrait
      */
     protected function enableHydrationCacheFlag(AbstractQuery $query)
     {
-        if ($this->enableHydrationCache and $query->getQueryCacheProfile()) {
-            $query->setHydrationCacheProfile($query->getQueryCacheProfile());
+        if ($this->enableHydrationCache) {
+            $driver           = $query->getEntityManager()->getConfiguration()->getHydrationCacheImpl();
+            $hydrationProfile = new QueryCacheProfile($this->cacheLifetime, null, $driver);
+
+            $query->setHydrationCacheProfile($hydrationProfile);
             $this->enableHydrationCache = false;
         }
 

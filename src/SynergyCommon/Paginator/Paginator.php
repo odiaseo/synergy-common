@@ -19,7 +19,6 @@ class Paginator extends ZendPaginator
      *
      * @return string
      */
-    /*
     protected function _getCacheInternalId()
     {
         $adapter   = $this->getAdapter();
@@ -34,5 +33,4 @@ class Paginator extends ZendPaginator
 
         return md5(serialize([$adapterId, $this->getItemCountPerPage()]));
     }
-    */
 }
