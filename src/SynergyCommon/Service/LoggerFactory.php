@@ -1,8 +1,9 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
 use SynergyCommon\Util\ErrorHandler;
-use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -37,15 +38,9 @@ class LoggerFactory implements FactoryInterface
         $filename = rtrim($directory, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'app.log';
         $handler  = new ErrorHandler();
 
-        if (class_exists('Monolog\Logger')) {
-            $stream = new  \Monolog\Handler\RotatingFileHandler($filename, 5, $priority, true, 0777);
-            $logger = new \Monolog\Logger($namespace, array($stream));
-        } else {
-            $logger   = new Logger();
-            $resource = fopen($filename, 'w');
-            $writer   = new Stream($resource);
-            $logger->addWriter($writer, $priority);
-        }
+        $stream = new  RotatingFileHandler($filename, 5, $priority, true, 0777);
+        $logger = new Logger($namespace, array($stream));
+
         $handler->setServiceLocator($serviceLocator);
         $handler->setLogger($logger);
 
