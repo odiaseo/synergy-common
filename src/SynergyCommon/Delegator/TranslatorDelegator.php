@@ -23,8 +23,9 @@ class TranslatorDelegator implements DelegatorFactoryInterface
     {
         /** @var Translator $translator */
         $translator = $callback();
-        $locale     = $translator->getLocale();
-        $language   = \Locale::parseLocale($locale)['language'];
+
+        $locale   = $translator->getLocale();
+        $language = \Locale::parseLocale($locale)['language'];
 
         $translator->addTranslationFilePattern(
             'phpArray',
@@ -36,7 +37,6 @@ class TranslatorDelegator implements DelegatorFactoryInterface
             Resources::getBasePath(),
             sprintf(Resources::getPatternForCaptcha(), $language)
         );
-
         return $translator;
     }
 }
