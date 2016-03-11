@@ -12,7 +12,15 @@ trait CurlRequestTrait
 {
     use ConsolePrinterTrait;
 
-    public function curlRequest($url, $postData = '', array $header = null, $contentType = '')
+    /**
+     * @param $url
+     * @param string $postData
+     * @param array $header
+     * @param string $contentType
+     * @param int $timeout
+     * @return mixed
+     */
+    public function curlRequest($url, $postData = '', array $header = null, $contentType = '', $timeout = 60)
     {
         $this->printMessage(' >> Processing curl request ... ', 1, false);
 
@@ -28,6 +36,8 @@ trait CurlRequestTrait
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curlHandle, CURLOPT_SAFE_UPLOAD, true);
+        curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 5);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
 
         if ($postData) {
@@ -35,7 +45,7 @@ trait CurlRequestTrait
             curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $postData);
         }
 
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 60);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, $timeout);
 
         $curlResponse = curl_exec($curlHandle);
         $curlErrno    = curl_errno($curlHandle);
