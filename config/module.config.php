@@ -37,11 +37,11 @@ return array(
     ),
     'session'         => array(
         'config'       => array(
-            'model'   => 'common\model\session',
-            'class'   => 'Zend\Session\Config\SessionConfig',
-            'options' => array(
+            'model'      => 'common\model\session',
+            'class'      => 'Zend\Session\Config\SessionConfig',
+            'options'    => array(
                 'name'                => 'synergycommon',
-                'remember_me_seconds' => 1800,
+                'remember_me_seconds' => 14400,
             ),
             'validators' => array(
                 'Zend\Session\Validator\RemoteAddr',
