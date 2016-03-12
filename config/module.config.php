@@ -1,11 +1,5 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonAffiliateManager for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+use SynergyCommon\Service\ApiServiceFactory;
 
 return array(
     'service_manager' => array(
@@ -21,6 +15,7 @@ return array(
         ),
         'factories'          => array(
             'logger'                              => 'SynergyCommon\Service\LoggerFactory',
+            'common\api\service'                  => ApiServiceFactory::class,
             'doctrine.cache.synergy_memcache'     => 'SynergyCommon\Service\DoctrineMemcacheFactory',
             'doctrine.cache.synergy_apc'          => 'SynergyCommon\Service\DoctrineApcCacheFactory',
             'doctrine.cache.cache\factory'        => 'SynergyCommon\Service\DoctrineCacheFactory',

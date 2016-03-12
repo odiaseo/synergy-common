@@ -28,7 +28,7 @@ class ActiveClientSiteFactory implements FactoryInterface
         }
         $host = str_replace(array('http://', 'https://', 'www.'), '', $host);
 
-        if (!$site = $serviceLocator->get('synergycommon\service\api')->getSiteDetails($host)) {
+        if (!$site = $serviceLocator->get('common\api\service')->getSiteDetails($host)) {
             throw new \InvalidArgumentException("Site {$host} is not registered");
         }
 

@@ -421,8 +421,8 @@ class BaseService extends AbstractService
      */
     public function getApiService()
     {
-        if ($this->getServiceManager()->has('synergycommon\service\api')) {
-            return $this->getServiceManager()->get('synergycommon\service\api');
+        if ($this->getServiceManager()->has('common\api\service')) {
+            return $this->getServiceManager()->get('common\api\service');
         }
 
         return null;

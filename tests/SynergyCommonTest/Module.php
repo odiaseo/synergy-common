@@ -53,7 +53,6 @@ class Module
             ),
             'factories' => array(
                 'Zend\Session\SessionManager' => 'SynergyCommon\Session\SessionManager',
-                'synergycommon\service\api'   => 'SynergyCommon\Service\ApiServiceFactory',
                 'logger'                      => 'SynergyCommon\Service\LoggerFactory',
                 'active\site'                 => 'SynergyCommon\Service\ActiveClientSiteFactory',
             ),

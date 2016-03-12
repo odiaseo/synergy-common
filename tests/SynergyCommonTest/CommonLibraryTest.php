@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommonTest\Lib;
 
+use SynergyCommon\Service\BaseApiService;
 use SynergyCommonTest\Bootstrap;
 
 /**
@@ -43,8 +44,8 @@ class CommonLibraryTest extends \PHPUnit_Framework_TestCase
 
     public function testApiService()
     {
-        $service = $this->serviceManager->get('synergycommon\service\api');
-        $this->assertInstanceOf('SynergyCommon\Service\BaseApiService', $service);
+        $service = $this->serviceManager->get('common\api\service');
+        $this->assertInstanceOf(BaseApiService::class, $service);
     }
 
     public function testFlashMessaager()
