@@ -191,9 +191,11 @@ class Util
             //$data = \preg_replace('#[\r\n]+#', $replacement, $text);
             $data = \preg_replace('/[\p{C}\p{Z}]+/iu', $replacement, $text);
             $data = \preg_replace('#\s+#', $replacement, $data);
+            $data = str_replace(['<br>', '<br />'], '', $data);
 
-            return trim($data, '<br> ');
+            return trim($data);
         }
+
         return '';
     }
 
