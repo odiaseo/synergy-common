@@ -10,6 +10,8 @@ use SynergyCommon\Entity\BasePage;
 use SynergyCommon\Entity\BaseRole;
 use SynergyCommon\Entity\BaseSite;
 use SynergyCommon\Entity\BaseUser;
+use SynergyCommon\Member\Entity\Session;
+use SynergyCommon\Member\Entity\UserGroup;
 use SynergyCommonTest\Bootstrap;
 use Zend\Filter\StringTrim;
 use Zend\InputFilter\InputFilter;
@@ -32,6 +34,8 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
             BaseUser::class,
             BaseLicence::class,
             BaseSite::class,
+            Session::class,
+            UserGroup::class
         ];
 
         $this->serviceManager = Bootstrap::getServicemanager();
@@ -108,6 +112,8 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
                     if (method_exists($entity, 'ensureNoLineBreaks')) {
                         $entity->ensureNoLineBreaks();
                     }
+
+                    $this->assertTrue(method_exists($entity, 'getId'));
                 }
             }
         }

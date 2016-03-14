@@ -177,5 +177,5 @@ abstract class AbstractEntity
         return trim($value);
     }
 
-    abstract public function getSessionId();
+    abstract public function getId();
 }

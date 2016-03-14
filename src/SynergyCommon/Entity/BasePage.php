@@ -169,7 +169,7 @@ class BasePage extends BaseEntity
         $this->id = $id;
     }
 
-    public function getSessionId()
+    public function getId()
     {
         return $this->id;
     }

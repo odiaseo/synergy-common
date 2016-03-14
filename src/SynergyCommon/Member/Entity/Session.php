@@ -106,4 +106,9 @@ class Session extends AbstractEntity
     {
         return $this->name;
     }
+
+    public function getId()
+    {
+        return $this->getName() . ':' . $this->getSessionId();
+    }
 }

@@ -1217,7 +1217,7 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
             }
 
             if ($value instanceof AbstractEntity) {
-                $value = $value->getSessionId();
+                $value = $value->getId();
             } elseif ($value instanceof \DateTime) {
                 $value = $value->format(self::DB_DATE_FORMAT);
             } elseif (is_bool($value)) {

@@ -120,7 +120,7 @@ class BaseService extends AbstractService
 
                 $return            = $this->fetchOne($id, $data);
                 $return['message'] = sprintf(
-                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $offer->getSessionId()
+                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $offer->getId()
                 );
             } else {
                 throw new InvalidArgumentException(
@@ -165,7 +165,7 @@ class BaseService extends AbstractService
             if ($items instanceof PersistentCollection) {
                 /** @var \SynergyCommon\Entity\BaseEntity $row */
                 foreach ($items as $row) {
-                    $rows[$subEntity][] = $row->getSessionId();
+                    $rows[$subEntity][] = $row->getId();
                 }
             } else {
                 throw new InvalidArgumentException(
@@ -260,7 +260,7 @@ class BaseService extends AbstractService
                     'error'   => false,
                     'message' => sprintf(
                         '%s #%d successfully created', ucfirst($this->getEntityKey()),
-                        $offer->getSessionId()
+                        $offer->getId()
                     ),
                     'content' => $this->_formatResult($offer, $model->getOptions()->getFields(), $this->getEntityKey())
                 );
