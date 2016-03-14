@@ -124,10 +124,14 @@ abstract class BaseEntity extends AbstractEntity
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function removeLineBreaks()
+    public function ensureNoLineBreaks()
     {
-        if (!empty($this->description)) {
+        if (isset($this->description)) {
             $this->description = Util::removeLineBreaks($this->description);
+        }
+
+        if (isset($this->title)) {
+            $this->title = Util::removeLineBreaks($this->title);
         }
     }
 }

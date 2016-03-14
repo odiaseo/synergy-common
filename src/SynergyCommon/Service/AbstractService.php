@@ -96,7 +96,8 @@ abstract class AbstractService implements ServiceManagerAwareInterface
     public function getModel($key, $options = array(), $additionalOptions = array())
     {
         /** @var $model \SynergyCommon\Model\AbstractModel */
-        $model = $this->getServiceManager()->get('am\model\\' . $key);
+        $config = $this->getServiceManager()->get('config');
+        $model  = $this->getServiceManager()->get($config['synergy']['model_factory_prefix'] . $key);
         $model->setOptions(
             new ModelOptions(
                 array(

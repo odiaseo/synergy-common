@@ -26,7 +26,12 @@ class Module
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        $eventManager->attach(new SynergyModuleListener());
+        /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
+        $serviceLocator  = $event->getApplication()->getServiceManager();
+        $synergyListener = new SynergyModuleListener();
+        $eventManager->attach($synergyListener);
+        $synergyListener->initSession($event);
+        $synergyListener->bootstrap($eventManager, $serviceLocator);
     }
 
     public function getConfig()

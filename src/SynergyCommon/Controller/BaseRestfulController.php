@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 
 /**
  * Class BaseRestfulController
+ * @method sendPayload()
  * @package SynergyCommon\Controller
  */
 class BaseRestfulController extends AbstractRestfulController
@@ -40,22 +41,17 @@ class BaseRestfulController extends AbstractRestfulController
      * Example
      * curl -X GET -H "Accept: application/json"
      *
-     * @param mixed $id
+     * @param mixed $entityId
      * @method GET
      *
      * @endpoint /affiliate/:entity/:id
      * @return mixed|\Zend\View\Model\ModelInterface
      */
-    public function get($id)
+    public function get($entityId)
     {
-        $params = array_merge(
-            $this->params()->fromQuery(),
-            $this->params()->fromRoute()
-        );
+        $params = array_merge($this->params()->fromQuery(), $this->params()->fromRoute());
 
-        return $this->_sendPayload(
-            $this->_getService()->fetchOne($id, $params)
-        );
+        return $this->sendPayload($this->_getService()->fetchOne($entityId, $params));
     }
 
     /**
@@ -69,14 +65,9 @@ class BaseRestfulController extends AbstractRestfulController
      */
     public function getList()
     {
-        $params = array_merge(
-            $this->params()->fromQuery(),
-            $this->params()->fromRoute()
-        );
+        $params = array_merge($this->params()->fromQuery(), $this->params()->fromRoute());
 
-        return $this->_sendPayload(
-            $this->_getService()->fetchAll($params)
-        );
+        return $this->sendPayload($this->_getService()->fetchAll($params));
     }
 
     /**
@@ -94,14 +85,9 @@ class BaseRestfulController extends AbstractRestfulController
      */
     public function create($data)
     {
-        $params = array_merge(
-            $data,
-            $this->params()->fromRoute()
-        );
+        $params = array_merge($data, $this->params()->fromRoute());
 
-        return $this->_sendPayload(
-            $this->_getService()->create($params)
-        );
+        return $this->sendPayload($this->_getService()->create($params));
     }
 
     /**
@@ -111,39 +97,32 @@ class BaseRestfulController extends AbstractRestfulController
      * curl -X PUT -d "title=explorer&category=1"  -d "merchant_fields=id,category&category_fields=id,title"
      * -H "Accept: application/json" affiliate-manager.com/affiliate/merchant/5
      *
-     * @param mixed $id
+     * @param mixed $entityId
      * @param mixed $data
      * @method PUT
      *
      * @endpoint /affiliate/:entity/:id
      * @return mixed|\Zend\View\Model\ModelInterface
      */
-    public function update($id, $data)
+    public function update($entityId, $data)
     {
-        $params = array_merge(
-            $data,
-            $this->params()->fromRoute()
-        );
+        $params = array_merge($data, $this->params()->fromRoute());
 
-        return $this->_sendPayload(
-            $this->_getService()->update($id, $params)
-        );
+        return $this->sendPayload($this->_getService()->update($entityId, $params));
     }
 
     /**
      * Delete an entity by ID
      *
-     * @param mixed $id
+     * @param mixed $entityId
      *
      * @method DELETE
      * @endpoint /affiliate/:entity/:id
      * @return mixed|\Zend\View\Model\ModelInterface
      */
-    public function delete($id)
+    public function delete($entityId)
     {
-        return $this->_sendPayload(
-            $this->_getService()->delete($id)
-        );
+        return $this->sendPayload($this->_getService()->delete($entityId));
     }
 
     /**
@@ -155,25 +134,7 @@ class BaseRestfulController extends AbstractRestfulController
      */
     protected function _sendPayload($payload)
     {
-        /** @var $response \Zend\Http\PhpEnvironment\Response */
-        $response  = $this->getResponse();
-        $viewModel = $this->acceptableViewModelSelector($this->_acceptCriteria);
-
-        if (isset($payload['error']) and $payload['error'] == true) {
-            if (!empty($payload['code'])) {
-                $response->setStatusCode($payload['code']);
-            } else {
-                $response->setStatusCode(Response::STATUS_CODE_400);
-            }
-        }
-
-        if (isset($payload['content'])) {
-            $viewModel->setVariables($payload['content']);
-        } elseif (!empty($payload)) {
-            $viewModel->setVariables($payload);
-        }
-
-        return $viewModel;
+        return $this->sendPayload($payload);
     }
 
     /**
@@ -186,5 +147,13 @@ class BaseRestfulController extends AbstractRestfulController
         $serviceKey = $serviceKey ?: $this->_serviceKey;
 
         return $this->getServiceLocator()->get($serviceKey);
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }

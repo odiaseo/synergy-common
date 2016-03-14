@@ -95,7 +95,7 @@ class DoctrineSaveHandler implements SaveHandlerInterface
         $row  = $this->model->getSessionRecord($sessionId, $this->sessionName);
 
         if ($row) {
-            if (($row->getModified() + $row->getLifetime()) > time()) {
+            if (($row->getExpireBy()) > time()) {
                 $data = $row->getData();
             } else {
                 $this->destroy($sessionId);
@@ -127,9 +127,10 @@ class DoctrineSaveHandler implements SaveHandlerInterface
             $class = $this->model->getEntity();
             $row   = new $class();
 
-            $data['lifetime'] = $this->lifetime;
-            $data['id']       = $sessionId;
-            $data['name']     = $this->sessionName;
+            $data['lifetime']  = $this->lifetime;
+            $data['sessionId'] = $sessionId;
+            $data['name']      = $this->sessionName;
+            $data['expireBy']  = time() + $this->lifetime;
         }
 
         $row->exchangeArray($data);
@@ -158,7 +159,7 @@ class DoctrineSaveHandler implements SaveHandlerInterface
      */
     public function gc($maxlifetime)
     {
-        return $this->model->collectGabage() ? true : false;
+        return $this->model->collectGabbage() ? true : false;
     }
 
     /**

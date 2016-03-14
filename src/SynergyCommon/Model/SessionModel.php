@@ -11,15 +11,13 @@ class SessionModel extends AbstractModel
     /**
      * @return mixed
      */
-    public function collectGabage()
+    public function collectGabbage()
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $alias        = $this->getAlias();
-        $where        = sprintf('SUM(%s.modified, %s.lifetime) < %d', $alias, $alias, time());
-
-        $query = $queryBuilder->delete()
+        $query        = $queryBuilder->delete()
             ->from($this->getEntity(), $alias)
-            ->where($where);
+            ->where($queryBuilder->expr()->lt($alias . '.expireBy', time()));
 
         return $query->getQuery()->execute();
     }
@@ -35,7 +33,7 @@ class SessionModel extends AbstractModel
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $query        = $queryBuilder->select('e')
             ->from($this->getEntity(), 'e')
-            ->where('e.id = :id')
+            ->where('e.sessionId = :id')
             ->andWhere('e.name = :name')
             ->setParameters(
                 array(
@@ -61,7 +59,7 @@ class SessionModel extends AbstractModel
             $queryBuilder = $this->getEntityManager()->createQueryBuilder();
             $query        = $queryBuilder->delete()
                 ->from($this->getEntity(), 'e')
-                ->where('e.id = :id')
+                ->where('e.sessionId = :id')
                 ->andWhere('e.name = :name')
                 ->setParameter(':name', $sessionName)
                 ->setParameter(':id', $sessionId);

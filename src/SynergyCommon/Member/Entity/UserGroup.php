@@ -43,7 +43,7 @@ class UserGroup extends AbstractEntity
         $this->id = $id;
     }
 
-    public function getId()
+    public function getSessionId()
     {
         return $this->id;
     }

@@ -46,7 +46,7 @@ class BaseLicence extends AbstractEntity
         $this->id = $id;
     }
 
-    public function getId()
+    public function getSessionId()
     {
         return $this->id;
     }

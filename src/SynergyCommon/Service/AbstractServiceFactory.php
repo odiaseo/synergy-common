@@ -4,8 +4,11 @@ namespace SynergyCommon\Service;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AbstractServiceFactory
-    implements AbstractFactoryInterface
+/**
+ * Class AbstractServiceFactory
+ * @package SynergyCommon\Service
+ */
+class AbstractServiceFactory implements AbstractFactoryInterface
 {
 
     protected $_configPrefix;

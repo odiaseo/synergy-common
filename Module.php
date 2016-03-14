@@ -2,6 +2,7 @@
 
 namespace SynergyCommon;
 
+use SynergyCommon\Controller\Plugin\SendPayload;
 use SynergyCommon\Service\Factory\CacheStatusFactory;
 use SynergyCommon\Service\Factory\DoctrineSessionSaveHandlerFactory;
 
@@ -46,6 +47,15 @@ class Module
                 'synergy\cache\status'          => CacheStatusFactory::class,
             )
         );
+    }
+
+    public function getControllerPluginConfig()
+    {
+        return [
+            'invokables' => [
+                'sendPayload' => SendPayload::class,
+            ]
+        ];
     }
 
     public function getViewHelperConfig()

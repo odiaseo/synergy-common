@@ -16,9 +16,9 @@ class Session extends AbstractEntity
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=40);
+     * @ORM\Column(type="string", length=40, name="session_id");
      */
-    protected $id;
+    protected $sessionId;
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=25)
@@ -36,6 +36,26 @@ class Session extends AbstractEntity
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $lifetime;
+    /**
+     * @ORM\Column(type="integer", nullable=true, name="expire_by")
+     */
+    protected $expireBy;
+
+    /**
+     * @return mixed
+     */
+    public function getExpireBy()
+    {
+        return $this->expireBy;
+    }
+
+    /**
+     * @param mixed $expireBy
+     */
+    public function setExpireBy($expireBy)
+    {
+        $this->expireBy = $expireBy;
+    }
 
     public function setData($data)
     {
@@ -47,14 +67,14 @@ class Session extends AbstractEntity
         return $this->data;
     }
 
-    public function setId($id)
+    public function setSessionId($sessionId)
     {
-        $this->id = $id;
+        $this->sessionId = $sessionId;
     }
 
-    public function getId()
+    public function getSessionId()
     {
-        return $this->id;
+        return $this->sessionId;
     }
 
     public function setLifetime($lifetime)

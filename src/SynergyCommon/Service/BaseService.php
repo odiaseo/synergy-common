@@ -120,7 +120,7 @@ class BaseService extends AbstractService
 
                 $return            = $this->fetchOne($id, $data);
                 $return['message'] = sprintf(
-                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $offer->getId()
+                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $offer->getSessionId()
                 );
             } else {
                 throw new InvalidArgumentException(
@@ -165,7 +165,7 @@ class BaseService extends AbstractService
             if ($items instanceof PersistentCollection) {
                 /** @var \SynergyCommon\Entity\BaseEntity $row */
                 foreach ($items as $row) {
-                    $rows[$subEntity][] = $row->getId();
+                    $rows[$subEntity][] = $row->getSessionId();
                 }
             } else {
                 throw new InvalidArgumentException(
@@ -247,23 +247,33 @@ class BaseService extends AbstractService
     public function create($data)
     {
         try {
+            /** @var $offer \SynergyCommon\Entity\AbstractEntity */
             $model       = $this->getModel($this->getEntityKey());
             $entityClass = $model->getEntity();
-
-            /** @var $offer \SynergyCommon\Entity\AbstractEntity */
-            $offer = new $entityClass();
-            $offer = $model->populateEntity($offer, $data);
+            $offer       = new $entityClass();
+            $offer       = $model->populateEntity($offer, $data);
 
             $offer = $model->save($offer);
 
-            $return = array(
-                'error'   => false,
-                'message' => sprintf(
-                    '%s #%d successfully created', ucfirst($this->getEntityKey()),
-                    $offer->getId()
-                ),
-                'content' => $this->_formatResult($offer, $model->getOptions()->getFields(), $this->getEntityKey())
-            );
+            if ($offer) {
+                $return = array(
+                    'error'   => false,
+                    'message' => sprintf(
+                        '%s #%d successfully created', ucfirst($this->getEntityKey()),
+                        $offer->getSessionId()
+                    ),
+                    'content' => $this->_formatResult($offer, $model->getOptions()->getFields(), $this->getEntityKey())
+                );
+            } else {
+                $return = array(
+                    'error'   => true,
+                    'code'    => 400,
+                    'message' => sprintf(
+                        'Could not create entity of type %s', ucfirst($this->getEntityKey())
+                    ),
+                    'content' => $data
+                );
+            }
         } catch (\Exception $exception) {
             $return = array(
                 'error'   => true,

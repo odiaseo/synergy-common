@@ -55,7 +55,7 @@ class SiteFilter extends SQLFilter
         if ($site instanceof \ArrayObject) {
             return $site->id;
         } else {
-            return $site->getId();
+            return $site->getSessionId();
         }
     }
 
@@ -93,7 +93,7 @@ class SiteFilter extends SQLFilter
      */
     public function getSiteFilterQuery($targetTableAlias, $targetEntity)
     {
-        if ($id = $this->getSite()->getId()) {
+        if ($id = $this->getSite()->getSessionId()) {
             return $targetTableAlias . '.site_id = ' . $id;
         }
 

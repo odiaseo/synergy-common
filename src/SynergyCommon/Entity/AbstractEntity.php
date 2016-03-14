@@ -1,10 +1,7 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\ORM\Proxy\Proxy;
 use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 use Zend\InputFilter\InputFilter;
@@ -58,56 +55,6 @@ abstract class AbstractEntity
         }
 
         return $this;
-    }
-
-    /**
-     * @param null $object
-     *
-     * @deprecated
-     * @return array
-     */
-    public function toArrayOld($object = null)
-    {
-        $list   = array();
-        $object = $object ?: $this;
-
-        if ($object instanceof PersistentCollection) {
-            /** @var \SynergyCommon\Entity\AbstractEntity $item */
-            foreach ($object as $item) {
-                $list[] = $item->toArray();
-            }
-        } else {
-
-            $properties = get_object_vars($object);
-            foreach ($properties as $key => $value) {
-                if (substr($key, 0, 1) != '_') {
-                    if ($value instanceof \DateTime) {
-                        $list[$key] = $value->getTimestamp();
-                    } elseif ($value instanceof Proxy) {
-                        $realClass  = ClassUtils::getRealClass(get_class($value));
-                        $reflection = new \ReflectionClass($realClass);
-                        $properties = $reflection->getProperties();
-
-                        foreach ($properties as $prop) {
-                            $propName = $prop->getName();
-                            $method   = 'get' . ucfirst($propName);
-                            $v        = $value->$method();
-                            if (is_object($v)) {
-                                $list[$key][$propName] = $this->toArray($v);
-                            } else {
-                                $list[$key][$propName] = $v;
-                            }
-                        }
-                    } elseif (is_object($value)) {
-                        $list[$key] = $this->toArray($value);
-                    } else {
-                        $list[$key] = $value;
-                    }
-                }
-            }
-        }
-
-        return $list;
     }
 
     public function __toString()
@@ -216,10 +163,13 @@ abstract class AbstractEntity
      */
     public function getInputFilter()
     {
+        if (empty($this->inputFilter)) {
+            $this->inputFilter = new InputFilter();
+        }
         return $this->inputFilter;
     }
 
-    protected function removeWhiteSpace($value)
+    public function removeWhiteSpace($value)
     {
         $value = str_replace(array("\n", "\r"), ' ', $value);
         $value = preg_replace('/\s+/', ' ', $value);
@@ -227,5 +177,5 @@ abstract class AbstractEntity
         return trim($value);
     }
 
-    abstract public function getId();
+    abstract public function getSessionId();
 }

@@ -44,7 +44,7 @@ class BaseRole extends BaseEntity
         $this->id = $id;
     }
 
-    public function getId()
+    public function getSessionId()
     {
         return $this->id;
     }

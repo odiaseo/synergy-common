@@ -6,3 +6,4 @@ vendor/
 .settings
 autoload
 application.config.php
+coverage-report
