@@ -37,6 +37,7 @@ trait CacheAwareQueryTrait
     public function setCacheFlag(AbstractQuery $query)
     {
         if ($this->enableResultCache) {
+            $this->cloneQueryCacheProfile($query);
             $query->useResultCache(true, $this->cacheLifetime);
             if ($this->cacheKey) {
                 $query->setResultCacheId($this->cacheKey);
@@ -62,6 +63,15 @@ trait CacheAwareQueryTrait
         }
 
         return $query;
+    }
+
+    protected function cloneQueryCacheProfile(AbstractQuery $query)
+    {
+        $profile = $query->getQueryCacheProfile();
+        if ($profile and !$profile instanceof QueryCacheProfile) {
+            $profile = new QueryCacheProfile($this->cacheLifetime, null, $profile->getResultCacheDriver());
+            $query->setResultCacheProfile($profile);
+        }
     }
 
     /**
