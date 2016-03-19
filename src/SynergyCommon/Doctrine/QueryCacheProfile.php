@@ -71,7 +71,7 @@ class QueryCacheProfile extends DoctrineProfile
      * @param Cache $resultCacheDriver
      * @return $this
      */
-    public function setResultCacheDriver($resultCacheDriver)
+    public function setResultCacheDriver(Cache $resultCacheDriver)
     {
         $this->resultCacheDriver = $resultCacheDriver;
         return $this;
