@@ -271,7 +271,7 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
     public function findOneBy(array $params, $mode = AbstractQuery::HYDRATE_OBJECT, $fields = [])
     {
         try {
-            $query = $this->getFindByQueryBuilder($params, $mode, null, $fields);
+            $query = $this->getFindByQueryBuilder($params, null, null, $fields);
             $query->setMaxResults(1);
 
             if ($mode == AbstractQuery::HYDRATE_ARRAY) {
