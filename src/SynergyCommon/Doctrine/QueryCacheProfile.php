@@ -58,4 +58,58 @@ class QueryCacheProfile extends DoctrineProfile
 
         return array($cacheKey, $realCacheKey);
     }
+
+    /**
+     * @return Cache|null
+     */
+    public function getResultCacheDriver()
+    {
+        return $this->resultCacheDriver;
+    }
+
+    /**
+     * @param Cache $resultCacheDriver
+     * @return $this
+     */
+    public function setResultCacheDriver($resultCacheDriver)
+    {
+        $this->resultCacheDriver = $resultCacheDriver;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param int $lifetime
+     * @return $this
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCacheKey()
+    {
+        return $this->cacheKey;
+    }
+
+    /**
+     * @param null|string $cacheKey
+     * @return $this
+     */
+    public function setCacheKey($cacheKey)
+    {
+        $this->cacheKey = $cacheKey;
+        return $this;
+    }
 }

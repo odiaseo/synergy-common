@@ -68,8 +68,15 @@ trait CacheAwareQueryTrait
     protected function cloneQueryCacheProfile(AbstractQuery $query)
     {
         $profile = $query->getQueryCacheProfile();
-        if ($profile and !$profile instanceof QueryCacheProfile) {
-            $profile = new QueryCacheProfile($this->cacheLifetime, null, $profile->getResultCacheDriver());
+
+        if (!$profile) {
+            $driver = $query->getEntityManager()->getConfiguration()->getResultCacheImpl();
+        } else {
+            $driver = $profile->getResultCacheDriver();
+        }
+
+        if (!$profile or !$profile instanceof QueryCacheProfile) {
+            $profile = new QueryCacheProfile($this->cacheLifetime, null, $driver);
             $query->setResultCacheProfile($profile);
         }
     }

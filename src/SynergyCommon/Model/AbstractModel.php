@@ -275,6 +275,9 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
             $query = $this->getFindByQueryBuilder($params);
             $query->setMaxResults(1);
 
+            if ($mode == AbstractQuery::HYDRATE_ARRAY) {
+                $query->setEnableHydrationCache($this->enableResultCache);
+            }
             return $query->getQuery()->getOneOrNullResult($mode);
         } catch (\Exception $exception) {
             $this->getLogger()->err($exception->getMessage());
@@ -287,15 +290,24 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
      * @param array $param
      * @param QueryBuilder $queryBuilder
      * @param null $alias
-     *
+     * @param array $select
      * @return QueryBuilder
      */
-    protected function getFindByQueryBuilder(array $param, QueryBuilder $queryBuilder = null, $alias = null)
+    protected function getFindByQueryBuilder(array $param, QueryBuilder $queryBuilder = null, $alias = null, $select = [])
     {
-        $alias        = $alias ?: $this->getAlias();
+        $alias = $alias ?: $this->getAlias();
+        if ($select) {
+            foreach ($select as $key => $column) {
+                $select[$key] = $alias . '.' . $column;
+            }
+        } else {
+            $select = $alias;
+        }
+
         $queryBuilder = $queryBuilder ?: $this->getEntityManager()->createQueryBuilder();
-        $query        = $queryBuilder->select($alias)->from($this->getEntity(), $alias);
-        $count        = 0;
+        $query        = $queryBuilder->select($select)->from($this->getEntity(), $alias);
+
+        $count = 0;
         foreach ($param as $key => $value) {
             if (is_null($value) or $value == 'null') {
                 $query->andWhere(
