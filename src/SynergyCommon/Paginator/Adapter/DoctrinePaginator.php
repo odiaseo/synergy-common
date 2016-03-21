@@ -56,6 +56,7 @@ class DoctrinePaginator extends Paginator implements AdapterInterface, IdentityP
         }
 
         $this->query               = $query;
+        $this->useOutputWalkers    = $useOutputWalker;
         $this->fetchJoinCollection = (Boolean)$fetchJoinCollection;
     }
 
@@ -213,7 +214,7 @@ class DoctrinePaginator extends Paginator implements AdapterInterface, IdentityP
         if ($query->getHydrationMode() == AbstractQuery::HYDRATE_OBJECT) {
             //$cloneQuery->setHydrationCacheProfile(null);
         } elseif ($profile = $query->getHydrationCacheProfile()) {
-           // $cloneQuery->setHydrationCacheProfile($profile);
+            // $cloneQuery->setHydrationCacheProfile($profile);
         }
 
         foreach ($query->getHints() as $name => $value) {
