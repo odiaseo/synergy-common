@@ -1375,9 +1375,4 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
     {
         return $this->_identity;
     }
-
-    protected function disableSiteFilter()
-    {
-        (new Container())->offsetSet(self::FILTER_SESSION_KEY, true);
-    }
 }

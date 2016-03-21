@@ -149,7 +149,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             if ($serviceManager->has('active\site')) {
                 $site      = $serviceManager->get('active\site');
-                $namespace = 'sess' . $site->getSessionNamespace();
+                $namespace = $site->getSessionNamespace();
             } else {
                 $namespace = 'initialised';
             }
