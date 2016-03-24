@@ -5,7 +5,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use SynergyCommon\CacheAwareInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryInterface;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
@@ -18,6 +17,7 @@ use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
+use SynergyCommon\Paginator\Paginator;
 use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -354,7 +354,7 @@ class AbstractModel implements NestedsetInterface, ServiceLocatorAwareInterface,
             if ($paginate) {
 
                 $adapter   = new DoctrinePaginator($query);
-                $paginator = new \Zend\Paginator\Paginator($adapter);
+                $paginator = new Paginator($adapter);
                 $paginator->setCurrentPageNumber($page);
                 $paginator->setItemCountPerPage($limit);
 
