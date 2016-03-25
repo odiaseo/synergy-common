@@ -249,6 +249,10 @@ class Util
     public static function prepareTitleForSlug($text, $unAccent = true, $firstPart = true)
     {
         $original = $text;
+
+        if ('Купистол' == $original) {
+            $text = 'Kupistol';
+        }
         if ($firstPart) {
             $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
             $separators = [
@@ -445,7 +449,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\b(nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|usa|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                            'pattern'     => '/\b(int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|usa|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
                             'replacement' => '',
                         ),
                     ),
@@ -503,13 +507,16 @@ class Util
             case 'vision direct':
                 $name = $original;
                 break;
+            case 'dx':
+                $name = 'deal-extreme';
+                break;
         }
 
         if (empty($name)) {
             $name = $original;
         }
 
-        if (strlen($name) < 3) {
+        if (strlen(str_replace('-', '', $name)) < 3) {
             $name = trim($original);
         }
 
@@ -1078,7 +1085,9 @@ class Util
                     'Welcome to TradeTracker',
                     'product is no longer available via this affiliate link',
                     'Campaign is not Active',
-                    'Unfortunately we cannot redirect you to the website requested'
+                    'Unfortunately we cannot redirect you to the website requested',
+                    'www.voucherhive.co.uk', //redirected back
+                    'Начните экономить',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
