@@ -448,7 +448,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\b(Android|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|usa|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                            'pattern'     => '/\b(int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|usa|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
                             'replacement' => '',
                         ),
                     ),
