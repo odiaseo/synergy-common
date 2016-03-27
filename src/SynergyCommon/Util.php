@@ -389,6 +389,7 @@ class Util
                 'Mexico',
                 'Portugal',
                 'APK',
+                'Android',
                 'CPI',
                 'CPL',
                 'CPS',
@@ -448,14 +449,14 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\b(int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|usa|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                            'pattern'     => '/\b(int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
                             'replacement' => '',
                         ),
                     ),
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk)$/i',
+                            'pattern'     => '/\s+(?:at|it|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android)$/i',
                             'replacement' => '',
                         ),
                     ),
