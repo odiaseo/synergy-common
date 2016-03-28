@@ -1511,4 +1511,13 @@ class Util
 
         return [$isConsole, self::cleanDomain($host)];
     }
+
+    public static function tidyHtml($html)
+    {
+        $tidy    = new \Tidy();
+        $options = array('indent' => false, 'doctype' => false, 'show-body-only' => true);
+        $return  = $tidy->repairString($html, $options, 'UTF8');
+
+        return $return;
+    }
 }
