@@ -1107,6 +1107,7 @@ class Util
                     'Unfortunately we cannot redirect you to the website requested',
                     'www.voucherhive.co.uk', //redirected back
                     'Начните экономить',
+                    'the web page I was looking for is no longer available',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
