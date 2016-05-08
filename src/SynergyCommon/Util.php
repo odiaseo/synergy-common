@@ -903,6 +903,25 @@ class Util
             unset($query['url']);
 
             return sprintf('%s://%s%s?%s', $paths['scheme'], $paths['host'], $paths['path'], http_build_query($query));
+        } elseif (stripos($deepLink, 'track.webgains.com') !== false) {
+            $paths  = parse_url($deepLink);
+            $params = urldecode($paths['query']);
+            parse_str($params, $query);
+            unset($query['wgtarget']);
+            unset($query['utm_source']);
+            unset($query['utm_medium']);
+            unset($query['utm_campaign']);
+            unset($query['utm_content']);
+            unset($query['wmid']);
+            unset($query['nvc']);
+            unset($query['ord']);
+
+            $queryString = '';
+            if (!empty($query)) {
+                $queryString = '?' . http_build_query($query);
+            }
+
+            return sprintf('%s://%s%s%s', $paths['scheme'], $paths['host'], $paths['path'], $queryString);
         }
 
         return self::removeLineBreaks($deepLink);
