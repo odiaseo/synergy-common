@@ -1110,6 +1110,7 @@ class Util
                     'Начните экономить',
                     'the web page I was looking for is no longer available',
                     'the page you are looking for no longer exists',
+                    'Unfortunately, the link that you’ve used is not valid',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
