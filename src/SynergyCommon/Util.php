@@ -1083,13 +1083,14 @@ class Util
                 if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
                     return false;
                 }
-            } elseif (stripos($body, '<html') === false) {
+            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false) { //
                 return false;
             }
 
             if ($body) {
                 $texts = [
                     '<title>Webgains</title>',
+                    'You’ve been redirected to this page because the link you clicked is now inactive',
                     'no relationship',
                     'advertiser is not active',
                     'link is incorrect',
