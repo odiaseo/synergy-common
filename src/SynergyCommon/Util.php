@@ -1113,6 +1113,7 @@ class Util
                     'Unfortunately, the link that you’ve used is not valid',
                     'http://www.voucherhive.co.uk/koupon.appcache',
                     'Runtime Error',
+                    'File or directory not found',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
