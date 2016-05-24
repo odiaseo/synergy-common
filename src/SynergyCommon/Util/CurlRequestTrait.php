@@ -20,9 +20,9 @@ trait CurlRequestTrait
      * @param int $timeout
      * @return mixed
      */
-    public function curlRequest($url, $postData = '', array $header = null, $contentType = '', $timeout = 60)
+    public function curlRequest($url, $postData = '', array $header = null, $contentType = '', $timeout = 300)
     {
-        $this->printMessage(' >> Processing curl request ... ', 1, false);
+        $this->printMessage(' >> Processing curl request ... ' . $timeout . 'sec ..', 1, false);
 
         $header   = $header ?: array();
         $header[] = 'Accept-Charset: UTF-8';
