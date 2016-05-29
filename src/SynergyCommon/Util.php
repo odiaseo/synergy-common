@@ -1114,6 +1114,7 @@ class Util
                     'http://www.voucherhive.co.uk/koupon.appcache',
                     'Runtime Error',
                     'File or directory not found',
+                    '<h1>Forbidden</h1>',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
