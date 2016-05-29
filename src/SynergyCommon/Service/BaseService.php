@@ -209,7 +209,7 @@ class BaseService extends AbstractService
 
             if (!$return['error']) {
                 $return['message'] = sprintf(
-                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $entity->getId()
+                    '%s #%d successfully updated', ucfirst($this->getEntityKey()), $entity ? $entity->getId() : ''
                 );
             }
         } catch (\Exception $exception) {
