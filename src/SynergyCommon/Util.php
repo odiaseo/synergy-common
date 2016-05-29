@@ -1072,7 +1072,7 @@ class Util
             // use this one if you cant use curl
             return false;
         } else {
-            list($code, $body) = $data;
+            list($code, $body, $lastUrl) = $data;
 
             if ($code == 403) {
                 return false;
@@ -1235,12 +1235,15 @@ class Util
 
             return false;
         }
-        $code = @curl_getinfo(
+        $code    = @curl_getinfo(
             $ch, CURLINFO_HTTP_CODE
+        ); // note: php.net documentation shows this returns a string, but really it returns an int
+        $lastUrl = @curl_getinfo(
+            $ch, CURLINFO_EFFECTIVE_URL
         ); // note: php.net documentation shows this returns a string, but really it returns an int
         @curl_close($ch);
 
-        return [$code, $return];
+        return [$code, $return, $lastUrl];
     }
 
     public static function getHttpResponseCodeUsingGetheaders($url, $followredirects = true)
@@ -1273,6 +1276,25 @@ class Util
         }
 
         // no headers :
+        return false;
+    }
+
+    public static function getRedirectUrl($url, $count = 0)
+    {
+        $url = stripslashes($url);
+        if ($data = self::getHttpResponseUsingCurl($url)) {
+            list(, $body, $redirectUrl) = $data;
+            if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body, false)) {
+                if ($hiddenRedirectUrl != $url) {
+                    return self:: getRedirectUrl($hiddenRedirectUrl, ++$count);
+                }
+            } elseif ($url != $hiddenRedirectUrl) {
+                return $redirectUrl;
+            }
+        } elseif ($count > 0 and $url) {
+            return $url;
+        }
+
         return false;
     }
 
@@ -1468,10 +1490,10 @@ class Util
 
     /**
      * @param $content
-     *
-     * @return bool|string
+     * @param bool $checkQuery
+     * @return bool
      */
-    private static function getHiddenRedirectUrl($content)
+    private static function getHiddenRedirectUrl($content, $checkQuery = true)
     {
         $url = false;
         if (preg_match('/(referLink\.href)\s?\=(.*)\;.*/i', $content, $matches)) {
@@ -1480,7 +1502,7 @@ class Util
             $url = trim($moreMatches[2], '"\'');
         }
 
-        if ($url) {
+        if ($url and $checkQuery) {
             if (!$query = parse_url($url, PHP_URL_QUERY)) {
                 return $query;
             }
