@@ -49,6 +49,10 @@ class BaseSite extends AbstractEntity
      */
     protected $i18nLocale;
     /**
+     * @ORM\Column(type="string", length=25, nullable=true, name="ip_address")
+     */
+    protected $ipAddress;
+    /**
      * @var \datetime createdAt
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="created_at")
@@ -205,6 +209,22 @@ class BaseSite extends AbstractEntity
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * @param mixed $ipAddress
+     */
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
     }
 
     /**
