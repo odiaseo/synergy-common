@@ -519,8 +519,13 @@ class Util
             $name = trim($original);
         }
 
-        $camelFilter = new CamelCaseToSeparator(' ');
-        $name        = $camelFilter->filter($name);
+        if (preg_match('/[0-9]+/i', $name)) {
+            $name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
+        } else {
+            $camelFilter = new CamelCaseToSeparator(' ');
+            $name        = $camelFilter->filter($name);
+        }
+
         $name        = trim($name, ' &-!,._');
 
         return $name;
