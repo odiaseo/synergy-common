@@ -1106,7 +1106,7 @@ class Util
                     'product is no longer available via this affiliate link',
                     'Campaign is not Active',
                     'Unfortunately we cannot redirect you to the website requested',
-                    'www.voucherhive.co.uk', //redirected back
+                    //'www.voucherhive.co.uk', //redirected back
                     'Начните экономить',
                     'the web page I was looking for is no longer available',
                     'the page you are looking for no longer exists',
