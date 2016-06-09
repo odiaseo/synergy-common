@@ -1057,6 +1057,7 @@ class Util
 
     public static function isValidDeepLink($url)
     {
+        $url = stripslashes($url);
         // first do some quick sanity checks:
         if (!$url || !is_string($url)) {
             return false;
