@@ -526,7 +526,7 @@ class Util
             $name        = $camelFilter->filter($name);
         }
 
-        $name        = trim($name, ' &-!,._');
+        $name = trim($name, ' &-!,._');
 
         return $name;
     }
@@ -1079,7 +1079,9 @@ class Util
         } else {
             list($code, $body, $lastUrl) = $data;
 
-            if ($code == 403) {
+            if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
+                return true;
+            } else if ($code == 403) {
                 return false;
             }
 
