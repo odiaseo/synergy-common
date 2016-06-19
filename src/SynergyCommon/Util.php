@@ -1090,7 +1090,7 @@ class Util
                 if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
                     return false;
                 }
-            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false) { //
+            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false && stripos($body,'http-equiv="refresh"') === false) { //
                 return false;
             }
 
@@ -1121,6 +1121,7 @@ class Util
                     'Unfortunately, the link that you’ve used is not valid',
                     'http://www.voucherhive.co.uk/koupon.appcache',
                     'Runtime Error',
+                    'This product is no longer available via this affiliate link',
                     'File or directory not found',
                     '<h1>Forbidden</h1>',
                 ];
