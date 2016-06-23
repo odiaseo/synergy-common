@@ -407,7 +407,6 @@ class Util
                 'Polska',
                 '*suspended*',
                 'suspended',
-                'Scandinavia',
                 'Nigeria',
                 'Italia',
                 'Hungary',
