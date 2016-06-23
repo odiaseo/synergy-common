@@ -475,6 +475,9 @@ class Util
         $name = trim($name, '-., :');
 
         switch (mb_strtolower($name, 'UTF-8')) {
+            case 'n design center':
+                $name = $original;
+                break;
             case 'host europe':
                 $name = 'Host Europe';
                 break;
@@ -510,7 +513,7 @@ class Util
                 break;
         }
 
-        if (empty($name)) {
+        if (empty($name) || strtolower($original) == 'affiliate window') {
             $name = $original;
         }
 
@@ -1089,7 +1092,7 @@ class Util
                 if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
                     return false;
                 }
-            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false && stripos($body,'http-equiv="refresh"') === false) { //
+            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false && stripos($body, 'http-equiv="refresh"') === false) { //
                 return false;
             }
 
