@@ -77,7 +77,12 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     if ($exception instanceof \Exception) {
                         $service->logException($exception);
                     } elseif ($exception instanceof \Error) {
-                        $service->error($exception->getTraceAsString());
+                        $error = [
+                            'code'    => $exception->getCode(),
+                            'message' => $exception->getMessage(),
+                            'trace'   => $exception->getTraceAsString()
+                        ];
+                        $service->error(print_r($error, true));
                     }
                 }
             }
