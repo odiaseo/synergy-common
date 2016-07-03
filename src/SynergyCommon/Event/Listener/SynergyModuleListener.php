@@ -85,7 +85,6 @@ class SynergyModuleListener implements ListenerAggregateInterface
                             'line'    => $exception->getLine(),
                         ];
                         $service->error($exception->__toString());
-                        $service->error(print_r($error, true));
                     }
                 }
             }
