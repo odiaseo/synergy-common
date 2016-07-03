@@ -80,8 +80,11 @@ class SynergyModuleListener implements ListenerAggregateInterface
                         $error = [
                             'code'    => $exception->getCode(),
                             'message' => $exception->getMessage(),
-                            'trace'   => $exception->getTraceAsString()
+                            'trace'   => $exception->getTraceAsString(),
+                            'file'    => $exception->getFile(),
+                            'line'    => $exception->getLine(),
                         ];
+                        $service->error($exception->__toString());
                         $service->error(print_r($error, true));
                     }
                 }
