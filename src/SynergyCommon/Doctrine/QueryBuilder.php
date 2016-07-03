@@ -26,7 +26,7 @@ class QueryBuilder extends DoctrineQueryBuilder implements CacheAwareQueryInterf
         $container = new Container(LocaleAwareTrait::getNamespace());
         $siteId    = $container->offsetGet(AbstractModel::SESSION_ALLOWED_SITE_KEY);
         $query     = $this->setCacheFlag(parent::getQuery());
-        $query->setHint(self::HINT_LINKED_SITES, $siteId);
+        //$query->setHint(self::HINT_LINKED_SITES, $siteId);
 
         return $query;
     }
