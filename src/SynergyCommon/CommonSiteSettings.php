@@ -60,7 +60,7 @@ class CommonSiteSettings extends AbstractOptions
     protected $groupOnToken;
     protected $groupOnCode;
     protected $groupOnAffId;
-
+    protected $yieldKitSiteId;
     protected $cjWebsiteId; //commission Junction site id
     protected $daisyConMediaId = '';
 
@@ -75,6 +75,22 @@ class CommonSiteSettings extends AbstractOptions
             }
         }
         parent::__construct($data);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getYieldKitSiteId()
+    {
+        return $this->yieldKitSiteId;
+    }
+
+    /**
+     * @param mixed $yieldKitSiteId
+     */
+    public function setYieldKitSiteId($yieldKitSiteId)
+    {
+        $this->yieldKitSiteId = $yieldKitSiteId;
     }
 
     /**
