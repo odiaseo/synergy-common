@@ -66,6 +66,11 @@ class BaseSite extends AbstractEntity
     protected $updatedAt;
 
     /**
+     * @ORM\Column(type="string", length=50, nullable=true, name="colour_scheme")
+     */
+    protected $colourScheme;
+
+    /**
      * @return mixed
      */
     public function getOfferCount()
@@ -225,6 +230,22 @@ class BaseSite extends AbstractEntity
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColourScheme()
+    {
+        return $this->colourScheme;
+    }
+
+    /**
+     * @param mixed $colourScheme
+     */
+    public function setColourScheme($colourScheme)
+    {
+        $this->colourScheme = $colourScheme;
     }
 
     /**
