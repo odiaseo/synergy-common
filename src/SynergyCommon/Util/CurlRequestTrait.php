@@ -25,10 +25,10 @@ trait CurlRequestTrait
         $this->printMessage(' >> Processing curl request ... ' . $timeout . 'sec ..', 1, false);
 
         $header   = $header ?: array();
-        $header[] = 'Accept-Charset: UTF-8';
+        $header[] = 'accept-charset: UTF-8';
 
         if ($contentType) {
-            $header[] = "Content-Type: {$contentType}";
+            $header[] = "content-type: {$contentType}";
         }
 
         $curlHandle = curl_init();
