@@ -64,12 +64,6 @@ class BaseSite extends AbstractEntity
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true, name="colour_scheme")
-     */
-    protected $colourScheme;
-
     /**
      * @return mixed
      */
@@ -230,22 +224,6 @@ class BaseSite extends AbstractEntity
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getColourScheme()
-    {
-        return $this->colourScheme;
-    }
-
-    /**
-     * @param mixed $colourScheme
-     */
-    public function setColourScheme($colourScheme)
-    {
-        $this->colourScheme = $colourScheme;
     }
 
     /**
