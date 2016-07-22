@@ -14,13 +14,14 @@ trait CurlRequestTrait
 
     /**
      * @param $url
-     * @param string $postData
-     * @param array $header
+     * @param string $data
+     * @param array|null $header
      * @param string $contentType
      * @param int $timeout
+     * @param string $cred
      * @return mixed
      */
-    public function curlRequest($url, $postData = '', array $header = null, $contentType = '', $timeout = 300)
+    public function curlRequest($url, $data = '', array $header = null, $contentType = '', $timeout = 300, $cred = '')
     {
         $this->printMessage(' >> Processing curl request ... ' . $timeout . 'sec ..', 1, false);
 
@@ -40,9 +41,13 @@ trait CurlRequestTrait
         curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 5);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
 
-        if ($postData) {
+        if ($data) {
             curl_setopt($curlHandle, CURLOPT_POST, true);
-            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $postData);
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
+        }
+
+        if ($cred) {
+            curl_setopt($curlHandle, CURLOPT_USERPWD, $cred);
         }
 
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, $timeout);

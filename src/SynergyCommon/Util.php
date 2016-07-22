@@ -1127,6 +1127,7 @@ class Util
                     'This product is no longer available via this affiliate link',
                     'File or directory not found',
                     'This link is not valid',
+                    'Invalid link',
                     '<h1>Forbidden</h1>',
                 ];
 
