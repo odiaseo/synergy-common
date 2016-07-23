@@ -1128,6 +1128,8 @@ class Util
                     'File or directory not found',
                     'This link is not valid',
                     'Invalid link',
+                    'Invalid Publisher',
+                    "You don't have permission to access",
                     '<h1>Forbidden</h1>',
                 ];
 
