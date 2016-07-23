@@ -1154,8 +1154,9 @@ class Util
                     }
                 }
 
-                if (stripos($body, "method='POST'")) {
-                    return self:: isValidDeepLink($url, true, true);
+                if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body, $matches)) {
+                    $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
+                    return self:: isValidDeepLink($newLink, true, true);
                 }
             }
         }
