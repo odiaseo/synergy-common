@@ -1083,9 +1083,15 @@ class Util
         } else {
             list($code, $body, $lastUrl) = $data;
 
+            if ($lastUrl == 'http://localhost/error.html') {
+                return false;
+            }
+            
             if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
                 return true;
-            } else if ($code == 403) {
+            } 
+            
+            if ($code == 403) {
                 return false;
             }
 
@@ -1100,6 +1106,7 @@ class Util
             if ($body) {
                 $texts = [
                     '<title>Webgains</title>',
+                    '<h1>Forbidden</h1>',
                     'You’ve been redirected to this page because the link you clicked is now inactive',
                     'no relationship',
                     'advertiser is not active',
@@ -1129,7 +1136,7 @@ class Util
                     'This link is not valid',
                     'Invalid link',
                     'Invalid Publisher',
-                    "You don't have permission to access",
+                    'You don\'t have permission to access',
                     '<h1>Forbidden</h1>',
                 ];
 
