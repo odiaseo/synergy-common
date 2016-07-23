@@ -1058,7 +1058,7 @@ class Util
         return $url;
     }
 
-    public static function isValidDeepLink($url)
+    public static function isValidDeepLink($url, $usePost = false)
     {
         $url = stripslashes($url);
         // first do some quick sanity checks:
@@ -1077,7 +1077,7 @@ class Util
    */
         // the next bit could be slow:
         //if (self::getHttpResponseCode_using_curl($url) != 200) {
-        if (!$data = self::getHttpResponseUsingCurl($url)) {
+        if (!$data = self::getHttpResponseUsingCurl($url, true, $usePost)) {
             // use this one if you cant use curl
             return false;
         } else {
@@ -1153,6 +1153,10 @@ class Util
                         return self:: isValidDeepLink($hiddenRedirectUrl);
                     }
                 }
+
+                if (stripos($body, "method='POST'")) {
+                    return self:: isValidDeepLink($url, true, true);
+                }
             }
         }
 
@@ -1161,7 +1165,7 @@ class Util
         return $url;
     }
 
-    public static function getHttpResponseCodeUsingCurl($url, $followredirects = true)
+    public static function getHttpResponseCodeUsingCurl($url, $followredirects = true, $usePost = false)
     {
         // returns int responsecode, or false (if url does not exist or connection timeout occurs)
         // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
@@ -1195,6 +1199,11 @@ class Util
             $ch, CURLOPT_USERAGENT,
             "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1"
         );   // pretend we're a regular browser
+
+        if ($usePost) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+        
         @curl_exec($ch);
         if (@curl_errno($ch)) {   // should be 0
             @curl_close($ch);
@@ -1214,7 +1223,7 @@ class Util
      *
      * @return array|bool
      */
-    public static function getHttpResponseUsingCurl($url, $followredirects = true)
+    public static function getHttpResponseUsingCurl($url, $followredirects = true, $usePost = false)
     {
         // returns int responsecode, or false (if url does not exist or connection timeout occurs)
         // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
@@ -1251,6 +1260,10 @@ class Util
 
         @curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
+        if ($usePost) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+        
         $return = @curl_exec($ch);
 
         if (@curl_errno($ch)) {   // should be 0
