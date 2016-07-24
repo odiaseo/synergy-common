@@ -1429,7 +1429,7 @@ class Util
         );
     }
 
-    public static function cleanKeywords($value)
+    public static function cleanKeywords($value, $asArray = false)
     {
         $data = array();
         foreach ((array)$value as $val) {
@@ -1455,12 +1455,16 @@ class Util
         }
 
         foreach ($data as $k => $v) {
-            $data[$k] = str_replace('-', ' ', self::urlize($v));
+            $val = trim(str_replace('-', ' ', self::urlize($v)));
+            if (strlen($val) > 2) {
+                $data[$k] = $val;
+            }
         }
 
         $data = array_unique(array_filter($data));
+        sort($data);
 
-        return implode(', ', $data);
+        return $asArray ? $data : implode(', ', $data);
     }
 
     /**
