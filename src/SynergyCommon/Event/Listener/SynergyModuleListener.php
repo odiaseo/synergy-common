@@ -3,6 +3,7 @@ namespace SynergyCommon\Event\Listener;
 
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
+use Gedmo\Loggable\LoggableListener;
 use SynergyCommon\PageRendererInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -243,6 +244,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 foreach ($listeners as $listener) {
                     if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
                         $listener->setSite($site);
+                    }
+                    
+                    if ($listener instanceof LoggableListener) {
+                        $listener->setUsername('system');
                     }
                 }
             }
