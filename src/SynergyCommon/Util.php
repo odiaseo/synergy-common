@@ -1137,6 +1137,7 @@ class Util
                     'Invalid link',
                     'Invalid Publisher',
                     'You don\'t have permission to access',
+                    'Service Unavailable',
                     '<h1>Forbidden</h1>',
                 ];
 
@@ -1264,7 +1265,7 @@ class Util
         if ($usePost) {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
-        
+
         $return = @curl_exec($ch);
 
         if (@curl_errno($ch)) {   // should be 0
