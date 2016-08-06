@@ -15,7 +15,6 @@ use Zend\Session\Container;
  * @method getEntity()
  * @method \SynergyCommon\Doctrine\CachedEntityManager getEntityManager()
  * @method NestedSetRepositoryTrait getRepository()
-
  */
 trait LocaleAwareTrait
 {
@@ -29,12 +28,13 @@ trait LocaleAwareTrait
      * @param       $locale
      * @param null $limit
      * @param array $ids
+     * @param $field
      *
      * @return mixed
      */
-    public function getItemsToTranslate($locale, $limit = null, array $ids = null)
+    public function getItemsToTranslate($locale, $limit = null, array $ids = null, $field = '')
     {
-        $query = $this->getItemsToTranslateQueryBuilder($locale, $limit, $ids);
+        $query = $this->getItemsToTranslateQueryBuilder($locale, $limit, $ids, $field);
 
         return $query->getQuery()->useResultCache(false)->execute();
     }
@@ -43,21 +43,38 @@ trait LocaleAwareTrait
      * @param       $locale
      * @param null $limit
      * @param array $ids
+     * @param $field
      *
      * @return QueryBuilder
      */
-    protected function getItemsToTranslateQueryBuilder($locale, $limit = null, array $ids = null)
+    protected function getItemsToTranslateQueryBuilder($locale, $limit = null, array $ids = null, $field = '')
     {
+        $params = array(
+            ':locale' => $locale
+        );
+
         $qb    = $this->getEntityManager()->createQueryBuilder();
         $query = $qb
             ->select('e')
-            ->from($this->getEntity(), 'e')
-            ->leftJoin(
+            ->from($this->getEntity(), 'e');
+
+        if ($field) {
+            $query->leftJoin(
+                'e.translations', 't', 'WITH',
+                $query->expr()->andx(
+                    $query->expr()->eq('t.locale', ':locale'),
+                    $query->expr()->eq('t.field', ':field')
+                )
+            );
+
+            $params[':field'] = $field;
+        } else {
+            $query->leftJoin(
                 'e.translations', 't', 'WITH',
                 $qb->expr()->eq('t.locale', ':locale')
-            )->setParameters(array(':locale' => $locale))
-            ->andWhere($qb->expr()->isNull('t.object'));
-
+            );
+        }
+        $query->andWhere($qb->expr()->isNull('t.object'));
         if ($limit) {
             $query->setMaxResults($limit);
         }
@@ -65,6 +82,8 @@ trait LocaleAwareTrait
         if ($ids) {
             $query->andWhere($qb->expr()->in('e.id', $ids));
         }
+
+        $query->setParameters($params);
 
         return $query;
     }
