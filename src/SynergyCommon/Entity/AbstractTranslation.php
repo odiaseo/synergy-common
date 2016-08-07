@@ -24,20 +24,4 @@ abstract class AbstractTranslation extends AbstractPersonalTranslation
     {
         $this->id = $id;
     }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
 }
