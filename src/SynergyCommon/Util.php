@@ -1139,6 +1139,7 @@ class Util
                     'You don\'t have permission to access',
                     'Service Unavailable',
                     '<h1>Forbidden</h1>',
+                    'The target URL was invalid. Please contact the vendor',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
