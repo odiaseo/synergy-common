@@ -16,4 +16,28 @@ abstract class AbstractTranslation extends AbstractPersonalTranslation
      * @ORM\Column(type="string", length=15)
      */
     protected $locale;
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 }
