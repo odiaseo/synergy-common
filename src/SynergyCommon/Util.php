@@ -1140,6 +1140,8 @@ class Util
                     'Service Unavailable',
                     '<h1>Forbidden</h1>',
                     'The target URL was invalid. Please contact the vendor',
+                    'This site is no longer in service or has been disabled',
+                    'OOPS! Your offer could not be found',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
