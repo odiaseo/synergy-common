@@ -323,6 +323,7 @@ class Util
                 '.nz',
                 '.biz',
                 '.us',
+                '.ee',
                 '.ro',
                 'gmbh',
                 'Vouchers',
@@ -455,7 +456,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\s+(?:at|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt)$/i',
+                            'pattern'     => '/\s+(?:at|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt)$/i',
                             'replacement' => '',
                         ),
                     ),
