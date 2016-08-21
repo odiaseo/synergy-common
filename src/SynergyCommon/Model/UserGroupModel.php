@@ -2,10 +2,9 @@
 namespace SynergyCommon\Model;
 
 /**
- * Class LicenceModel
+ * Class UserGroupModel
  * @package SynergyCommon\Model
  */
-class LicenceModel extends AbstractModel
+class UserGroupModel extends AbstractModel
 {
-
 }

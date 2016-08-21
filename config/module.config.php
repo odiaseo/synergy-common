@@ -9,9 +9,11 @@ return array(
             'SynergyCommon\Entity\AbstractEntityFactory',
         ),
         'invokables'         => array(
-            'synergycommon\entity\licence' => 'SynergyCommon\Entity\BaseLicence',
-            'synergycommon\entity\site'    => 'SynergyCommon\Entity\BaseSite',
-            'TranslatorDelegator'          => 'SynergyCommon\Delegator\TranslatorDelegator',
+            'synergycommon\entity\licence'   => 'SynergyCommon\Entity\BaseLicence',
+            'synergycommon\entity\site'      => 'SynergyCommon\Entity\BaseSite',
+            'synergycommon\entity\session'   => 'SynergyCommon\Member\Entity\Session',
+            'synergycommon\entity\userGroup' => 'SynergyCommon\Member\Entity\UserGroup',
+            'TranslatorDelegator'            => 'SynergyCommon\Delegator\TranslatorDelegator',
         ),
         'factories'          => array(
             'logger'                              => 'SynergyCommon\Service\LoggerFactory',
@@ -30,7 +32,7 @@ return array(
             ],
         ],
     ),
-    'controllers' => [
+    'controllers'     => [
         'abstract_factories' => [
             \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],

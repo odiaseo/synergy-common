@@ -1,7 +1,5 @@
 <?php
 return array(
-    'controllers'  => array(
-    ),
     'router'       => array(
         'routes' => array(
             'api\home'  => array(

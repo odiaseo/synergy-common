@@ -6,6 +6,8 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use SynergyCommon\CacheAwareInterface;
+use SynergyCommon\Doctrine\CacheAwareQueryInterface;
+use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\Doctrine\ModelCacheAwareTrait;
 use SynergyCommon\Doctrine\QueryBuilder;
 use SynergyCommon\Entity\AbstractEntity;
@@ -16,9 +18,10 @@ use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Paginator\Paginator;
-use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
+use Zend\Session\Container;
 
 /**
  * Class AbstractModel
