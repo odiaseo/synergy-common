@@ -14,7 +14,6 @@ use SynergyCommon\Member\Entity\Session;
 use SynergyCommon\Member\Entity\UserGroup;
 use SynergyCommonTest\Bootstrap;
 use Zend\Filter\StringTrim;
-use Zend\InputFilter\InputFilter;
 use Zend\Server\Reflection\ReflectionParameter;
 
 /**
@@ -47,14 +46,16 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
     public function testAbstractEntityFactoryException()
     {
         $factory = new AbstractEntityFactory();
-        $factory->createServiceWithName($this->serviceManager, 'synergy\entity\page', 'synergy\entity\page');
+        $factory->__invoke($this->serviceManager, 'synergy\entity\page', []);
     }
 
+    /**
+     * @expectedException \SynergyCommon\Exception\InvalidEntityException
+     */
     public function testCannotCreateFactory()
     {
         $factory = new AbstractEntityFactory();
-        $result  = $factory->canCreateServiceWithName($this->serviceManager, 'synergy\entity', 'synergy\entity');
-        $this->assertFalse($result);
+        $factory->__invoke($this->serviceManager, 'synergy\entity', []);
     }
 
     public function testAbstractEntityFactory()
@@ -88,8 +89,6 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
                             if (count($methodParams) === 1) {
                                 /** @var \ReflectionParameter $param */
                                 $param = current($methodParams);
-                                $param = new ReflectionParameter($param);
-
                                 if ($param->allowsNull()) {
                                     $class->$methodName(null);
                                     $this->assertTrue(true);

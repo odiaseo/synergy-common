@@ -1,7 +1,8 @@
 <?php
 namespace SynergyCommon\Service;
 
-use Zend\ServiceManager\FactoryInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -18,7 +19,7 @@ class DoctrineCacheFactory implements FactoryInterface
      *
      * @return mixed|void
      */
-    public function createService(ServiceLocatorInterface $serviceManager)
+    public function __invoke(ContainerInterface $serviceManager, $requestedName, array $options = null)
     {
         $appEnv      = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
         $status      = $serviceManager->get('synergy\cache\status');

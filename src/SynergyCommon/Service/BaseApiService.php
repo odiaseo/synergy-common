@@ -1,8 +1,6 @@
 <?php
 namespace SynergyCommon\Service;
 
-use Zend\Json\Json;
-
 /**
  * Class BaseApiService
  * @package SynergyCommon\Service

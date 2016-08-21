@@ -1,9 +1,8 @@
 <?php
 namespace SynergyCommon\Model;
 
-use Zend\Log\Formatter\Base;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  * Class AbstractModelFactory
@@ -20,15 +19,11 @@ class AbstractModelFactory implements AbstractFactoryInterface
     }
 
     /**
-     * Determine if we can create a service with name
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param                         $name
-     * @param                         $requestedName
-     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
      * @return bool
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         if (substr($requestedName, 0, strlen($this->_configPrefix)) != $this->_configPrefix) {
             return false;
@@ -38,16 +33,12 @@ class AbstractModelFactory implements AbstractFactoryInterface
     }
 
     /**
-     * Create service with name
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param                         $name
-     * @param                         $requestedName
-     *
-     * @return AbstractModel|mixed
-     * @throws \SynergyCommon\Exception\InvalidEntityException
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
+     * @return AbstractModel
      */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $modelId   = str_replace($this->_configPrefix, '', $requestedName);
         $modelName = __NAMESPACE__ . '\\' . ucfirst($modelId) . 'Model';

@@ -33,16 +33,14 @@ class SynergyModuleListener implements ListenerAggregateInterface
     protected $callback;
     protected static $handled = false;
 
-    public function attach(EventManagerInterface $events)
+    /**
+     * @param EventManagerInterface $events
+     * @param int $priority
+     */
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(
-            array(
-                MvcEvent::EVENT_RENDER_ERROR,
-                MvcEvent::EVENT_DISPATCH_ERROR
-            ),
-            array($this, 'handleException'),
-            25
-        );
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'handleException'), 25);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleException'), 25);
 
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 200);
@@ -62,34 +60,24 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
     public function bootstrap(EventManagerInterface $eventManager, ServiceManager $services)
     {
-        $eventManager->attach(
-            array(
-                MvcEvent::EVENT_RENDER_ERROR,
-                MvcEvent::EVENT_DISPATCH_ERROR
-            ),
-            function ($event) use ($services) {
-                /** @var MvcEvent $event */
-                $exception = $event->getResult()->exception;
+        $callback = function ($event) use ($services) {
+            /** @var MvcEvent $event */
+            $exception = $event->getResult()->exception;
 
-                if (!$exception) {
-                    return;
-                } elseif ($services->has('logger')) {
-                    $service = $services->get('logger');
-                    if ($exception instanceof \Exception) {
-                        $service->logException($exception);
-                    } elseif ($exception instanceof \Error) {
-                        $error = [
-                            'code'    => $exception->getCode(),
-                            'message' => $exception->getMessage(),
-                            'trace'   => $exception->getTraceAsString(),
-                            'file'    => $exception->getFile(),
-                            'line'    => $exception->getLine(),
-                        ];
-                        $service->error($exception->__toString());
-                    }
+            if (!$exception) {
+                return;
+            } elseif ($services->has('logger')) {
+                $service = $services->get('logger');
+                if ($exception instanceof \Exception) {
+                    $service->logException($exception);
+                } elseif ($exception instanceof \Error) {
+                    $service->error($exception->__toString());
                 }
             }
-        );
+        };
+
+        $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, $callback);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback);
     }
 
     /**
@@ -245,7 +233,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     if ($listener instanceof SiteAwareListener and !$listener->hasSite()) {
                         $listener->setSite($site);
                     }
-                    
+
                     if ($listener instanceof LoggableListener) {
                         $listener->setUsername('system');
                     }

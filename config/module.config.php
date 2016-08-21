@@ -30,6 +30,11 @@ return array(
             ],
         ],
     ),
+    'controllers' => [
+        'abstract_factories' => [
+            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
+        ],
+    ],
     'session'         => array(
         'config'       => array(
             'model'      => 'common\model\session',

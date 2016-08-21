@@ -1,11 +1,11 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Interop\Container\ContainerInterface;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use SynergyCommon\Util\ErrorHandler;
-use Zend\Log\Writer\Stream;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -20,7 +20,7 @@ class LoggerFactory implements FactoryInterface
      *
      * @return mixed|ErrorHandler
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $config    = $serviceLocator->get('config');
         $directory = 'data/logs/';

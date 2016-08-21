@@ -1,9 +1,9 @@
 <?php
 namespace SynergyCommon\Model;
 
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Doctrine\CachedEntityManager;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class SessionModelFactory
@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class SessionModelFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $cacheStatus   = $serviceLocator->get('synergy\cache\status');
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');

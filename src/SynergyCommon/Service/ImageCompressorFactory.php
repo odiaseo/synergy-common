@@ -1,11 +1,10 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Image\Config\ImageCompressorOptions;
 use SynergyCommon\Image\ImageCompressor;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class ImageCompressorFactory
@@ -14,7 +13,7 @@ use Zend\ServiceManager\ServiceManager;
 class ImageCompressorFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
         $config      = $serviceLocator->get('config');

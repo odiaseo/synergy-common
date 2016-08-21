@@ -1,9 +1,9 @@
 <?php
 namespace SynergyCommon\Session;
 
+use Interop\Container\ContainerInterface;
 use Zend\Cache\StorageFactory as CacheStorageFactory;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Session\Container;
 use Zend\Session\SaveHandler\Cache;
 use Zend\Session\SessionManager as ZendSessionManager;
@@ -16,11 +16,12 @@ use Zend\Session\SessionManager as ZendSessionManager;
 class SessionManager implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
      * @return ZendSessionManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $config = $serviceLocator->get('config');
         if (isset($config['session'])) {

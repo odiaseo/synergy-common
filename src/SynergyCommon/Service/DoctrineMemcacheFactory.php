@@ -4,10 +4,10 @@ namespace SynergyCommon\Service;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Exception\MemcacheNotAvailableException;
 use Zend\Console\Request;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class DoctrineMemcacheFactory
@@ -15,7 +15,14 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class DoctrineMemcacheFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    /**
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
+     * @return ArrayCache|MemcacheCache|MemcachedCache
+     * @throws MemcacheNotAvailableException
+     */
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $host = '';
         /** @var $request \Zend\Http\PhpEnvironment\Request */
@@ -27,8 +34,8 @@ class DoctrineMemcacheFactory implements FactoryInterface
             if ($request instanceof Request) {
                 /** @var $event \Zend\Mvc\MvcEvent */
                 $event = $serviceLocator->get('application')->getMvcEvent();
-                if ($event and $rm = $event->getRouteMatch()) {
-                    $host = $rm->getParam('host');
+                if ($event and $routeMatch = $event->getRouteMatch()) {
+                    $host = $routeMatch->getParam('host');
                 }
             } else {
                 $host = $request->getServer('HTTP_HOST');

@@ -4,9 +4,6 @@ namespace SynergyCommonTest;
 
 use SynergyCommon\Client\ClientOptions;
 use SynergyCommon\CommonSiteSettings;
-use Zend\Filter\StringTrim;
-use Zend\InputFilter\InputFilter;
-use Zend\Server\Reflection\ReflectionParameter;
 
 /**
  * Class run generic tests on entites. Verifies simple getters/setters
@@ -46,7 +43,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         if (count($methodParams) === 1) {
                             /** @var \ReflectionParameter $param */
                             $param = current($methodParams);
-                            $param = new ReflectionParameter($param);
 
                             if ($param->allowsNull()) {
                                 $class->$methodName([]);

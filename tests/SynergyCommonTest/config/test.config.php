@@ -1,9 +1,6 @@
 <?php
 return array(
     'controllers'  => array(
-        'invokables' => array(
-            'SynergyCommonTest\Sample' => 'SynergyCommonTest\SampleController',
-        ),
     ),
     'router'       => array(
         'routes' => array(

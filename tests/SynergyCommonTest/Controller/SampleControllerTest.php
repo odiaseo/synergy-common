@@ -3,9 +3,9 @@ namespace SynergyCommonTest\Controller;
 
 use SynergyCommon\Controller\BaseRestfulController;
 use SynergyCommonTest\Bootstrap;
-use Zend\Http\Header\ContentType;
+use SynergyCommonTest\SampleController;
 use Zend\Http\PhpEnvironment\Request;
-use Zend\Mvc\Router\Console\RouteMatch;
+use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -25,7 +25,7 @@ class SampleControllerTest extends \PHPUnit_Framework_TestCase
     public function testSendPayload()
     {
         /** @var BaseRestfulController $controller */
-        $controller = $this->serviceManager->get('controllerLoader')->get('SynergyCommonTest\Sample');
+        $controller = $this->serviceManager->get('ControllerManager')->get(SampleController::class);
         $this->assertInstanceOf(BaseRestfulController::class, $controller);
     }
 
@@ -35,7 +35,7 @@ class SampleControllerTest extends \PHPUnit_Framework_TestCase
     public function testRestMethods($method, $id, $data = [])
     {
         /** @var BaseRestfulController $controller */
-        $controller = $this->serviceManager->get('controllerLoader')->get('SynergyCommonTest\Sample');
+        $controller = $this->serviceManager->get('ControllerManager')->get(SampleController::class);
 
         $params = [
             'name' => 'api\home',
@@ -62,7 +62,7 @@ class SampleControllerTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         /** @var BaseRestfulController $controller */
-        $controller = $this->serviceManager->get('controllerLoader')->get('SynergyCommonTest\Sample');
+        $controller = $this->serviceManager->get('ControllerManager')->get(SampleController::class);
 
         $params = [
             'name'   => 'test\page',

@@ -3,10 +3,8 @@ namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\InitializerInterface;
+use Zend\ServiceManager\Initializer\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class ServiceManagerAwareInitializer
@@ -16,22 +14,11 @@ class ServiceManagerAwareInitializer implements InitializerInterface
 {
 
     /**
-     * Initialize
-     *
-     * @param $first
-     * @param ServiceLocatorInterface $second
-     * @return mixed
+     * @param ContainerInterface $container
+     * @param object $instance
      */
-    public function initialize($first, ServiceLocatorInterface $second)
+    public function __invoke(ContainerInterface $container, $instance)
     {
-        if ($first instanceof ContainerInterface) {
-            $container = $first;
-            $instance  = $second;
-        } else {
-            $container = $second;
-            $instance  = $first;
-        }
-
         if ($instance instanceof ServiceLocatorAwareInterface
             && !$instance instanceof AbstractPluginManager
         ) {

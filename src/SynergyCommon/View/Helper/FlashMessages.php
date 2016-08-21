@@ -1,42 +1,21 @@
 <?php
 namespace SynergyCommon\View\Helper;
 
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use Zend\Mvc\Controller\Plugin\FlashMessenger as FlashMessenger;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
 use Zend\View\Helper\AbstractHelper;
 
-class FlashMessages
-    extends AbstractHelper
-    implements ServiceLocatorAwareInterface
+/**
+ * Class FlashMessages
+ * @package SynergyCommon\View\Helper
+ */
+class FlashMessages extends AbstractHelper
 {
+    use ServiceLocatorAwareTrait;
     /**
      * @var FlashMessenger
      */
     protected $flashMessenger;
-
-    /** @var \Zend\Mvc\Controller\PluginManager */
-    protected $_serviceLocator;
-
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->_serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get service locator
-     *
-     */
-    public function getServiceLocator()
-    {
-        return $this->_serviceLocator;
-    }
 
     public function getFlashMessenger()
     {

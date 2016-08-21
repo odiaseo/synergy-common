@@ -1,9 +1,9 @@
 <?php
 namespace SynergyCommon\Entity;
 
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Exception\InvalidEntityException;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  * Class AbstractEntityFactory
@@ -20,15 +20,11 @@ class AbstractEntityFactory implements AbstractFactoryInterface
     }
 
     /**
-     * Determine if we can create a entity with name
-     *
-     * @param ServiceLocatorInterface $entityLocator
-     * @param                         $name
-     * @param                         $requestedName
-     *
+     * @param ContainerInterface $container
+     * @param string $requestedName
      * @return bool
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $entityLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         if (substr($requestedName, 0, strlen($this->_configPrefix)) != $this->_configPrefix) {
             return false;
@@ -38,16 +34,12 @@ class AbstractEntityFactory implements AbstractFactoryInterface
     }
 
     /**
-     * Crete entity with name
-     *
-     * @param ServiceLocatorInterface $entityLocator
-     * @param                         $name
-     * @param                         $requestedName
-     *
-     * @return \SynergyCommon\Entity\AbstractEntity
-     * @throws \SynergyCommon\Exception\InvalidEntityException
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
+     * @return AbstractEntity
      */
-    public function createServiceWithName(ServiceLocatorInterface $entityLocator, $name, $requestedName)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $entityId   = str_replace($this->_configPrefix, '', $requestedName);
         $entityName = __NAMESPACE__ . '\\' . ucfirst($entityId);

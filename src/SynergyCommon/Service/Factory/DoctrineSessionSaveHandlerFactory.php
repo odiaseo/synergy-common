@@ -1,8 +1,9 @@
 <?php
 namespace SynergyCommon\Service\Factory;
 
+use Interop\Container\ContainerInterface;
 use SynergyCommon\Session\SaveHandler\DoctrineSaveHandler;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -17,7 +18,7 @@ class DoctrineSessionSaveHandlerFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         /** @var ServiceLocatorInterface $serviceLocator */
         $config  = $serviceLocator->get('config');

@@ -12,13 +12,17 @@
       "email": "peleodiase@yahoo.co.uk"
     }
   ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": ">=5.5",
-    "zendframework/zendframework": "2.*",
+    "zendframework/zend-component-installer": "^1.0 || ^0.3 || ^1.0.0-dev@dev",
+    "zendframework/zendframework": "^3.0.2",
     "zendframework/zend-i18n-resources": "*",
-    "doctrine/doctrine-orm-module": "*",
-    "doctrine/doctrine-module": "*",
-    "doctrine/orm": "*",
+    "doctrine/doctrine-orm-module": "dev-master",
+    "doctrine/doctrine-module": "dev-master",
+    "zendframework/zend-mvc": "^3.0.2",
+    "zfcampus/zf-development-mode": "^3.0",
     "gedmo/doctrine-extensions": "^2.4",
     "monolog/monolog": "^1.18"
   },
@@ -30,6 +34,9 @@
     "monolog/monolog": "For enhanced logging features"
   },
   "autoload": {
+    "psr-4": {
+      "SynergyCommon\\": "module/SynergyCommon/src/"
+    },
     "psr-0": {
       "SynergyCommon": "src/",
       "SynergyCommonTest": "tests/"

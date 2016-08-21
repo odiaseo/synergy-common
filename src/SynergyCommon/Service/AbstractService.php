@@ -6,16 +6,14 @@ use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
 use SynergyCommon\Util\CurlRequestTrait;
-use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class AbstractService
  *
  * @package SynergyCommon\Service
  */
-abstract class AbstractService implements ServiceManagerAwareInterface
+abstract class AbstractService
 {
     use CurlRequestTrait;
     /**

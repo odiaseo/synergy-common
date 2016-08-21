@@ -29,7 +29,8 @@ class Module
         /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
         $serviceLocator  = $event->getApplication()->getServiceManager();
         $synergyListener = new SynergyModuleListener();
-        $eventManager->attach($synergyListener);
+        $synergyListener->attach($eventManager);
+
         $synergyListener->initSession($event);
         $synergyListener->bootstrap($eventManager, $serviceLocator);
     }

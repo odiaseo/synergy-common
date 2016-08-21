@@ -1,16 +1,18 @@
 <?php
 namespace SynergyCommon\Controller;
 
-use Zend\Http\PhpEnvironment\Response;
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class BaseRestfulController
  * @method sendPayload()
  * @package SynergyCommon\Controller
  */
-class BaseRestfulController extends AbstractRestfulController
+abstract class BaseRestfulController extends AbstractRestfulController
 {
+    use ServiceLocatorAwareTrait;
     /**
      * Service manager alias to concrate service class
      *
@@ -34,6 +36,11 @@ class BaseRestfulController extends AbstractRestfulController
                 '*/*'
             ),
         );
+
+    public function __construct(ServiceManager $serviceLocator)
+    {
+        $this->setServiceLocator($serviceLocator);
+    }
 
     /**
      * Return an item by ID

@@ -50,7 +50,7 @@ class CommonLibraryTest extends \PHPUnit_Framework_TestCase
 
     public function testFlashMessaager()
     {
-        $service = $this->serviceManager->get('viewhelpermanager')->get('flashMessages');
+        $service = $this->serviceManager->get('ViewHelperManager')->get('flashMessages');
         $this->assertInstanceOf('SynergyCommon\View\Helper\FlashMessages', $service);
     }
 
