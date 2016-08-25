@@ -5,6 +5,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
+use SynergyCommon\Doctrine\CachedEntityManager;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\NestedSetRepositoryTrait;
 use SynergyCommon\Util;
@@ -13,7 +14,7 @@ use Zend\Session\Container;
 /**
  * Class LocateAwareTrait
  * @method getEntity()
- * @method \SynergyCommon\Doctrine\CachedEntityManager getEntityManager()
+ * @method CachedEntityManager getEntityManager()
  * @method NestedSetRepositoryTrait getRepository()
  */
 trait LocaleAwareTrait
@@ -61,7 +62,7 @@ trait LocaleAwareTrait
         if ($field) {
             $query->leftJoin(
                 'e.translations', 't', 'WITH',
-                $query->expr()->andx(
+                $query->expr()->andX(
                     $query->expr()->eq('t.locale', ':locale'),
                     $query->expr()->eq('t.field', ':field')
                 )

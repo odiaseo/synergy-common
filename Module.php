@@ -3,8 +3,12 @@
 namespace SynergyCommon;
 
 use SynergyCommon\Controller\Plugin\SendPayload;
+use SynergyCommon\Form\Element\GoogleCaptcha;
 use SynergyCommon\Service\Factory\CacheStatusFactory;
 use SynergyCommon\Service\Factory\DoctrineSessionSaveHandlerFactory;
+use SynergyCommon\View\Helper\Factory\FlashMessagesHelperFactory;
+use SynergyCommon\View\Helper\Factory\MicroDataHelperFactory;
+use SynergyCommon\View\Helper\RenderGoogleCaptcha;
 
 /**
  * Class Module
@@ -62,8 +66,12 @@ class Module
     {
         return [
             'invokables' => array(
-                'renderGoogleCaptcha' => 'SynergyCommon\View\Helper\RenderGoogleCaptcha',
+                'renderGoogleCaptcha' => RenderGoogleCaptcha::class,
             ),
+            'factories'  => [
+                'microData'     => MicroDataHelperFactory::class,
+                'flashMessages' => FlashMessagesHelperFactory::class,
+            ]
         ];
     }
 
@@ -71,7 +79,7 @@ class Module
     {
         return array(
             'invokables' => array(
-                'GoogleCaptcha' => 'SynergyCommon\Form\Element\GoogleCaptcha'
+                'googleCaptcha' => GoogleCaptcha::class
             )
         );
     }

@@ -12,25 +12,38 @@
       "email": "peleodiase@yahoo.co.uk"
     }
   ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://toran.vaboose.org/repo/private/"
+    },
+    {
+      "type": "composer",
+      "url": "http://toran.vaboose.org/repo/packagist/"
+    },
+    {
+      "packagist": false
+    }
+  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=5.5",
+    "php": ">=5.6",
     "zendframework/zend-component-installer": "^1.0 || ^0.3 || ^1.0.0-dev@dev",
     "zendframework/zendframework": "^3.0.2",
     "zendframework/zend-i18n-resources": "*",
     "doctrine/doctrine-orm-module": "dev-master",
     "doctrine/doctrine-module": "dev-master",
     "zendframework/zend-mvc": "^3.0.2",
-    "zfcampus/zf-development-mode": "^3.0",
     "gedmo/doctrine-extensions": "^2.4",
-    "monolog/monolog": "^1.18"
+    "monolog/monolog": "^1.18",
+    "ewgo/solarium-module": "~2.0"
   },
   "require-dev": {
+    "zfcampus/zf-development-mode": "^3.0",
     "phpunit/phpunit": "~4.0"
   },
   "suggest": {
-    "ewgo/solarium-module": "For solr search aware models",
     "monolog/monolog": "For enhanced logging features"
   },
   "autoload": {
@@ -50,5 +63,8 @@
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
+  },
+  "config": {
+    "secure-http": false
   }
 }

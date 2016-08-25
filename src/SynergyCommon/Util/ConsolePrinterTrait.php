@@ -2,11 +2,12 @@
 namespace SynergyCommon\Util;
 
 use Zend\Console\ColorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class ConsolePrinterTrait
  * @method getVerbose()
- * @method \Zend\ServiceManager\ServiceManager getServiceManager()
+ * @method ServiceManager getServiceLocator()
  *
  * @package SynergyCommon\Util
  */
@@ -39,8 +40,8 @@ trait ConsolePrinterTrait
                 } else {
                     $console->write($msg, $color, $bgColor);
                 }
-            } elseif ($this->getServiceManager()->has('logger')) {
-                $this->getInternalLocator()->get('logger')->info($msg);
+            } elseif ($this->getInternalLocator()->has('logger')) {
+                $this->getServiceLocator()->get('logger')->info($msg);
             }
         }
 
@@ -110,11 +111,9 @@ trait ConsolePrinterTrait
     /**
      * @return \Zend\ServiceManager\ServiceManager
      */
-    public function getInternalLocator()
+    private function getInternalLocator()
     {
-        if (method_exists($this, 'getServiceManager')) {
-            return $this->getServiceManager();
-        } elseif (method_exists($this, 'getServiceLocator')) {
+        if (method_exists($this, 'getServiceLocator')) {
             return $this->getServiceLocator();
         }
 

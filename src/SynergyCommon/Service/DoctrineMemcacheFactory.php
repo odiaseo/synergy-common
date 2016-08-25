@@ -50,7 +50,7 @@ class DoctrineMemcacheFactory implements FactoryInterface
                 $cache->setMemcached($memcache);
 
                 if (!$memcache->getServerList()) {
-                    $memcache->addserver($memcacheConfig['host'], $memcacheConfig['port']);
+                    $memcache->addServer($memcacheConfig['host'], $memcacheConfig['port']);
                 }
             } else {
                 $cache    = new MemcacheCache();

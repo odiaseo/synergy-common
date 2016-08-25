@@ -13,6 +13,8 @@ use Zend\Filter\Word\CamelCaseToDash;
 class BaseService extends AbstractService
 {
 
+    use ServiceLocatorAwareTrait;
+
     /** @var \SynergyCommon\Util\ErrorHandler */
     protected $logger;
 
@@ -404,6 +406,7 @@ class BaseService extends AbstractService
      */
     public function getClassnameFromEntityKey($entityKey)
     {
+        $entityKey = strtolower($entityKey);
         $filename = $this->getEntityCacheFile();
         $cache    = include "$filename";
 

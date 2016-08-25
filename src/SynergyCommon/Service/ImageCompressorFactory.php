@@ -31,7 +31,7 @@ class ImageCompressorFactory implements FactoryInterface
 
         $service = new ImageCompressor();
         $service->setConfig($compressorConfig);
-        $service->setServiceManager($serviceLocator);
+        $service->setServiceLocator($serviceLocator);
 
         if ($serviceLocator->has('logger')) {
             $logger = $serviceLocator->get('logger');

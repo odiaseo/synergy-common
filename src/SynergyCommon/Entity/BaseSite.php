@@ -64,6 +64,7 @@ class BaseSite extends AbstractEntity
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
     /**
      * @return mixed
      */
@@ -224,32 +225,5 @@ class BaseSite extends AbstractEntity
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
-    }
-
-    /**
-     * Get sum of all offers
-     *
-     * @return mixed
-     */
-    public function sumOfferCount()
-    {
-        $count = $this->getOfferCount();
-        if ($this->getParent()) {
-            $count += $this->getParent()->getOfferCount();
-        }
-
-        if ($this->getLinkedSites()->count()) {
-            foreach ($this->getLinkedSites() as $linked) {
-                $count += $linked->getOfferCount();
-            }
-        }
-
-        if ($this->getSubDomains()->count()) {
-            foreach ($this->getSubDomains() as $linked) {
-                $count += $linked->getOfferCount();
-            }
-        }
-
-        return $count;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 use SynergyCommon\Service\ApiServiceFactory;
+use SynergyCommon\Service\ServiceManagerAwareInitializer;
 
 return array(
     'service_manager' => array(
@@ -13,7 +14,6 @@ return array(
             'synergycommon\entity\site'      => 'SynergyCommon\Entity\BaseSite',
             'synergycommon\entity\session'   => 'SynergyCommon\Member\Entity\Session',
             'synergycommon\entity\userGroup' => 'SynergyCommon\Member\Entity\UserGroup',
-            'TranslatorDelegator'            => 'SynergyCommon\Delegator\TranslatorDelegator',
         ),
         'factories'          => array(
             'logger'                              => 'SynergyCommon\Service\LoggerFactory',
@@ -25,12 +25,15 @@ return array(
         ),
         'delegators'         => [
             'translator'    => [
-                'TranslatorDelegator',
+                SynergyCommon\Delegator\TranslatorDelegator::class,
             ],
             'MvcTranslator' => [
-                'TranslatorDelegator',
+                SynergyCommon\Delegator\TranslatorDelegator::class,
             ],
         ],
+        'initializers'       => [
+            'injectContainer' => ServiceManagerAwareInitializer::class
+        ]
     ),
     'controllers'     => [
         'abstract_factories' => [
@@ -81,5 +84,5 @@ return array(
         'logger'               => array(
             'priority' => \Zend\Log\Logger::DEBUG
         )
-    )
+    ),
 );

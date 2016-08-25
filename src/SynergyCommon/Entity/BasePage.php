@@ -1,7 +1,6 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -112,21 +111,6 @@ class BasePage extends BaseEntity
      * @ORM\Column(type="datetime", name="end_at", nullable=true)
      */
     protected $endAt;
-
-    public function __construct()
-    {
-        $this->children = new ArrayCollection();
-    }
-
-    public function setChildren($children)
-    {
-        $this->children = $children;
-    }
-
-    public function getChildren()
-    {
-        return $this->children;
-    }
 
     public function setDescription($description)
     {

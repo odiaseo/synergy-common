@@ -6,7 +6,6 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use SynergyCommon\Util\ErrorHandler;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class LoggerFactory
@@ -16,9 +15,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class LoggerFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed|ErrorHandler
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
+     * @return ErrorHandler
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {

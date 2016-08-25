@@ -1059,6 +1059,11 @@ class Util
         return $url;
     }
 
+    /**
+     * @param $url
+     * @param bool $usePost
+     * @return bool|string
+     */
     public static function isValidDeepLink($url, $usePost = false)
     {
         $url = stripslashes($url);
@@ -1087,11 +1092,11 @@ class Util
             if ($lastUrl == 'http://localhost/error.html') {
                 return false;
             }
-            
+
             if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
                 return true;
-            } 
-            
+            }
+
             if ($code == 403) {
                 return false;
             }
@@ -1161,7 +1166,7 @@ class Util
 
                 if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body, $matches)) {
                     $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
-                    return self:: isValidDeepLink($newLink, true, true);
+                    return self:: isValidDeepLink($newLink, true);
                 }
             }
         }
@@ -1209,7 +1214,7 @@ class Util
         if ($usePost) {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
-        
+
         @curl_exec($ch);
         if (@curl_errno($ch)) {   // should be 0
             @curl_close($ch);
@@ -1224,9 +1229,9 @@ class Util
     }
 
     /**
-     * @param      $url
+     * @param $url
      * @param bool $followredirects
-     *
+     * @param bool $usePost
      * @return array|bool
      */
     public static function getHttpResponseUsingCurl($url, $followredirects = true, $usePost = false)
@@ -1594,7 +1599,7 @@ class Util
         $host      = null;
         if ($request instanceof ConsoleRequest) {
             $isConsole = true;
-            /** @var $routeMatch \Zend\Mvc\Router\RouteMatch */
+            /** @var $routeMatch \Zend\Router\RouteMatch */
             if ($event and $routeMatch = $event->getRouteMatch()) {
                 $host = $routeMatch->getParam('host', $routeMatch->getParam(self::CLIENT_DOMAIN_KEY, null));
             }

@@ -1,8 +1,8 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\Cache\Storage\StorageInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class DoctrineCacheFactory
@@ -14,14 +14,14 @@ class DoctrineResultCacheFactory extends DoctrineCacheFactory
     /**
      * Generate Stoker cache storage
      *
-     * @param ServiceLocatorInterface $serviceManager
+     * @param ContainerInterface $serviceManager
      *
      * @return mixed|void
      */
-    public function createService(ServiceLocatorInterface $serviceManager)
+    public function __invoke(ContainerInterface $serviceManager, $requestedName, array $options = null)
     {
         /** @var StorageInterface $cache */
-        $cache  = parent::createService($serviceManager);
+        $cache  = parent::__invoke($serviceManager, $requestedName, $options);
         $status = $serviceManager->get('synergy\cache\status');
         if ($status->enabled) {
             $cache->getOptions()->setTtl(7200);

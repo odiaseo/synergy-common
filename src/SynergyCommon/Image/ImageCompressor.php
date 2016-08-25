@@ -1,25 +1,24 @@
 <?php
 namespace SynergyCommon\Image;
 
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
+use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Util\ConsolePrinterTrait;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class ImageCompressor
  *
  * @package SynergyCommon\Image
  */
-class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterface
+class ImageCompressor implements CompressionInterface, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
     use ConsolePrinterTrait;
 
     /** @var \Zend\Log\LoggerInterface */
     protected $_logger;
     /** @var Config\ImageCompressorOptions */
     protected $_config;
-    /** @var \Zend\ServiceManager\ServiceManager */
-    protected $_serviceManager;
     /** @var bool */
     protected $verbose = true;
 
@@ -42,7 +41,6 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
             $this->printInfo('creating directory ' . $watchDirectory);
         }
 
-        /** @var $file  \SplFileObject */
         foreach (new \DirectoryIterator($watchDirectory) as $file) {
 
             if ($file->isDot()) {
@@ -76,7 +74,7 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
                         $this->printMessage('compresed with trimage');
 
                         if ($converter = $this->_config->getJpegConverter()) {
-                            $converter = $this->_serviceManager->get($converter);
+                            $converter = $this->serviceLocator->get($converter);
                             if ($converter instanceof ImageConverterInterface) {
                                 $convertedList = $converter->convert(
                                     $tmpFile, $newFilename, $this->_config->getDimensions()
@@ -160,18 +158,5 @@ class ImageCompressor implements ServiceManagerAwareInterface, CompressionInterf
     public function getConfig()
     {
         return $this->_config;
-    }
-
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->_serviceManager = $serviceManager;
-    }
-
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->_serviceManager;
     }
 }

@@ -2,23 +2,39 @@
 
 namespace SynergyCommon\View\Helper;
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Interop\Container\ContainerInterface;
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
+use SynergyCommon\Util\ErrorHandler;
+use Zend\Log\LoggerInterface;
 use Zend\View\Helper\AbstractHelper;
 
-class MicroData
-    extends AbstractHelper
-    implements ServiceManagerAwareInterface
+/**
+ * Class MicroData
+ * @package SynergyCommon\View\Helper
+ */
+class MicroData extends AbstractHelper
 {
+    use ServiceLocatorAwareTrait;
 
-    private $_enabled = true;
+    /**
+     * @var bool
+     */
+    private $enabled = true;
 
-    /** @var \Zend\View\HelperPluginManager */
-    protected $_sm;
+    /**
+     * @var ErrorHandler | LoggerInterface
+     */
+    private $logger;
 
-    public function setServiceManager(ServiceManager $serviceManager)
+    /**
+     * MicroData constructor.
+     * @param ContainerInterface $serviceManager
+     * @param ErrorHandler $logger
+     */
+    public function __construct(ContainerInterface $serviceManager, ErrorHandler $logger)
     {
-        $this->_sm = $serviceManager;
+        $this->setServiceLocator($serviceManager);
+        $this->logger = $logger;
     }
 
     /**
@@ -37,7 +53,7 @@ class MicroData
     public function property($property)
     {
         $itemProperty = '';
-        if ($this->isPropertyValid($property) and $this->_enabled) {
+        if ($this->isPropertyValid($property) and $this->enabled) {
             $itemProperty = "itemprop=\"{$property}\"";
         }
 
@@ -52,7 +68,7 @@ class MicroData
     public function scope($scope)
     {
         $itemProperty = '';
-        if ($scope and $this->_enabled) {
+        if ($scope and $this->enabled) {
             $itemProperty = "itemscope itemtype=\"http://schema.org/{$scope}\"";
         }
 
@@ -72,7 +88,7 @@ class MicroData
 
     protected function pad($text)
     {
-        if ($this->_enabled) {
+        if ($this->enabled) {
             return ' ' . trim($text) . ' ';
         } else {
             return '';
@@ -122,12 +138,8 @@ class MicroData
             'WPHeader'
         );
 
-        if (!in_array($property, $valid)
-            and $this->_sm->getServiceLocator()->has('logger')
-        ) {
-            /** @var $logger \SynergyCommon\Util\ErrorHandler */
-            $logger = $this->_sm->getServiceLocator()->get('logger');
-            $logger->warn('Invalid microData property found: ' . $property);
+        if (!in_array($property, $valid)) {
+            $this->logger->warn('Invalid microData property found: ' . $property);
         }
 
         return true;
@@ -135,14 +147,13 @@ class MicroData
 
     public function setEnabled($enabled)
     {
-        $this->_enabled = $enabled;
+        $this->enabled = $enabled;
 
         return $this;
     }
 
     public function getEnabled()
     {
-        return $this->_enabled;
+        return $this->enabled;
     }
 }
-

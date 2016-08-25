@@ -14,7 +14,7 @@ use Zend\Http\PhpEnvironment\Response as HttpResponse;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\TranslatorAwareTreeRouteStack;
+use Zend\Router\Http\TranslatorAwareTreeRouteStack;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\View\Model\JsonModel;

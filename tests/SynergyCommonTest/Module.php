@@ -64,13 +64,4 @@ class Module
             ),
         );
     }
-
-    public function getViewHelperConfig()
-    {
-        return array(
-            'invokables' => array(
-                'flashMessages' => 'SynergyCommon\View\Helper\FlashMessages',
-            )
-        );
-    }
 }

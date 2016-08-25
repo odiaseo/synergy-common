@@ -1,13 +1,21 @@
 <?php
 namespace SynergyCommon\Service;
 
+use Interop\Container\ContainerInterface;
+
+/**
+ * Class ServiceLocatorAwareTrait
+ * @package SynergyCommon\Service
+ */
 trait ServiceLocatorAwareTrait
 {
-
+    /**
+     * @var ContainerInterface
+     */
     protected $serviceLocator;
 
     /**
-     * @return mixed
+     * @return ContainerInterface
      */
     public function getServiceLocator()
     {
@@ -17,7 +25,7 @@ trait ServiceLocatorAwareTrait
     /**
      * @param mixed $serviceLocator
      */
-    public function setServiceLocator($serviceLocator)
+    public function setServiceLocator(ContainerInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
     }

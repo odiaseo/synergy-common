@@ -1,8 +1,6 @@
 <?php
 namespace SynergyCommon\Doctrine;
 
-use Doctrine\ORM\AbstractQuery;
-
 /**
  * Class ModelCacheAwareTrait
  * @package SynergyCommon\Doctrine

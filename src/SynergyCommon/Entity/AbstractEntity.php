@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilter;
 
 /**
  * Class AbstractEntity
- * @method formatDeeplink()
+ * @method formatDeeplink($link)
  *
  * @package SynergyCommon\Entity
  */

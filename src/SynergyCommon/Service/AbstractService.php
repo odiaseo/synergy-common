@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceManager;
  *
  * @package SynergyCommon\Service
  */
-abstract class AbstractService
+abstract class AbstractService implements ServiceLocatorAwareInterface
 {
     use CurlRequestTrait;
     /**

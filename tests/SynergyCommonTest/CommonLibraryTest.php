@@ -35,13 +35,6 @@ class CommonLibraryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSessionManager()
-    {
-        $service = $this->serviceManager->get('session_manager');
-        $this->assertInstanceOf('Zend\Session\SessionManager', $service);
-
-    }
-
     public function testApiService()
     {
         $service = $this->serviceManager->get('common\api\service');

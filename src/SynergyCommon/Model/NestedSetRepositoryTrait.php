@@ -3,7 +3,6 @@ namespace SynergyCommon\Model;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Repository\DefaultRepositoryFactory;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;

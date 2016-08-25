@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon\Service;
 
-use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Interop\Container\ContainerInterface;
 use Zend\Console\Request;
@@ -18,7 +18,7 @@ class DoctrineApcCacheFactory implements FactoryInterface
      * @param ContainerInterface $serviceLocator
      * @param string $requestedName
      * @param array|null $options
-     * @return ApcCache|ArrayCache
+     * @return ApcuCache|ArrayCache
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
@@ -39,7 +39,7 @@ class DoctrineApcCacheFactory implements FactoryInterface
             }
 
             $prefix = preg_replace('/[^a-z0-9]/i', '', $host);
-            $cache  = new ApcCache();
+            $cache  = new ApcuCache();
             $cache->setNamespace($prefix);
         } else {
             $cache = new ArrayCache();

@@ -1,8 +1,7 @@
 <?php
 namespace SynergyCommon\View\Helper;
 
-use SynergyCommon\Service\ServiceLocatorAwareTrait;
-use Zend\Mvc\Controller\Plugin\FlashMessenger as FlashMessenger;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Zend\View\Helper\AbstractHelper;
 
 /**
@@ -11,27 +10,26 @@ use Zend\View\Helper\AbstractHelper;
  */
 class FlashMessages extends AbstractHelper
 {
-    use ServiceLocatorAwareTrait;
     /**
      * @var FlashMessenger
      */
-    protected $flashMessenger;
+    private $flashMessenger;
+
+    /**
+     * FlashMessages constructor.
+     * @param FlashMessenger $flashMessenger
+     */
+    public function __construct(FlashMessenger $flashMessenger)
+    {
+        $this->flashMessenger = $flashMessenger;
+    }
 
     public function getFlashMessenger()
     {
-        if (!$this->flashMessenger) {
-            /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
-            $serviceManager = $this->getServiceLocator()->getServiceLocator();
-
-            /** @var $pluginManager \Zend\Mvc\Controller\PluginManager */
-            $pluginManager        = $serviceManager->get('ControllerPluginManager');
-            $this->flashMessenger = $pluginManager->get('flashmessenger');
-        }
-
         return $this->flashMessenger;
     }
 
-    public function __invoke($includeCurrentMessages = false)
+    public function __invoke($includeMessages = false)
     {
         $messages = array(
             FlashMessenger::NAMESPACE_ERROR   => array(),
@@ -42,7 +40,7 @@ class FlashMessages extends AbstractHelper
 
         foreach ($messages as $ns => &$m) {
             $m = $this->getFlashMessenger()->getMessagesFromNamespace($ns);
-            if ($includeCurrentMessages) {
+            if ($includeMessages) {
                 $m = array_merge($m, $this->getFlashMessenger()->getCurrentMessagesFromNamespace($ns));
                 $this->getFlashMessenger()->clearCurrentMessagesFromNamespace($ns);
             }

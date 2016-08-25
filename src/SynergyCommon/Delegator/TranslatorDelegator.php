@@ -1,10 +1,10 @@
 <?php
 namespace SynergyCommon\Delegator;
 
+use Interop\Container\ContainerInterface;
 use Zend\I18n\Translator\Resources;
 use Zend\I18n\Translator\Translator;
-use Zend\ServiceManager\DelegatorFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
 /**
  * Class TranslatorDelegator
@@ -13,13 +13,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class TranslatorDelegator implements DelegatorFactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $services
+     * @param ContainerInterface $services
      * @param string $name
-     * @param string $requestedName
      * @param callable $callback
-     * @return mixed
+     * @param array|null $options
+     * @return Translator
      */
-    public function createDelegatorWithName(ServiceLocatorInterface $services, $name, $requestedName, $callback)
+    public function __invoke(ContainerInterface $services, $name, callable $callback, array $options = null)
     {
         /** @var Translator $translator */
         $translator = $callback();
@@ -28,12 +28,12 @@ class TranslatorDelegator implements DelegatorFactoryInterface
         $language = \Locale::parseLocale($locale)['language'];
 
         $translator->addTranslationFilePattern(
-            'phpArray',
+            'phparray',
             Resources::getBasePath(),
             sprintf(Resources::getPatternForValidator(), $language)
         );
         $translator->addTranslationFilePattern(
-            'phpArray',
+            'phparray',
             Resources::getBasePath(),
             sprintf(Resources::getPatternForCaptcha(), $language)
         );

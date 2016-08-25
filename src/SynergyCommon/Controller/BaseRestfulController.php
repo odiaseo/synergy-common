@@ -7,7 +7,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class BaseRestfulController
- * @method sendPayload()
+ * @method sendPayload($load)
  * @package SynergyCommon\Controller
  */
 abstract class BaseRestfulController extends AbstractRestfulController
@@ -157,7 +157,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
     }
 
     /**
-     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     * @return \Interop\Container\ContainerInterface
      */
     public function getServiceLocator()
     {

@@ -6,8 +6,6 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use SynergyCommon\CacheAwareInterface;
-use SynergyCommon\Doctrine\CacheAwareQueryInterface;
-use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\Doctrine\ModelCacheAwareTrait;
 use SynergyCommon\Doctrine\QueryBuilder;
 use SynergyCommon\Entity\AbstractEntity;
@@ -18,10 +16,9 @@ use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Paginator\Paginator;
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
-use SynergyCommon\Service\ServiceLocatorAwareTrait;
-use Zend\Session\Container;
 
 /**
  * Class AbstractModel
@@ -491,7 +488,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface
 
     public function __call($method, $args)
     {
-        $repo = $this->getRepository($this->getEntity());
+        $repo = $this->getRepository();
         try {
             return Util::customCall($repo, $method, $args);
         } catch (\Exception $e) {
@@ -621,7 +618,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface
                 return null;
             }
         } elseif ($limit) {
-            $query->getMaxResults($limit);
+            $query->setMaxResults($limit);
 
             return $query->getQuery()->getArrayResult();
         }
@@ -640,7 +637,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface
      */
     public function updateForeignEntity($id, $param, $value)
     {
-        $entity  = $this->getRepository($this->_entity)->find($id);
+        $entity  = $this->getRepository()->find($id);
         $mapping = $this->getEntityManager()->getClassMetadata($this->_entity);
         $target  = $mapping->associationMappings[$param]['targetEntity'];
 
@@ -698,7 +695,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface
     {
         $error   = false;
         $message = '';
-        $entity  = $this->getRepository($this->getEntity())->find($entityId);
+        $entity  = $this->getRepository()->find($entityId);
         $mapping = $this->getEntityManager()->getClassMetadata($this->_entity);
 
         try {
@@ -768,7 +765,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface
     /**
      * Get paginatored list
      *
-     * @return Paginator
+     * @return DoctrinePaginator
      */
     public function getPaginator()
     {

@@ -3,7 +3,6 @@ namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class DoctrineCacheFactory
@@ -13,11 +12,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class DoctrineCacheFactory implements FactoryInterface
 {
     /**
-     * Generate Stoker cache storage
-     *
-     * @param ServiceLocatorInterface $serviceManager
-     *
-     * @return mixed|void
+     * @param ContainerInterface $serviceManager
+     * @param string $requestedName
+     * @param array|null $options
+     * @return mixed
      */
     public function __invoke(ContainerInterface $serviceManager, $requestedName, array $options = null)
     {

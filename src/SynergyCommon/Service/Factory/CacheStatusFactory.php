@@ -13,10 +13,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class CacheStatusFactory implements FactoryInterface
 {
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ContainerInterface $serviceLocator
+     * @param string $requestedName
+     * @param array|null $options
+     * @return object
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {

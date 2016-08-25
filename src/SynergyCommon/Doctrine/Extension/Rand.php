@@ -6,7 +6,6 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
-use SynergyCommon\Doctrine\Extension;
 
 /**
  * DoctrineExtensions Mysql Function Pack
