@@ -6,7 +6,6 @@ use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
 use SynergyCommon\Util\CurlRequestTrait;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class AbstractService
@@ -15,6 +14,7 @@ use Zend\ServiceManager\ServiceManager;
  */
 abstract class AbstractService implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
     use CurlRequestTrait;
     /**
      * Print to console
@@ -28,16 +28,8 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     /** @var \Doctrine\ORM\EntityManager */
     protected $_entityManager;
 
-    /** @var  \Zend\ServiceManager\ServiceManager */
-    protected $_serviceManager;
-
     /** @var \SynergyCommon\Util\ErrorHandler */
     protected $logger;
-
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->_serviceManager = $serviceManager;
-    }
 
     public function processFilters($options = array())
     {
@@ -94,8 +86,8 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     public function getModel($key, $options = array(), $additionalOptions = array())
     {
         /** @var $model \SynergyCommon\Model\AbstractModel */
-        $config = $this->getServiceManager()->get('config');
-        $model  = $this->getServiceManager()->get($config['synergy']['model_factory_prefix'] . $key);
+        $config = $this->getServiceLocator()->get('config');
+        $model  = $this->getServiceLocator()->get($config['synergy']['model_factory_prefix'] . $key);
         $model->setOptions(
             new ModelOptions(
                 array(
@@ -125,7 +117,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
                     }
 
                     if ($field == 'deeplink' and method_exists($entity, 'formatDeeplink')) {
-                        $list[$field] = $entity->formatDeeplink($this->getServiceManager());
+                        $list[$field] = $entity->formatDeeplink($this->getServiceLocator());
                     }
                 }
             } else {
@@ -181,7 +173,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     public function getEntityManager()
     {
         if (!$this->_entityManager) {
-            $this->_entityManager = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+            $this->_entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         }
 
         return $this->_entityManager;
@@ -225,12 +217,4 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     }
 
     abstract public function getEntityCacheFile();
-
-    /**
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->_serviceManager;
-    }
 }

@@ -12,9 +12,6 @@ use Zend\Filter\Word\CamelCaseToDash;
  */
 class BaseService extends AbstractService
 {
-
-    use ServiceLocatorAwareTrait;
-
     /** @var \SynergyCommon\Util\ErrorHandler */
     protected $logger;
 
@@ -316,7 +313,7 @@ class BaseService extends AbstractService
 
     public function getEntityCacheFile()
     {
-        $config   = $this->getServiceManager()->get('config');
+        $config   = $this->getServiceLocator()->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
         if (!is_readable($filename)) {
@@ -328,7 +325,7 @@ class BaseService extends AbstractService
         }
 
         if ($refresh) {
-            $this->_createEntityCache($filename);
+            $this->createEntityCache($filename);
         }
 
         return $filename;
@@ -341,15 +338,15 @@ class BaseService extends AbstractService
      *
      * @return bool|int
      */
-    protected function _createEntityCache($filename)
+    protected function createEntityCache($filename)
     {
         /** @var $entityManager  \Doctrine\ORM\EntityManager */
         $output = array();
-        $config = $this->getServiceManager()->get('config');
+        $config = $this->getServiceLocator()->get('config');
         foreach ($config['doctrine']['connection'] as $orm => $data) {
             $ormAlias = 'doctrine.entitymanager.' . $orm;
-            if ($this->getServiceManager()->has($ormAlias)) {
-                $entityManager = $this->getServiceManager()->get($ormAlias);
+            if ($this->getServiceLocator()->has($ormAlias)) {
+                $entityManager = $this->getServiceLocator()->get($ormAlias);
                 $cmf           = $entityManager->getMetadataFactory();
                 $classes       = $cmf->getAllMetadata();
                 $filter        = new CamelCaseToDash();
@@ -407,8 +404,8 @@ class BaseService extends AbstractService
     public function getClassnameFromEntityKey($entityKey)
     {
         $entityKey = strtolower($entityKey);
-        $filename = $this->getEntityCacheFile();
-        $cache    = include "$filename";
+        $filename  = $this->getEntityCacheFile();
+        $cache     = include "$filename";
 
         return isset($cache[$entityKey]) ? $cache[$entityKey] : null;
     }
@@ -418,7 +415,7 @@ class BaseService extends AbstractService
      */
     public function getLogger()
     {
-        return $this->getServiceManager()->get('logger');
+        return $this->getServiceLocator()->get('logger');
     }
 
     /**
@@ -434,8 +431,8 @@ class BaseService extends AbstractService
      */
     public function getApiService()
     {
-        if ($this->getServiceManager()->has('common\api\service')) {
-            return $this->getServiceManager()->get('common\api\service');
+        if ($this->getServiceLocator()->has('common\api\service')) {
+            return $this->getServiceLocator()->get('common\api\service');
         }
 
         return null;

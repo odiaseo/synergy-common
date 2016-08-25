@@ -65,7 +65,7 @@ class BaseApiService extends BaseService implements ClientAwareInterface
     {
         if (!$domain) {
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request = $this->getServiceManager()->get('application')->getRequest();
+            $request = $this->getServiceLocator()->get('application')->getRequest();
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
         }
 

@@ -54,7 +54,7 @@ class AbstractServiceFactory implements AbstractFactoryInterface
             $service = new BaseService();
         }
 
-        $service->setServiceManager($serviceLocator);
+        $service->setServiceLocator($serviceLocator);
         $service->setEntityKey($serviceId);
 
         return $service;

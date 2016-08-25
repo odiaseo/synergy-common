@@ -41,7 +41,7 @@ trait ConsolePrinterTrait
                     $console->write($msg, $color, $bgColor);
                 }
             } elseif ($this->getInternalLocator()->has('logger')) {
-                $this->getServiceLocator()->get('logger')->info($msg);
+                $this->getInternalLocator()->get('logger')->info($msg);
             }
         }
 

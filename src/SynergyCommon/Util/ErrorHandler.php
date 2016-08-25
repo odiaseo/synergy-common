@@ -1,6 +1,8 @@
 <?php
 namespace SynergyCommon\Util;
 
+use SynergyCommon\Service\ServiceLocatorAwareInterface;
+use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Log\Logger;
@@ -10,29 +12,13 @@ use Zend\Log\Logger;
  *
  * @package SynergyCommon\Util
  */
-class ErrorHandler
+class ErrorHandler implements ServiceLocatorAwareInterface
 {
 
-    protected $serviceLocator;
+    use ServiceLocatorAwareTrait;
 
     /** @var  Logger */
     private $logger;
-
-    /**
-     * @return mixed
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * @param mixed $serviceLocator
-     */
-    public function setServiceLocator($serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
 
     public function logException(\Exception $e)
     {
