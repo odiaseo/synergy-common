@@ -16,6 +16,7 @@ use SynergyCommon\ModelTrait\LocaleAwareTrait;
 use SynergyCommon\NestedsetInterface;
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
 use SynergyCommon\Paginator\Paginator;
+use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
 use Zend\InputFilter\InputFilter;
@@ -25,7 +26,7 @@ use Zend\InputFilter\InputFilter;
  *
  * @package SynergyCommon\Model
  */
-class AbstractModel implements NestedsetInterface, CacheAwareInterface
+class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ModelCacheAwareTrait;

@@ -3,6 +3,7 @@
 namespace SynergyCommon\View\Helper;
 
 use Interop\Container\ContainerInterface;
+use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util\ErrorHandler;
 use Zend\Log\LoggerInterface;
@@ -12,7 +13,7 @@ use Zend\View\Helper\AbstractHelper;
  * Class MicroData
  * @package SynergyCommon\View\Helper
  */
-class MicroData extends AbstractHelper
+class MicroData extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
