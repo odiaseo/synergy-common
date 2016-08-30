@@ -7,7 +7,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class BaseRestfulController
- * @method sendPayload()
+ * @method sendPayload($payload)
  * @package SynergyCommon\Controller
  */
 abstract class BaseActionController extends AbstractActionController
