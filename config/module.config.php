@@ -22,6 +22,7 @@ return array(
             'doctrine.cache.synergy_apc'          => 'SynergyCommon\Service\DoctrineApcCacheFactory',
             'doctrine.cache.cache\factory'        => 'SynergyCommon\Service\DoctrineCacheFactory',
             'doctrine.cache.result\cache\factory' => 'SynergyCommon\Service\DoctrineResultCacheFactory',
+            'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
         ),
         'delegators'         => [
             'translator'    => [
@@ -40,33 +41,30 @@ return array(
             \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
-    'session'         => array(
-        'config'       => array(
-            'model'      => 'common\model\session',
-            'class'      => 'Zend\Session\Config\SessionConfig',
-            'options'    => array(
-                'name'                => 'synergycommon',
-                'remember_me_seconds' => 14400,
-            ),
-            'validators' => array(
-                'Zend\Session\Validator\RemoteAddr',
-                'Zend\Session\Validator\HttpUserAgent',
-            ),
-        ),
-        'save_handler' => array(
-            'cache' => array(
-                'adapter' => array(
-                    'name'    => 'filesystem',
-                    'options' => array(
-                        'cache_dir' => getcwd() . '/data/session',
-                    )
-                )
-            ),
-        ),
-        'lifetime'     => 7200,
-        'storage'      => 'Zend\Session\Storage\SessionArrayStorage',
-        'validators'   => array(),
-    ),
+    'session_config'  => [
+        'phpSaveHandler'      => 'files',
+        'savePath'            => '/tmp/',
+        'remember_me_seconds' => 7200,
+        'cookie_httponly'     => true,
+        'cookie_lifetime'     => 7200,
+        'gc_maxlifetime'      => 7200,
+    ],
+    'session'         => [
+        'config'     => [
+            'class'   => \Zend\Session\Config\SessionConfig::class,
+            'options' => [
+                'name' => 'synergy',
+            ],
+        ],
+        'storage'    => \Zend\Session\Storage\SessionArrayStorage::class,
+        'validators' => [
+            \Zend\Session\Validator\RemoteAddr::class,
+            \Zend\Session\Validator\HttpUserAgent::class,
+        ],
+    ],
+    'session_storage' => [
+        'type' => \Zend\Session\Storage\SessionArrayStorage::class,
+    ],
     'synergy'         => array(
         'model_factory_prefix' => 'am\model\\',
         'compress_output'      => true,
