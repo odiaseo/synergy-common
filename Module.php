@@ -3,6 +3,7 @@
 namespace SynergyCommon;
 
 use SynergyCommon\Controller\Plugin\SendPayload;
+use SynergyCommon\Factory\LazyInvokableFactory;
 use SynergyCommon\Form\Element\GoogleCaptcha;
 use SynergyCommon\Service\Factory\CacheStatusFactory;
 use SynergyCommon\Service\Factory\DoctrineSessionSaveHandlerFactory;
@@ -133,9 +134,12 @@ class Module
     public function getFormElementConfig()
     {
         return array(
-            'invokables' => array(
-                'googleCaptcha' => GoogleCaptcha::class
-            )
+            'aliases'   => array(
+                'GoogleCaptcha' => GoogleCaptcha::class
+            ),
+            'factories' => [
+                GoogleCaptcha::class => LazyInvokableFactory::class
+            ],
         );
     }
 }

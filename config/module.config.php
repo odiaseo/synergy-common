@@ -41,6 +41,7 @@ return array(
             \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
+
     'session_config'  => [
         'phpSaveHandler'      => 'files',
         'savePath'            => '/tmp/',
