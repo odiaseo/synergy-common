@@ -58,8 +58,8 @@ return array(
         ],
         'storage'    => \Zend\Session\Storage\SessionArrayStorage::class,
         'validators' => [
-            \Zend\Session\Validator\RemoteAddr::class,
-            \Zend\Session\Validator\HttpUserAgent::class,
+            //\Zend\Session\Validator\RemoteAddr::class,
+            //\Zend\Session\Validator\HttpUserAgent::class,
         ],
     ],
     'session_storage' => [
