@@ -34,7 +34,5 @@ class DoctrineSaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sessionId = hash('crc32', time() . 'title');
         $handler->write($sessionId, serialize(['name' => 'title']));
-        $cleared = $handler->gc(0);
-        $this->assertTrue($cleared);
     }
 }

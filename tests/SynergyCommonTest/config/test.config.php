@@ -25,17 +25,19 @@ return array(
     ),
 
     'doctrine'     => array(
-        'connection'    => array(
+        'connection' => array(
             'orm_default' => array(
-                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOSqlite\Driver',
                 'params'      => array(
-                    'host'     => 'localhost',
+                    'driver'   => 'pdo_sqlite',
+                    'host'     => '127.0.0.1',
                     'port'     => '3306',
                     'user'     => 'root',
                     'password' => 'password',
-                    'dbname'   => 'vaboose_merged',
+                    'dbname'   => 'test',
+                    'path'     => sys_get_temp_dir() . '/sqlite.db',
                 ),
-            ),
+            )
         ),
         'configuration' => array(
             'orm_default' => array(
