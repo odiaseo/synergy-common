@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/SynergyCommonTest/Bootstrap.php" colors="true" backupGlobals="false" backupStaticAttributes="false">
+
+    <testsuites>
+        <testsuite name="Synergy Common Test Suite">
+            <directory suffix="Test.php">tests/SynergyCommonTest</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <includePath>tests/SynergyCommonTest</includePath>
+        <includePath>../../vendor</includePath>
+        <includePath>../../src</includePath>
+    </php>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
