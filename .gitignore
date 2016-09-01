@@ -1,9 +1,7 @@
 vendor
-composer.lock
 composer.phar
 vendor/
 .idea/
 .settings
 autoload
-application.config.php
 coverage-report
