@@ -7,7 +7,7 @@ use Zend\Mvc\Application;
 date_default_timezone_set('UTC');
 error_reporting(E_ALL | E_STRICT);
 
-chdir(dirname(realpath(__DIR__. '/../')));
+chdir(dirname(realpath(__DIR__ . '/../')));
 $basePath = realpath('./') . '/';
 
 set_include_path(
@@ -96,7 +96,12 @@ class Bootstrap
      */
     public static function setUpDatabase()
     {
-        unlink(sys_get_temp_dir() . '/sqlite.db');
+        $file = sys_get_temp_dir() . '/sqlite.db';
+
+        if (file_exists($file)) {
+            unlink($file);
+        }
+
         $entityManager = self::getServiceManager()->get('doctrine.entitymanager.orm_default');
         $tool          = new SchemaTool($entityManager);
         $classes       = $entityManager->getMetadataFactory()->getAllMetadata();

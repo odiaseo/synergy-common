@@ -8,8 +8,8 @@
     </testsuites>
     <php>
         <includePath>tests/SynergyCommonTest</includePath>
-        <includePath>../../vendor</includePath>
-        <includePath>../../src</includePath>
+        <includePath>vendor</includePath>
+        <includePath>src</includePath>
     </php>
     <filter>
         <whitelist>
