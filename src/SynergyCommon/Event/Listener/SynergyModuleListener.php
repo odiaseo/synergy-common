@@ -5,6 +5,7 @@ use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
 use SynergyCommon\PageRendererInterface;
+use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Header\CacheControl;
@@ -328,8 +329,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $production     = (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production');
             $serviceManager = $event->getApplication()->getServiceManager();
 
-            if ($serviceManager->has('zfcuser_auth_service')) {
-                $authService = $serviceManager->get('zfcuser_auth_service');
+            if ($serviceManager->has(AuthenticationService::class)) {
+                $authService = $serviceManager->get(AuthenticationService::class);
                 $hasIdentity = $authService->hasIdentity();
             } else {
                 $hasIdentity = false;
