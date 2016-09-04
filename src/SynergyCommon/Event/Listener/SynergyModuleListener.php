@@ -18,6 +18,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Router\Http\TranslatorAwareTreeRouteStack;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
+use Zend\Session\SessionManager;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -145,8 +146,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
         $request        = $serviceManager->get('Request');
 
         if (php_sapi_name() != 'cli' and $request instanceof Request) {
-            /** @var $session \Zend\Session\SessionManager */
-            $session = $serviceManager->get('session_manager');
+            /** @var $session SessionManager */
+            $session = $serviceManager->get(SessionManager::class);
             $session->start();
 
             if ($serviceManager->has('active\site')) {

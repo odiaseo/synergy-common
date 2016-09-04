@@ -54,13 +54,9 @@ class Module
     public function getServiceConfig()
     {
         return array(
-            'aliases'   => array(
-                'session_manager' => 'Zend\Session\SessionManager'
-            ),
             'factories' => array(
-                'Zend\Session\SessionManager' => 'SynergyCommon\Session\SessionManager',
-                'logger'                      => 'SynergyCommon\Service\LoggerFactory',
-                'active\site'                 => 'SynergyCommon\Service\ActiveClientSiteFactory',
+                'logger'      => 'SynergyCommon\Service\LoggerFactory',
+                'active\site' => 'SynergyCommon\Service\ActiveClientSiteFactory',
             ),
         );
     }
