@@ -1148,6 +1148,7 @@ class Util
                     'The target URL was invalid. Please contact the vendor',
                     'This site is no longer in service or has been disabled',
                     'OOPS! Your offer could not be found',
+                    'Invalid link or an error occured processing this request',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
