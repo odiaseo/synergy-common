@@ -1089,7 +1089,7 @@ class Util
         } else {
             list($code, $body, $lastUrl) = $data;
 
-            if ($lastUrl == 'http://localhost/error.html') {
+            if ($lastUrl == 'http://localhost/error.html' or $lastUrl == 'http://www.couponhives.com/discounts/latest.html') {
                 return false;
             }
 
