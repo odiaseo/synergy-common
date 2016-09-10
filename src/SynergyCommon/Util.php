@@ -1118,7 +1118,7 @@ class Util
                     'advertiser is not active',
                     'link is incorrect',
                     'now inactive',
-                    'not permitted',
+                    //'not permitted',
                     'contact the webmaster',
                     'have permission to access',
                     'offer could not be found',
