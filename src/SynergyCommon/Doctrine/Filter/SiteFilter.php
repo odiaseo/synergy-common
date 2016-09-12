@@ -118,6 +118,7 @@ class SiteFilter extends SQLFilter
     public function getSiteFilterQuery($targetTableAlias, $targetEntity)
     {
         if ($id = $this->getSite()->getId()) {
+            $this->setParameter(self::KEY_SITE_ID, $id);
             return $targetTableAlias . '.site_id = ' . $id;
         }
 
