@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\MappedSuperclass
  */
-class BaseSite extends AbstractEntity
+abstract class BaseSite extends AbstractEntity
 {
     /**
      * @ORM\Id
@@ -226,4 +226,9 @@ class BaseSite extends AbstractEntity
     {
         $this->ipAddress = $ipAddress;
     }
+
+    /**
+     * @return []
+     */
+    abstract function getAllowedSites();
 }

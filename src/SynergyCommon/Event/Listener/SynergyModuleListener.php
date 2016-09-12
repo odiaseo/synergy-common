@@ -4,6 +4,7 @@ namespace SynergyCommon\Event\Listener;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
+use SynergyCommon\Doctrine\Filter\SiteFilter;
 use SynergyCommon\PageRendererInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
@@ -229,6 +230,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             $siteFilter->setSite($site);
             $siteFilter->setServiceLocator($sm);
+            $siteFilter->setSiteList($site->getAllowedSites());
+
             /** @var \SynergyCommon\Util\ErrorHandler $logger */
             $logger = $sm->get('logger');
             $siteFilter->setLogger($logger);

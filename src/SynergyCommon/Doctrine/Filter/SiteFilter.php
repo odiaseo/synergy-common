@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class SiteFilter
@@ -24,6 +25,11 @@ class SiteFilter extends SQLFilter
 
     /** @var \Zend\Log\Logger */
     protected $logger;
+
+    /**
+     * @var []
+     */
+    protected $siteList;
 
     /**
      * @param ClassMetadata $targetEntity
@@ -85,6 +91,23 @@ class SiteFilter extends SQLFilter
     }
 
     /**
+     * @return mixed
+     */
+    public function getSiteList()
+    {
+        return $this->siteList;
+    }
+
+    /**
+     * @param mixed $siteList
+     */
+    public function setSiteList($siteList)
+    {
+        $this->setParameter(self::KEY_SITE_ID, $siteList);
+        $this->siteList = $siteList;
+    }
+
+    /**
      * Get filter query
      *
      * @param $targetTableAlias
@@ -95,8 +118,7 @@ class SiteFilter extends SQLFilter
     public function getSiteFilterQuery($targetTableAlias, $targetEntity)
     {
         if ($id = $this->getSite()->getId()) {
-            $this->setParameter(self::KEY_SITE_ID, $id);
-            return $targetTableAlias . '.site_id = ' . $this->getParameter(self::KEY_SITE_ID);
+            return $targetTableAlias . '.site_id = ' . $id;
         }
 
         return '';
