@@ -16,6 +16,7 @@ class SiteFilter extends SQLFilter
 {
     use ServiceLocatorAwareTrait;
 
+    const KEY_SITE_ID = 'site_id';
     /**
      * @var \SynergyCommon\Entity\BaseSite
      */
@@ -94,7 +95,8 @@ class SiteFilter extends SQLFilter
     public function getSiteFilterQuery($targetTableAlias, $targetEntity)
     {
         if ($id = $this->getSite()->getId()) {
-            return $targetTableAlias . '.site_id = ' . $id;
+            $this->setParameter(self::KEY_SITE_ID, $id);
+            return $targetTableAlias . '.site_id = ' . $this->getParameter(self::KEY_SITE_ID);
         }
 
         return '';
