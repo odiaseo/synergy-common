@@ -6,7 +6,6 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\NoResultException;
 use SynergyCommon\CacheAwareInterface;
-use SynergyCommon\Doctrine\ModelCacheAwareTrait;
 use SynergyCommon\Doctrine\QueryBuilder;
 use SynergyCommon\Entity\AbstractEntity;
 use SynergyCommon\Exception\InvalidArgumentException;
@@ -29,7 +28,6 @@ use Zend\InputFilter\InputFilter;
 class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ModelCacheAwareTrait;
 
     const EQUAL                 = 'eq';
     const NOT_EQUAL             = 'ne';
@@ -65,6 +63,29 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             'slug'
         ];
     protected $cache;
+
+    /**
+     * Global setting that affects all queries
+     *
+     * @var bool
+     */
+    protected $enableResultCache = false;
+
+    /**
+     * @param boolean $enabled
+     */
+    public function setEnableResultCache($enabled)
+    {
+        $this->enableResultCache = $enabled;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnableResultCache()
+    {
+        return $this->enableResultCache;
+    }
 
     /**
      * @return mixed

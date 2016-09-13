@@ -8,8 +8,8 @@
 
 namespace SynergyCommonTest\Doctrine;
 
+use SynergyCommonTest\Stub\SiteStub;
 use SynergyCommon\Doctrine\Filter\SiteFilter;
-use SynergyCommon\Entity\BaseSite;
 use SynergyCommonTest\Bootstrap;
 use Zend\Log\Logger;
 
@@ -23,7 +23,7 @@ class SiteFilterTest extends \PHPUnit_Framework_TestCase
     public function testSiteFilter()
     {
         $filter = new SiteFilter(Bootstrap::getServiceManager()->get('doctrine.entitymanager.orm_default'));
-        $site   = new BaseSite();
+        $site   = new SiteStub();
         $filter->setSite($site);
         $filter->setLogger(new Logger());
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace SessionModelTest\Model;
+namespace SynergyCommonTest\Model;
 
 use Doctrine\ORM\AbstractQuery;
 use SynergyCommon\Member\Entity\Session;

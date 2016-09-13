@@ -10,7 +10,6 @@ use Doctrine\ORM\AbstractQuery;
  */
 trait CacheAwareQueryTrait
 {
-
     /**
      * Global setting that affects all queries
      *
@@ -111,5 +110,13 @@ trait CacheAwareQueryTrait
     public function setEnableHydrationCache($enableHydrationCache)
     {
         $this->enableHydrationCache = $enableHydrationCache;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnableResultCache()
+    {
+        return $this->enableResultCache;
     }
 }
