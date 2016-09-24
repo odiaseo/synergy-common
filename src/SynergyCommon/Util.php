@@ -1089,7 +1089,12 @@ class Util
         } else {
             list($code, $body, $lastUrl) = $data;
 
-            if ($lastUrl == 'http://localhost/error.html' or $lastUrl == 'http://www.couponhives.com/discounts/latest.html') {
+            $badEnd = [
+                'http://localhost/error.html',
+                'http://www.couponhives.com/discounts/latest.html',
+                'http://scripts.affilired.com',
+            ];
+            if (in_array($lastUrl, $badEnd)) {
                 return false;
             }
 
@@ -1149,6 +1154,8 @@ class Util
                     'This site is no longer in service or has been disabled',
                     'OOPS! Your offer could not be found',
                     'Invalid link or an error occured processing this request',
+                    'If you are the owner of this website, please contact your hosting provider',
+                    'Directory listing denied',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
