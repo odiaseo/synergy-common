@@ -1052,7 +1052,22 @@ class Util
         $url   = $parts['scheme'] . '://' . $parts['host'];
         // the next bit could be slow:
         //if (self::getHttpResponseCode_using_curl($url) != 200) {
-        if (self::getHttpResponseCodeUsingGetheaders($url) != 200) {  // use this one if you cant use curl
+        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
+            return false;
+        }
+
+        return $url;
+    }
+
+    public static function isImageValid($url)
+    {
+        // first do some quick sanity checks:
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+
+        //if (self::getHttpResponseCode_using_curl($url) != 200) {
+        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
             return false;
         }
 
