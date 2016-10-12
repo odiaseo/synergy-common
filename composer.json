@@ -33,7 +33,6 @@
     "zendframework/zendframework": "^3.0.2",
     "zendframework/zend-i18n-resources": "*",
     "doctrine/doctrine-orm-module": "dev-master",
-    "doctrine/doctrine-module": "dev-master",
     "zendframework/zend-mvc": "^3.0.2",
     "gedmo/doctrine-extensions": "^2.4",
     "monolog/monolog": "^1.18",
