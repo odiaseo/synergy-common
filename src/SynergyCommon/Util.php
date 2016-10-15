@@ -1171,6 +1171,8 @@ class Util
                     'Invalid link or an error occured processing this request',
                     'If you are the owner of this website, please contact your hosting provider',
                     'Directory listing denied',
+                    'You have selected an invalid link. Possible causes for this',
+                    'The partnership no longer exists or has been paused',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
