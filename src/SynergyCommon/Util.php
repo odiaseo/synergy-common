@@ -1174,6 +1174,7 @@ class Util
                     'You have selected an invalid link. Possible causes for this',
                     'The partnership no longer exists or has been paused',
                     'Unfortunately, this link is no longer available.',
+                    'The requested URL is not valid anymore',
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
