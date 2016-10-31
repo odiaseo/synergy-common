@@ -17,12 +17,13 @@ class SluggableListener extends GedmoListener
     {
         parent::__construct();
 
+        /*
         $this->setTransliterator(
             function ($text) {
                 return Util::urlize($text, [], false);
             }
         );
-
+*/
         $this->setUrlizer(
             function ($text) {
                 return Util::urlize($text, [], false);
