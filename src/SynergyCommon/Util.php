@@ -1175,6 +1175,8 @@ class Util
                     'The partnership no longer exists or has been paused',
                     'Unfortunately, this link is no longer available.',
                     'The requested URL is not valid anymore',
+                    'Oops, we couldnt find what you were looking for',
+                    ''
                 ];
 
                 $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
@@ -1185,6 +1187,10 @@ class Util
                 }
 
                 if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body)) {
+                    if (stripos($url, 'kelkoo.co.uk') !== false and stripos($hiddenRedirectUrl, 'http') !== 0) {
+                        $hiddenRedirectUrl = 'http://ecs-uk.kelkoo.co.uk' . $hiddenRedirectUrl;
+                        return self:: isValidDeepLink($hiddenRedirectUrl);
+                    }
                     $destHost = str_replace(['www.'], '', parse_url($hiddenRedirectUrl, PHP_URL_HOST));
                     if ($destHost != $sourceHost) {
                         return self:: isValidDeepLink($hiddenRedirectUrl);
