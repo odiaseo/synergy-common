@@ -1125,6 +1125,10 @@ class Util
                 return false;
             }
 
+            if (stripos($lastUrl, 'manymorestores.com') !== false) {
+                return false;
+            }
+
             if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
                 return true;
             }
