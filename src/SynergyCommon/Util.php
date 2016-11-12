@@ -1105,7 +1105,16 @@ class Util
             // use this one if you cant use curl
             return false;
         } else {
-            list($code, $body, $lastUrl) = $data;
+            if($data[0] == 503){
+                $code = 302;
+                $body = $data[1];
+
+                if(stripos($body,'Location:') !== false){
+                    return true;
+                }
+            }else{
+                list($code, $body, $lastUrl) = $data;
+            }
 
             $badEnd = [
                 'http://localhost/error.html',
