@@ -1199,7 +1199,9 @@ class Util
 
                 if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body, $matches)) {
                     $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
-                    return self:: isValidDeepLink($newLink, true);
+                    if($newLink != $url){
+                        return self:: isValidDeepLink($newLink, true);
+                    }
                 }
             }
         }
