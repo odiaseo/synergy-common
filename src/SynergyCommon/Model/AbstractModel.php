@@ -563,6 +563,32 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
         return $id;
     }
 
+
+    /**
+     * @param string $data
+     * @param string $field
+     * @return mixed|null
+     */
+    public function getEntityLikeField($data, $field)
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('e.id')
+            ->from($this->_entity, 'e')
+            ->where("e.{$field} LIKE :slug")
+            ->setParameter(':slug', "{$data}%")
+            ->setMaxResults(1)
+            ->getQuery();
+
+        try {
+            $id = $query->getOneOrNullResult();
+        } catch (NoResultException $e) {
+            $id = null;
+        }
+
+        return $id;
+    }
+
     /**
      * @param array $idList
      * @param array $order
