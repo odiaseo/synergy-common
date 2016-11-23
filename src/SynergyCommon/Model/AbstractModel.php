@@ -573,7 +573,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('e.id')
+            ->select('e')
             ->from($this->_entity, 'e')
             ->where("e.{$field} LIKE :slug")
             ->setParameter(':slug', "{$data}%")
@@ -581,12 +581,11 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             ->getQuery();
 
         try {
-            $id = $query->getOneOrNullResult();
+            return  $query->getOneOrNullResult();
         } catch (NoResultException $e) {
-            $id = null;
         }
 
-        return $id;
+        return null;
     }
 
     /**
