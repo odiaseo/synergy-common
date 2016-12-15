@@ -313,12 +313,8 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
     protected function getFindByQueryBuilder(array $param, QueryBuilder $queryBuilder = null, $alias = null, $fields = [])
     {
         $alias = $alias ?: $this->getAlias();
-
         if ($fields) {
-            $select = [];
-            foreach ($fields as $key => $column) {
-                $select[$key] = $alias . '.' . $column;
-            }
+            $select = sprintf('partial %s.{%s}', $alias, implode(',', $fields));
         } else {
             $select = $alias;
         }
@@ -565,6 +561,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
         return $id;
     }
 
+
     /**
      * @param string $data
      * @param string $field
@@ -582,7 +579,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             ->getQuery();
 
         try {
-            return $query->getOneOrNullResult();
+            return  $query->getOneOrNullResult();
         } catch (NoResultException $e) {
         }
 
