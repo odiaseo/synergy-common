@@ -307,16 +307,14 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
      * @param array $param
      * @param QueryBuilder $queryBuilder
      * @param null $alias
-     * @param array $select
+     * @param array $fields
      * @return QueryBuilder
      */
-    protected function getFindByQueryBuilder(array $param, QueryBuilder $queryBuilder = null, $alias = null, $select = [])
+    protected function getFindByQueryBuilder(array $param, QueryBuilder $queryBuilder = null, $alias = null, $fields = [])
     {
         $alias = $alias ?: $this->getAlias();
-        if ($select) {
-            foreach ($select as $key => $column) {
-                $select[$key] = $alias . '.' . $column;
-            }
+        if ($fields) {
+            $select = sprintf('partial %s.{%s}', $alias, implode(',', $fields));
         } else {
             $select = $alias;
         }
