@@ -1192,6 +1192,9 @@ class Util
                     'Unfortunately, this link is no longer available.',
                     'The requested URL is not valid anymore',
                     'Oops, we couldnt find what you were looking for',
+                    'The link you clicked on has expired',
+                    'The website you requested is no longer accessible via this link',
+                    'Invalid Publisher Code',
                     ''
                 ];
 
