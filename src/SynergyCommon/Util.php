@@ -1081,7 +1081,7 @@ class Util
      */
     public static function isValidDeepLink($url, $usePost = false)
     {
-        if(stripos($url,'tradedoubler') !== false){
+        if (stripos($url, 'tradedoubler') !== false) {
             $url .= '&f=0';
         }
         $url = stripslashes($url);
@@ -1105,14 +1105,14 @@ class Util
             // use this one if you cant use curl
             return false;
         } else {
-            if($data[0] == 503){
+            if ($data[0] == 503) {
                 $code = 302;
                 $body = $data[1];
 
-                if(stripos($body,'Location:') !== false){
+                if (stripos($body, 'Location:') !== false) {
                     return true;
                 }
-            }else{
+            } else {
                 list($code, $body, $lastUrl) = $data;
             }
 
@@ -1120,8 +1120,10 @@ class Util
                 'http://localhost/error.html',
                 'http://www.couponhives.com/discounts/latest.html',
                 'http://scripts.affilired.com',
+                'http://www.flexoffers.com/invalidlink'
             ];
-            if (in_array($lastUrl, $badEnd)) {
+
+            if (in_array($lastUrl, rtrim($badEnd, '/'))) {
                 return false;
             }
 
@@ -1195,6 +1197,8 @@ class Util
                     'The link you clicked on has expired',
                     'The website you requested is no longer accessible via this link',
                     'Invalid Publisher Code',
+                    'Invalid link or an error',
+                    'Invalid link or an error occured processing this request',
                     ''
                 ];
 
@@ -1218,7 +1222,7 @@ class Util
 
                 if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body, $matches)) {
                     $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
-                    if($newLink != $url){
+                    if ($newLink != $url) {
                         return self:: isValidDeepLink($newLink, true);
                     }
                 }
