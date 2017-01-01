@@ -1123,7 +1123,7 @@ class Util
                 'http://www.flexoffers.com/invalidlink'
             ];
 
-            if (in_array($lastUrl, rtrim($badEnd, '/'))) {
+            if (in_array(rtrim($lastUrl, '/'), $badEnd)) {
                 return false;
             }
 
