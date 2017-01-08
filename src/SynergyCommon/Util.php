@@ -1120,7 +1120,8 @@ class Util
                 'http://localhost/error.html',
                 'http://www.couponhives.com/discounts/latest.html',
                 'http://scripts.affilired.com',
-                'http://www.flexoffers.com/invalidlink'
+                'http://www.flexoffers.com/invalidlink',
+                'http://www.pepperjamnetwork.com/tracking/error.php'
             ];
 
             if (in_array(rtrim($lastUrl, '/'), $badEnd)) {

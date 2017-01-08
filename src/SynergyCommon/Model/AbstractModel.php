@@ -280,6 +280,11 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
         return $this->findOneBy(array('id' => $id));
     }
 
+    public function findOffer($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+
     /**
      * @param array $params
      * @param int $mode
@@ -561,7 +566,6 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
         return $id;
     }
 
-
     /**
      * @param string $data
      * @param string $field
@@ -579,7 +583,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             ->getQuery();
 
         try {
-            return  $query->getOneOrNullResult();
+            return $query->getOneOrNullResult();
         } catch (NoResultException $e) {
         }
 
