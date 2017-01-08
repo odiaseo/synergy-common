@@ -329,6 +329,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
 
         $count = 0;
         foreach ($param as $key => $value) {
+            $count++;
             if (is_null($value) or $value == 'null') {
                 $query->andWhere(
                     $queryBuilder->expr()->isNull($alias . '.' . $key)
@@ -340,7 +341,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
                     );
                 }
             } else {
-                $placeHolder = ':' . $key . ++$count;
+                $placeHolder = ':' . $key . (string)$count;
                 $query->andWhere(
                     $queryBuilder->expr()->eq($alias . '.' . $key, $placeHolder)
                 );

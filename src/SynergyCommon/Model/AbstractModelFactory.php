@@ -2,6 +2,7 @@
 namespace SynergyCommon\Model;
 
 use Interop\Container\ContainerInterface;
+use SynergyCommon\Doctrine\CachedEntityManager;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
@@ -55,7 +56,11 @@ class AbstractModelFactory implements AbstractFactoryInterface
         $logger = $serviceLocator->get('logger');
         $model->setLogger($logger);
         $model->setServiceLocator($serviceLocator);
-        $model->setEntityManager($serviceLocator->get('doctrine.entitymanager.' . $model->getOrm()));
+
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.' . $model->getOrm());
+        $cachedManager = new CachedEntityManager($entityManager, false);
+
+        $model->setEntityManager($cachedManager);
 
         return $model;
     }
