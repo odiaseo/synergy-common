@@ -44,7 +44,7 @@ return array(
 
     'session_config'  => [
         'phpSaveHandler'      => 'files',
-        'savePath'            => '/tmp/',
+        //'savePath'            => '/tmp/',
         'remember_me_seconds' => 7200,
         'cookie_httponly'     => true,
         'cookie_lifetime'     => 7200,
