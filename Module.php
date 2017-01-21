@@ -7,6 +7,7 @@ use SynergyCommon\Factory\LazyInvokableFactory;
 use SynergyCommon\Form\Element\GoogleCaptcha;
 use SynergyCommon\Service\Factory\CacheStatusFactory;
 use SynergyCommon\Service\Factory\DoctrineSessionSaveHandlerFactory;
+use SynergyCommon\Service\Factory\RedisCacheAdapterFactory;
 use SynergyCommon\Session\SessionManagerFactory;
 use SynergyCommon\View\Helper\Factory\FlashMessagesHelperFactory;
 use SynergyCommon\View\Helper\Factory\MicroDataHelperFactory;
@@ -58,6 +59,7 @@ class Module
                 'session\doctrine\save\handler' => DoctrineSessionSaveHandlerFactory::class,
                 'session\memcache\save\handler' => DoctrineSessionSaveHandlerFactory::class,
                 'synergy\cache\status'          => CacheStatusFactory::class,
+                'cache\adapter\redis'           => RedisCacheAdapterFactory::class,
                 SessionManager::class           => SessionManagerFactory::class,
             )
         );

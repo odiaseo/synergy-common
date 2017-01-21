@@ -300,6 +300,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             if ($mode == AbstractQuery::HYDRATE_ARRAY) {
                 $query->setEnableHydrationCache($this->enableResultCache);
             }
+
             return $query->getQuery()->getOneOrNullResult($mode);
         } catch (\Exception $exception) {
             $this->getLogger()->err($exception->getMessage());
