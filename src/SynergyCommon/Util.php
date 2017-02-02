@@ -1200,6 +1200,7 @@ class Util
                     'Invalid Publisher Code',
                     'Invalid link or an error',
                     'Invalid link or an error occured processing this request',
+                    'Sorry, this shop is currently unavailable',
                     ''
                 ];
 
