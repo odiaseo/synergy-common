@@ -6,6 +6,7 @@ use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\Config\ModelOptions;
 use SynergyCommon\Model\Config\SortOrder;
 use SynergyCommon\Util\CurlRequestTrait;
+use Zend\Log\Logger;
 
 /**
  * Class AbstractService
@@ -209,7 +210,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @return \SynergyCommon\Util\ErrorHandler
+     * @return \SynergyCommon\Util\ErrorHandler | Logger
      */
     public function getLogger()
     {
