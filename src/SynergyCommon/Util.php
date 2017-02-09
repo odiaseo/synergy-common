@@ -1121,7 +1121,8 @@ class Util
                 'http://www.couponhives.com/discounts/latest.html',
                 'http://scripts.affilired.com',
                 'http://www.flexoffers.com/invalidlink',
-                'http://www.pepperjamnetwork.com/tracking/error.php'
+                'http://www.pepperjamnetwork.com/tracking/error.php',
+                'http://www.flexoffers.com/invalidlink/',
             ];
 
             if (in_array(rtrim($lastUrl, '/'), $badEnd)) {
@@ -1201,6 +1202,7 @@ class Util
                     'Invalid link or an error',
                     'Invalid link or an error occured processing this request',
                     'Sorry, this shop is currently unavailable',
+                    'Invalid link or an error occured processing this request',
                     ''
                 ];
 
