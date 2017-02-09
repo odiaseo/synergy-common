@@ -82,7 +82,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @param \Zend\Log\LoggerInterface $logger
+     * @param \Zend\Log\LoggerInterface | \Psr\Log\LoggerInterface $logger
      */
     public function setLogger($logger)
     {

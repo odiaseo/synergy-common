@@ -4,6 +4,7 @@ namespace SynergyCommon\Service;
 use Interop\Container\ContainerInterface;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use SynergyCommon\Util;
 use SynergyCommon\Util\ErrorHandler;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -30,7 +31,10 @@ class LoggerFactory implements FactoryInterface
             $directory = $config['synergy']['logger']['directory'];
         }
 
-        if (isset($config['synergy']['logger']['namespace'])) {
+        if($serviceLocator->has('active\site')){
+            $site = $serviceLocator->get('active\site');
+            $namespace = Util::urlize($site->getDomain());
+        }elseif (isset($config['synergy']['logger']['namespace'])) {
             $namespace = $config['synergy']['logger']['namespace'];
         }
 

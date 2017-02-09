@@ -65,8 +65,10 @@ class Bootstrap
         include __DIR__ . '/../../init_autoloader.php';
 
         /** @var \Zend\Mvc\Application $app */
-        $app                    = Application::init($config);
-        $serviceManager         = $app->getServiceManager();
+        $app            = Application::init($config);
+        $serviceManager = $app->getServiceManager();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('active\site', new Site());
         static::$serviceManager = $serviceManager;
 
         self::setUpDatabase();

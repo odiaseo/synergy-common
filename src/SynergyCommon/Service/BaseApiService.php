@@ -1,5 +1,6 @@
 <?php
 namespace SynergyCommon\Service;
+use Zend\Http\Request;
 
 /**
  * Class BaseApiService
@@ -63,9 +64,9 @@ class BaseApiService extends BaseService implements ClientAwareInterface
      */
     public function getSiteDetails($domain = null)
     {
-        if (!$domain) {
+        $request = $this->getServiceLocator()->get('application')->getRequest();
+        if (!$domain and $request instanceof Request) {
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request = $this->getServiceLocator()->get('application')->getRequest();
             $domain  = $this->_filterHostName($request->getServer('HTTP_HOST'));
         }
 
