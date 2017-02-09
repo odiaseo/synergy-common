@@ -20,6 +20,9 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     /** @var  Logger */
     private $logger;
 
+    /** @var  Logger */
+    private $loggerWithName;
+
     public function logException(\Exception $e)
     {
         $request = $this->getServiceLocator()->get('request');
@@ -29,7 +32,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
             $uri = '';
         }
         $log = $uri . $this->processException($e);
-        if ($logger = $this->getLogger()) {
+        if ($logger = $this->getLoggerWithName()) {
             /** @var  $logger \Zend\Log\LoggerInterface */
             $logger->err($log);
         }
@@ -44,7 +47,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
             $extra[] = 'uri: ' . $request->getUriString();
         }
 
-        return $this->logger->log($priority, $message, $extra);
+        return $this->getLoggerWithName()->log($priority, $message, $extra);
     }
 
     /**
@@ -78,7 +81,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
      */
     public function __call($method, $args = array())
     {
-        return Util::customCall($this->logger, $method, $args);
+        return Util::customCall($this->getLoggerWithName(), $method, $args);
     }
 
     /**
@@ -105,6 +108,25 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     public function logProxyNotFound($proxy, $namespace, $className)
     {
         $args = func_get_args();
-        $this->getLogger()->warn('Proxy not found', $args);
+        $this->getLoggerWithName()->warn('Proxy not found', $args);
+    }
+
+    private function getLoggerWithName()
+    {
+        if (!$this->loggerWithName) {
+            $namespace = '';
+            if ($this->logger instanceof \Monolog\Logger and $this->getServiceLocator()->has('active\site')) {
+                $site      = $this->getServiceLocator()->get('active\site');
+                $namespace = Util::urlize($site->getDomain());
+            }
+
+            if ($namespace) {
+                $this->loggerWithName = $this->logger->withName($namespace);
+            } else {
+                return $this->logger;
+            }
+        }
+
+        return $this->loggerWithName;
     }
 }
