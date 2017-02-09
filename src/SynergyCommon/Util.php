@@ -1226,7 +1226,7 @@ class Util
 
                 if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body, $matches)) {
                     $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
-                    if ($newLink != $url) {
+                    if ($newLink != $url and stripos($sourceHost, 'track.flexlinks') === false) {
                         return self:: isValidDeepLink($newLink, true);
                     }
                 }
