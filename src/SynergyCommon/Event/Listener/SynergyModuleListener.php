@@ -4,7 +4,6 @@ namespace SynergyCommon\Event\Listener;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
-use SynergyCommon\Doctrine\Filter\SiteFilter;
 use SynergyCommon\PageRendererInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
@@ -341,8 +340,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
             }
 
             if (!$hasIdentity and $production and $response->isSuccess()) {
-                $age     = 60 * 60 * 6;
-                $expire  = new \DateTime('+6 hours');
+                $config  = $serviceManager->get('Config');
+                $hours   = 1 * $config['synergy']['cache_control'];
+                $age     = $hours * 2600;
+                $expire  = new \DateTime("+{$hours} hours");
                 $headers = $response->getHeaders();
                 $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))

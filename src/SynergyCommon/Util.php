@@ -1203,6 +1203,7 @@ class Util
                     'Invalid link or an error occured processing this request',
                     'Sorry, this shop is currently unavailable',
                     'Invalid link or an error occured processing this request',
+                    'This Web page is parked for FREE',
                     ''
                 ];
 

@@ -82,6 +82,7 @@ return array(
         ),
         'logger'               => array(
             'priority' => \Zend\Log\Logger::DEBUG
-        )
+        ),
+        'cache_control' => 6
     ),
 );
