@@ -67,22 +67,23 @@ return array(
         'type' => \Zend\Session\Storage\SessionArrayStorage::class,
     ],
     'synergy'         => array(
-        'model_factory_prefix' => 'am\model\\',
-        'compress_output'      => true,
-        'memcache'             => array(
+        'check_entity_cache_file' => true,
+        'model_factory_prefix'    => 'am\model\\',
+        'compress_output'         => true,
+        'memcache'                => array(
             'host' => '127.0.0.1',
             'port' => 11211
         ),
-        'api'                  => array(
+        'api'                     => array(
             'options' => array(
                 'headers' => array(
                     'User-Agent' => 'Synergy Afifiliate Platform v1.0',
                 ),
             )
         ),
-        'logger'               => array(
+        'logger'                  => array(
             'priority' => \Zend\Log\Logger::DEBUG
         ),
-        'cache_control' => 6
+        'cache_control'           => 6
     ),
 );

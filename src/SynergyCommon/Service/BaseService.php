@@ -316,16 +316,19 @@ class BaseService extends AbstractService
         $config   = $this->getServiceLocator()->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
-        if (!is_readable($filename)) {
-            $refresh = true;
-        } else {
-            $lifetime = $config['synergy']['entity_cache_lifetime'];
-            $fileTime = (int)filemtime($filename);
-            $refresh  = ((time() - $fileTime) > $lifetime);
-        }
+        if (!empty($config['synergy']['check_entity_cache_file'])) {
 
-        if ($refresh) {
-            $this->createEntityCache($filename);
+            if (!is_readable($filename)) {
+                $refresh = true;
+            } else {
+                $lifetime = $config['synergy']['entity_cache_lifetime'];
+                $fileTime = (int)filemtime($filename);
+                $refresh  = ((time() - $fileTime) > $lifetime);
+            }
+
+            if ($refresh) {
+                $this->createEntityCache($filename);
+            }
         }
 
         return $filename;
@@ -338,7 +341,7 @@ class BaseService extends AbstractService
      *
      * @return bool|int
      */
-    protected function createEntityCache($filename)
+    public function createEntityCache($filename)
     {
         /** @var $entityManager  \Doctrine\ORM\EntityManager */
         $output = array();
