@@ -47,7 +47,7 @@
   },
   "autoload": {
     "psr-4": {
-      "SynergyCommon\\": "module/SynergyCommon/src/SynergyCommon"
+      "SynergyCommon\\": "src/SynergyCommon"
     },
     "psr-0": {
       "SynergyCommonTest": "tests/"
