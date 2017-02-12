@@ -47,10 +47,9 @@
   },
   "autoload": {
     "psr-4": {
-      "SynergyCommon\\": "module/SynergyCommon/src/"
+      "SynergyCommon\\": "module/SynergyCommon/src/SynergyCommon"
     },
     "psr-0": {
-      "SynergyCommon": "src/",
       "SynergyCommonTest": "tests/"
     },
     "classmap": [
