@@ -851,6 +851,45 @@ class Util
         return $list;
     }
 
+    /**
+     * @param string $logoPath
+     * @param string $dir
+     *
+     * @return array
+     */
+    public static function getScreenShotInventory($logoPath = 'data/screen-inventory.txt', $dir = 'png')
+    {
+        $list = array();
+
+        if (self::isFileExpired($logoPath, 4)) {
+            $destination = getcwd() . '/' . $logoPath;;
+            $remoteUser = 'live@37.61.202.70';
+            $remotePath = '/var/www/vhost/static/assets/merchants/screenshot/' . $dir;
+            $command    = sprintf(
+                'ssh %s ls %s > %s',
+                $remoteUser,
+                escapeshellarg($remotePath),
+                escapeshellarg($destination)
+            );
+
+            exec($command);
+        }
+
+        if (file_exists($logoPath)) {
+            $handle = fopen($logoPath, 'r');
+            $count  = 0;
+            while ($logo = fgets($handle)) {
+                if ($logo) {
+                    $list[trim($logo)] = $count;
+                    $count++;
+                }
+            }
+            fclose($handle);
+        }
+
+        return $list;
+    }
+
     public static function cleanUrl($url)
     {
         $validator = new Uri();
