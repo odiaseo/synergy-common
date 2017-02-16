@@ -282,7 +282,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
     private function setCliTimeout(EntityManager $entityManager)
     {
         if (php_sapi_name() == 'cli') {
-            $init      = ' SET session wait_timeout=28800; set innodb_lock_wait_timeout=6000;';
+            $init      = ' SET NAMES utf8mb4; SET session wait_timeout=28800; set innodb_lock_wait_timeout=6000;';
             $statement = $entityManager->getConnection()->prepare($init);
             $statement->execute();
         }
