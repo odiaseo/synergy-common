@@ -257,8 +257,25 @@ class SynergyModuleListener implements ListenerAggregateInterface
             }
 
             $this->setCliTimeout($em);
+            $this->setDbConnectionCleanup($em);
 
-            return null;
+            return;
+        }
+    }
+
+    private function setDbConnectionCleanup(EntityManager $entityManager)
+    {
+        if (PHP_SAPI == 'cli') {
+            declare (ticks = 1);
+
+            $handler = function () use ($entityManager) {
+                $entityManager->getConnection()->close();
+                \posix_kill(\posix_getpid(), SIGKILL);
+            };
+
+            \pcntl_signal(SIGINT, $handler);
+            \pcntl_signal(SIGTERM, $handler);
+            \pcntl_signal(SIGTSTP, $handler);
         }
     }
 
