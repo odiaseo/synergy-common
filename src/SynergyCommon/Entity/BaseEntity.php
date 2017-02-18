@@ -131,7 +131,7 @@ abstract class BaseEntity extends AbstractEntity
         }
 
         if (isset($this->title)) {
-            $this->title = Util::removeLineBreaks($this->title);
+           // $this->title = Util::removeLineBreaks($this->title);
         }
     }
 }
