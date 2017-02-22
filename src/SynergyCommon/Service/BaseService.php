@@ -311,12 +311,12 @@ class BaseService extends AbstractService
         return $return;
     }
 
-    public function getEntityCacheFile()
+    public function getEntityCacheFile($force =false)
     {
         $config   = $this->getServiceLocator()->get('config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
-        if (!empty($config['synergy']['check_entity_cache_file'])) {
+        if ($force or !empty($config['synergy']['check_entity_cache_file'])) {
 
             if (!is_readable($filename)) {
                 $refresh = true;
