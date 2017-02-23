@@ -359,7 +359,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
             if (!$hasIdentity and $production and $response->isSuccess()) {
                 $config  = $serviceManager->get('Config');
                 $max     = 1 * $config['synergy']['cache_control'];
-                $hours   = (int)(mt_rand(8, 12) % $max);
+                $rand    = (int)mt_rand(-4, 4);
+                $hours   = ($max + $rand);
                 $age     = $hours * 3600;
                 $expire  = new \DateTime("+{$hours} hours");
                 $headers = $response->getHeaders();
