@@ -63,6 +63,7 @@ class CommonSiteSettings extends AbstractOptions
     protected $yieldKitSiteId;
     protected $cjWebsiteId; //commission Junction site id
     protected $daisyConMediaId = '';
+    protected $amazonDomainTag;
 
     public function __construct($options = null, $mode = true)
     {
@@ -75,6 +76,22 @@ class CommonSiteSettings extends AbstractOptions
             }
         }
         parent::__construct($data);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAmazonDomainTag()
+    {
+        return $this->amazonDomainTag;
+    }
+
+    /**
+     * @param mixed $amazonDomainTag
+     */
+    public function setAmazonDomainTag($amazonDomainTag)
+    {
+        $this->amazonDomainTag = $amazonDomainTag;
     }
 
     /**
