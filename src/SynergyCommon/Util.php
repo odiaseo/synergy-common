@@ -842,10 +842,16 @@ class Util
             $count  = 0;
             while ($logo = fgets($handle)) {
                 if ($logo) {
-                    $list[trim($logo)] = $count;
+                    if ($clean = str_replace('-', '', $logo)) {
+                        $list[trim($clean)] = $count;
+                    } else {
+                        $list[trim($logo)] = $count;
+                    }
                     $count++;
                 }
             }
+
+            fclose($handle);
         }
 
         return $list;
