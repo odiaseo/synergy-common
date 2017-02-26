@@ -1126,6 +1126,7 @@ class Util
      */
     public static function isValidDeepLink($url, $usePost = false)
     {
+        $lastUrl = '';
         if (stripos($url, 'tradedoubler') !== false) {
             $url .= '&f=0';
         }
@@ -1159,6 +1160,7 @@ class Util
                 }
             } else {
                 list($code, $body, $lastUrl) = $data;
+                $lastUrl = rtrim($lastUrl, '/');
             }
 
             $badEnd = [
@@ -1168,9 +1170,12 @@ class Util
                 'http://www.flexoffers.com/invalidlink',
                 'http://www.pepperjamnetwork.com/tracking/error.php',
                 'http://www.flexoffers.com/invalidlink/',
+                'http://www.lcoffers.com',
             ];
 
-            if (in_array(rtrim($lastUrl, '/'), $badEnd)) {
+            if (in_array($lastUrl, $badEnd)) {
+                return false;
+            } elseif (stripos($lastUrl, 'http://www.lcoffers.com') === 0) {
                 return false;
             }
 
