@@ -21,8 +21,8 @@ class DoctrineCacheFactory implements FactoryInterface
     {
         $appEnv      = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
         $status      = $serviceManager->get('synergy\cache\status');
-        $hasMemcache = (extension_loaded('memcache') or extension_loaded('memcached'));
-        $hasApc      = (extension_loaded('apcu') or extension_loaded('apc'));
+        $hasMemcache = extension_loaded('memcache') || extension_loaded('memcached');
+        $hasApc      = extension_loaded('apcu') || extension_loaded('apc');
 
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
         if (!$status->enabled) {
