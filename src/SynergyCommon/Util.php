@@ -795,6 +795,11 @@ class Util
         return version_compare('2.0.0', phpversion('memcache')) <= 0;
     }
 
+    public static function isApcuAvailable()
+    {
+        return version_compare(phpversion('apcu'), '5.1.0', '<');
+    }
+
     /**
      * Converts XML to Array
      *
