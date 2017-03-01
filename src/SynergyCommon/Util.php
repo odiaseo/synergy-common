@@ -1256,6 +1256,7 @@ class Util
                     'This Web page is parked for FREE',
                     'This web site is no longer available through this link',
                     'This domain has recently been listed in the marketplace',
+                    'the page you are looking for no longer exists',
                     ''
                 ];
 

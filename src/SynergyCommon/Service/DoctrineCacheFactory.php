@@ -22,14 +22,15 @@ class DoctrineCacheFactory implements FactoryInterface
         $appEnv      = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'production';
         $status      = $serviceManager->get('synergy\cache\status');
         $hasMemcache = (extension_loaded('memcache') or extension_loaded('memcached'));
+        $hasApc      = (extension_loaded('apcu') or extension_loaded('apc'));
 
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
         if (!$status->enabled) {
             return $serviceManager->get('doctrine.cache.array');
+        } elseif ($appEnv == 'production' and $hasApc) {
+            return $serviceManager->get('doctrine.cache.synergy_apc');
         } elseif ($appEnv == 'production' and $hasMemcache) {
             return $serviceManager->get('doctrine.cache.synergy_memcache');
-        } elseif ($appEnv == 'production' and extension_loaded('apc')) {
-            return $serviceManager->get('doctrine.cache.synergy_apc');
         } else {
             return $serviceManager->get('doctrine.cache.filesystem');
         }
