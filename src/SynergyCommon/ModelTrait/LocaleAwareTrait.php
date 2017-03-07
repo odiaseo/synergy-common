@@ -3,6 +3,7 @@ namespace SynergyCommon\ModelTrait;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Translatable\TranslatableListener;
 use SynergyCommon\Doctrine\CachedEntityManager;
@@ -14,7 +15,7 @@ use Zend\Session\Container;
 /**
  * Class LocateAwareTrait
  * @method getEntity()
- * @method CachedEntityManager getEntityManager()
+ * @method CachedEntityManager | EntityManager getEntityManager()
  * @method NestedSetRepositoryTrait getRepository()
  */
 trait LocaleAwareTrait

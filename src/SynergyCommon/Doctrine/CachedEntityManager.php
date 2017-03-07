@@ -51,6 +51,10 @@ class CachedEntityManager implements CacheAwareQueryInterface
     {
         $return = Util::customCall($this->entityManager, $method, $args);
 
+        if ($return instanceof Repository) {
+            $return->overrideEntityManager($this);
+        }
+
         if ($return instanceof AbstractQuery) {
             return $this->setCacheFlag($return);
         }
@@ -61,5 +65,13 @@ class CachedEntityManager implements CacheAwareQueryInterface
     public function getEntityManager()
     {
         return $this->entityManager;
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function setEntityManager($entityManager)
+    {
+        $this->entityManager = $entityManager;
     }
 }
