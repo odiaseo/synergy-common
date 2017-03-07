@@ -1250,6 +1250,8 @@ class Util
                     'Unfortunately, this link is no longer available.',
                     'The requested URL is not valid anymore',
                     'Oops, we couldnt find what you were looking for',
+                    'Oops, something went wrong there',
+                    'An unexpected error occurred while processing the requested URL. We have been notified and are taking the appropriate actions',
                     'The link you clicked on has expired',
                     'The website you requested is no longer accessible via this link',
                     'Invalid Publisher Code',
