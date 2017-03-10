@@ -34,6 +34,9 @@ return array(
         ],
         'initializers'       => [
             'injectContainer' => ServiceManagerAwareInitializer::class
+        ],
+        'shared' => [
+            \SynergyCommon\Doctrine\CachedEntityManager::class => false
         ]
     ),
     'controllers'     => [
