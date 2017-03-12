@@ -1175,6 +1175,7 @@ class Util
                 'http://www.pepperjamnetwork.com/tracking/error.php',
                 'http://www.flexoffers.com/invalidlink/',
                 'http://www.lcoffers.com',
+                'http://www.shareasale.com/notactive.html'
             ];
 
             if (in_array($lastUrl, $badEnd)) {
@@ -1266,6 +1267,7 @@ class Util
                     'Our Web site is temporarily unavailable while we perform routine system maintenance. We are working on the site to improve its appearance and functionality',
                     'http://www.webaddresshelp.bt.com',
                     'Für diese Domain steht momentan keine Website zur Verfügung',
+                    'The link is not currently active',
                     ''
                 ];
 
