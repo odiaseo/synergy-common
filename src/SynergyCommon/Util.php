@@ -1263,6 +1263,9 @@ class Util
                     'This web site is no longer available through this link',
                     'This domain has recently been listed in the marketplace',
                     'the page you are looking for no longer exists',
+                    'Our Web site is temporarily unavailable while we perform routine system maintenance. We are working on the site to improve its appearance and functionality',
+                    'http://www.webaddresshelp.bt.com',
+                    'Für diese Domain steht momentan keine Website zur Verfügung',
                     ''
                 ];
 
@@ -1273,7 +1276,7 @@ class Util
                     }
                 }
 
-                if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body)) {
+                if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body, stripos($lastUrl, 'http://r.srvtrck.com/v2') === false)) {
                     if (stripos($url, 'kelkoo.co.uk') !== false and stripos($hiddenRedirectUrl, 'http') !== 0) {
                         $hiddenRedirectUrl = 'http://ecs-uk.kelkoo.co.uk' . $hiddenRedirectUrl;
                         return self:: isValidDeepLink($hiddenRedirectUrl);
@@ -1289,6 +1292,10 @@ class Util
                     if ($newLink != $url and stripos($sourceHost, 'track.flexlinks') === false) {
                         return self:: isValidDeepLink($newLink, true);
                     }
+                }
+
+                if (stripos($lastUrl, 'http://r.srvtrck.com/v2') !== false and $url != $lastUrl) {
+                    return self:: isValidDeepLink($lastUrl);
                 }
             }
         }
