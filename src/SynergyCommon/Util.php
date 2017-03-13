@@ -1175,7 +1175,8 @@ class Util
                 'http://www.pepperjamnetwork.com/tracking/error.php',
                 'http://www.flexoffers.com/invalidlink/',
                 'http://www.lcoffers.com',
-                'http://www.shareasale.com/notactive.html'
+                'http://www.shareasale.com/notactive.html',
+                'http://www.pepperjamnetwork.com/tracking/error.php',
             ];
 
             if (in_array($lastUrl, $badEnd)) {
@@ -1256,6 +1257,7 @@ class Util
                     'The link you clicked on has expired',
                     'The website you requested is no longer accessible via this link',
                     'Invalid Publisher Code',
+                    'This link is not valid',
                     'Invalid link or an error',
                     'Invalid link or an error occured processing this request',
                     'Sorry, this shop is currently unavailable',
@@ -1268,6 +1270,7 @@ class Util
                     'http://www.webaddresshelp.bt.com',
                     'Für diese Domain steht momentan keine Website zur Verfügung',
                     'The link is not currently active',
+                    'This link is now inactive',
                     ''
                 ];
 
