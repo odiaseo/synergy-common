@@ -1177,6 +1177,7 @@ class Util
                 'http://www.lcoffers.com',
                 'http://www.shareasale.com/notactive.html',
                 'http://www.pepperjamnetwork.com/tracking/error.php',
+                'http://cityadspix.com/blank-page',
             ];
 
             if (in_array($lastUrl, $badEnd)) {
@@ -1271,6 +1272,7 @@ class Util
                     'Für diese Domain steht momentan keine Website zur Verfügung',
                     'The link is not currently active',
                     'This link is now inactive',
+                    'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
                     ''
                 ];
 
