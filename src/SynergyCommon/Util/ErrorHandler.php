@@ -40,6 +40,13 @@ class ErrorHandler implements ServiceLocatorAwareInterface
         return $this;
     }
 
+    public static function logCacheException(\Exception $exception)
+    {
+        $data     = self::processException($exception);
+        $filename = sprintf('data/logs/cache-exception-%s.txt', date('Y-m-d'));
+        file_put_contents($filename, $data . PHP_EOL, FILE_APPEND);
+    }
+
     public function log($priority, $message, $extra = [])
     {
         $request = $this->getServiceLocator()->get('request');
