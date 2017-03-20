@@ -1272,6 +1272,7 @@ class Util
                     'Für diese Domain steht momentan keine Website zur Verfügung',
                     'The link is not currently active',
                     'This link is now inactive',
+                    'Page not found',
                     'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
                     ''
                 ];
