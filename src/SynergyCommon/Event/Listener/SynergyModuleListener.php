@@ -5,11 +5,11 @@ use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
 use SynergyCommon\PageRendererInterface;
-use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Header\CacheControl;
 use Zend\Http\Header\Expires;
+use Zend\Http\Header\GenericHeader;
 use Zend\Http\Header\Pragma;
 use Zend\Http\PhpEnvironment\Response as HttpResponse;
 use Zend\Http\Request;
@@ -344,29 +344,27 @@ class SynergyModuleListener implements ListenerAggregateInterface
         /** @var $authService \Zend\Authentication\AuthenticationService */
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
         /** @var HttpResponse $response */
+
         $response = $event->getResponse();
+
         if ($response instanceof HttpResponse) {
-            $production     = (defined('APPLICATION_ENV') and APPLICATION_ENV == 'production');
-            $serviceManager = $event->getApplication()->getServiceManager();
+            if ($response->isSuccess() or $response->isRedirect()) {
+                $serviceManager = $event->getApplication()->getServiceManager();
+                $config         = $serviceManager->get('Config');
+                $max            = 1 * $config['synergy']['cache_control'];
+                $rand           = (int)mt_rand(-4, 4);
+                $hours          = abs($max + $rand);
+                $age            = $hours * 3600;
+                $expire         = new \DateTime("+{$hours} hours");
+                $headers        = $response->getHeaders();
+                $nginxExpire    = $age * 3;
 
-            if ($serviceManager->has(AuthenticationService::class)) {
-                $authService = $serviceManager->get(AuthenticationService::class);
-                $hasIdentity = $authService->hasIdentity();
-            } else {
-                $hasIdentity = false;
-            }
-
-            if (!$hasIdentity and $production and $response->isSuccess()) {
-                $config  = $serviceManager->get('Config');
-                $max     = 1 * $config['synergy']['cache_control'];
-                $rand    = (int)mt_rand(-4, 4);
-                $hours   = ($max + $rand);
-                $age     = $hours * 3600;
-                $expire  = new \DateTime("+{$hours} hours");
-                $headers = $response->getHeaders();
                 $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
+                    ->addHeader(GenericHeader::fromString("X-Accel-Expires: {$nginxExpire}"))
                     ->addHeader(Pragma::fromString('Pragma: cache'));
+
+                $response->setHeaders($headers);
             }
         }
     }
