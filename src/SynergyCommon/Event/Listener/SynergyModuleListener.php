@@ -28,11 +28,12 @@ use Zend\View\Model\JsonModel;
  */
 class SynergyModuleListener implements ListenerAggregateInterface
 {
-    protected $listeners = array();
+    protected $listeners = [];
 
     protected static $initialised = false;
 
     protected $callback;
+
     protected static $handled = false;
 
     /**
@@ -41,14 +42,14 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'handleException'), 25);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleException'), 25);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'handleException'], 25);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'handleException'], 25);
 
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onPreRoute'), 200);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initEntityManager'), -500);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'compressOutput'), 103);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'setHeaders'), -100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onPreRoute'], 200);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'initEntityManager'], -500);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'compressOutput'], 103);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'setHeaders'], -100);
     }
 
     public function detach(EventManagerInterface $events)
@@ -100,10 +101,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
             if ($request instanceof Request and $request->isXmlHttpRequest()) {
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
-                    array(
+                    [
                         'error'   => true,
-                        'message' => $event->getError()
-                    )
+                        'message' => $event->getError(),
+                    ]
                 );
                 $viewModel->setTerminal(true);
                 $event->setResult($viewModel);
@@ -195,7 +196,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                         $validator = new $validator();
                 }
 
-                $chain->attach('session.validate', array($validator, 'isValid'));
+                $chain->attach('session.validate', [$validator, 'isValid']);
             }
         }
     }
@@ -253,7 +254,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
                 $proxyDir       = getcwd() . DIRECTORY_SEPARATOR . $path;
 
-                Autoloader::register($proxyDir, $proxyNamespace, array($logger, 'logProxyNotFound'));
+                Autoloader::register($proxyDir, $proxyNamespace, [$logger, 'logProxyNotFound']);
             }
 
             $this->setCliTimeout($em);
@@ -345,27 +346,36 @@ class SynergyModuleListener implements ListenerAggregateInterface
         /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
         /** @var HttpResponse $response */
 
-        $response = $event->getResponse();
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $response       = $event->getResponse();
+        $cacheStatus    = $serviceManager->get('synergy\cache\status');
 
         if ($response instanceof HttpResponse) {
-            if ($response->isSuccess() or $response->isRedirect()) {
-                $serviceManager = $event->getApplication()->getServiceManager();
-                $config         = $serviceManager->get('Config');
-                $max            = 1 * $config['synergy']['cache_control'];
-                $rand           = (int)mt_rand(-4, 4);
-                $hours          = abs($max + $rand);
-                $age            = $hours * 3600;
-                $expire         = new \DateTime("+{$hours} hours");
-                $headers        = $response->getHeaders();
-                $nginxExpire    = $age * 3;
+            $headers = $response->getHeaders();
+            if (($response->isSuccess() or $response->isRedirect()) and $cacheStatus->enabled) {
+                $config = $serviceManager->get('Config');
+                $max    = 1 * $config['synergy']['cache_control'];
+                $rand   = (int)mt_rand(-4, 4);
+                $hours  = abs($max + $rand);
+                $age    = $hours * 3600;
+                $expire = new \DateTime("+{$hours} hours");
+
+                $nginxExpire = $age * 3;
 
                 $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
                     ->addHeader(GenericHeader::fromString("X-Accel-Expires: {$nginxExpire}"))
                     ->addHeader(Pragma::fromString('Pragma: cache'));
 
-                $response->setHeaders($headers);
+
+            } else {
+                $expire = new \DateTime("-7 days");
+                $headers->addHeader(CacheControl::fromString("Cache-Control: max-age=0, no-cache"))
+                    ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
+                    ->addHeader(Pragma::fromString('Pragma: no-cache'));
             }
+            
+            $response->setHeaders($headers);
         }
     }
 
