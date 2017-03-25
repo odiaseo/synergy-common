@@ -20,6 +20,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 use Zend\View\Model\JsonModel;
+use Zend\Authentication\AuthenticationService;
 
 /**
  * Class SynergyModuleListener
@@ -352,7 +353,14 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
         if ($response instanceof HttpResponse) {
             $headers = $response->getHeaders();
-            if (($response->isSuccess() or $response->isRedirect()) and $cacheStatus->enabled) {
+            if ($serviceManager->has(AuthenticationService::class)) {
+                $authService = $serviceManager->get(AuthenticationService::class);
+                $hasIdentity = $authService->hasIdentity();
+            } else {
+                $hasIdentity = false;
+            }
+
+            if (!$hasIdentity and ($response->isSuccess() or $response->isRedirect()) and $cacheStatus->enabled) {
                 $config = $serviceManager->get('Config');
                 $max    = 1 * $config['synergy']['cache_control'];
                 $rand   = (int)mt_rand(-4, 4);
