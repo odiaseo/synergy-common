@@ -2,7 +2,6 @@
 namespace SynergyCommon;
 
 use Gedmo\Sluggable\Util\Urlizer;
-use SynergyCommon\Util as CommonUtil;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Filter\FilterChain;
 use Zend\Filter\Word\CamelCaseToSeparator;
@@ -455,7 +454,7 @@ class Util
                     array(
                         'name'    => 'pregReplace',
                         'options' => array(
-                            'pattern'     => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt)$/i',
+                            'pattern'     => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
                             'replacement' => '',
                         ),
                     ),
