@@ -1,8 +1,6 @@
 <?php
 namespace SynergyCommon\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use SynergyCommon\Util;
 
 /**
@@ -133,5 +131,25 @@ abstract class BaseEntity extends AbstractEntity
         if (isset($this->title)) {
            // $this->title = Util::removeLineBreaks($this->title);
         }
+    }
+
+    public function isFlexOfferLink($deepLink)
+    {
+        $links = [
+            'http://track.flexlinks.com',
+            'http://track.flexlinkspro.com',
+        ];
+
+        if (empty($deepLink)) {
+            return false;
+        }
+
+        foreach ($links as $prefix) {
+            if (stripos($deepLink, $prefix) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
