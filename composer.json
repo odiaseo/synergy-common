@@ -15,11 +15,11 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "http://toran.vaboose.org/repo/private/"
+      "url": "https://toran.vaboose.org/repo/private/"
     },
     {
       "type": "composer",
-      "url": "http://toran.vaboose.org/repo/packagist/"
+      "url": "https://toran.vaboose.org/repo/packagist/"
     },
     {
       "packagist": false
@@ -63,6 +63,6 @@
     }
   },
   "config": {
-    "secure-http": false
+    "secure-http": true
   }
 }

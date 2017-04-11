@@ -408,9 +408,12 @@ class BaseService extends AbstractService
     {
         $entityKey = strtolower($entityKey);
         $filename  = $this->getEntityCacheFile();
-        $cache     = include "$filename";
+        if (file_exists($filename)) {
+            $cache = include "$filename";
 
-        return isset($cache[$entityKey]) ? $cache[$entityKey] : null;
+            return isset($cache[$entityKey]) ? $cache[$entityKey] : null;
+        }
+        return null;
     }
 
     /**
