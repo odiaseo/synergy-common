@@ -12,19 +12,6 @@
       "email": "peleodiase@yahoo.co.uk"
     }
   ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://toran.vaboose.org/repo/private/"
-    },
-    {
-      "type": "composer",
-      "url": "https://toran.vaboose.org/repo/packagist/"
-    },
-    {
-      "packagist": false
-    }
-  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
