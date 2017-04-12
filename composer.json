@@ -17,16 +17,16 @@
   "require": {
     "php": ">=5.6",
     "zendframework/zend-component-installer": "^1.0 || ^0.3 || ^1.0.0-dev@dev",
-    "zendframework/zendframework": "^3.0.2",
+    "zendframework/zendframework": "^3",
     "zendframework/zend-i18n-resources": "*",
     "doctrine/doctrine-orm-module": "dev-master",
-    "zendframework/zend-mvc": "^3.0.2",
+    "zendframework/zend-mvc": "^3",
     "gedmo/doctrine-extensions": "^2.4",
     "monolog/monolog": "^1.18",
     "ewgo/solarium-module": "~2.0"
   },
   "require-dev": {
-    "zfcampus/zf-development-mode": "^3.0",
+    "zfcampus/zf-development-mode": "^3",
     "phpunit/phpunit": "~4.0"
   },
   "suggest": {
