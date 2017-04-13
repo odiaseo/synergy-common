@@ -1177,6 +1177,7 @@ class Util
                 'http://www.shareasale.com/notactive.html',
                 'http://www.pepperjamnetwork.com/tracking/error.php',
                 'http://cityadspix.com/blank-page',
+                'https://lenkmio.com/dummy/?r=3',
             ];
 
             if (in_array($lastUrl, $badEnd)) {
@@ -1272,6 +1273,7 @@ class Util
                     'The link is not currently active',
                     'This link is now inactive',
                     'Page not found',
+                    'Unfortunately, the link that you’ve used is not valid',
                     'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
                     ''
                 ];
