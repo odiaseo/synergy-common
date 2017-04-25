@@ -1242,6 +1242,7 @@ class Util
                     'You don\'t have permission to access',
                     'Service Unavailable',
                     '<h1>Forbidden</h1>',
+                    'The advertiser is not active',
                     'The target URL was invalid. Please contact the vendor',
                     'This site is no longer in service or has been disabled',
                     'OOPS! Your offer could not be found',
