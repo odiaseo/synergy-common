@@ -1178,6 +1178,7 @@ class Util
                 'http://www.pepperjamnetwork.com/tracking/error.php',
                 'http://cityadspix.com/blank-page',
                 'https://lenkmio.com/dummy/?r=3',
+                'http://click.cptrack.de/?rd=true&k=',
             ];
 
             if (in_array($lastUrl, $badEnd)) {
@@ -1275,6 +1276,7 @@ class Util
                     'This link is now inactive',
                     'Page not found',
                     'Unfortunately, the link that you’ve used is not valid',
+                    'Leider konnte Ihre Anfrage nicht weitergeleitet werden',
                     'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
                     ''
                 ];
