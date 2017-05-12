@@ -363,16 +363,16 @@ class SynergyModuleListener implements ListenerAggregateInterface
             if (!$hasIdentity and ($response->isSuccess() or $response->isRedirect()) and $cacheStatus->enabled) {
                 $config = $serviceManager->get('Config');
                 $max    = 1 * $config['synergy']['cache_control'];
-                $rand   = (int)mt_rand(4, 12);
+                $rand   = (int)mt_rand(-4, 4);
                 $hours  = abs($max + $rand);
                 $age    = $hours * 3600;
                 $expire = new \DateTime("+{$hours} hours");
 
-                //$nginxExpire = 86400 * 15; //expires after 14 days
+                $nginxExpire = $age * 3;
 
                 $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
-                    //->addHeader(GenericHeader::fromString("X-Accel-Expires: {$nginxExpire}"))
+                    ->addHeader(GenericHeader::fromString("X-Accel-Expires: {$nginxExpire}"))
                     ->addHeader(Pragma::fromString('Pragma: cache'));
 
 
