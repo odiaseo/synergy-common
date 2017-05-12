@@ -368,7 +368,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 $age    = $hours * 3600;
                 $expire = new \DateTime("+{$hours} hours");
 
-                //$nginxExpire = $age * 14;
+                //$nginxExpire = 86400 * 15; //expires after 14 days
 
                 $headers->addHeader(CacheControl::fromString("Cache-Control: public, max-age={$age}"))
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
