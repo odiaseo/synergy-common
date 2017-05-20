@@ -32,6 +32,12 @@ abstract class BaseSite extends AbstractEntity
      * @ORM\Column(type="boolean", name="is_subdomain")
      */
     protected $isSubDomain = 0;
+
+    /**
+     * @ORM\Column(type="boolean", name="is_secure", nullable=true, options={"default" = 0})
+     */
+    protected $isSecure = 0;
+
     /**
      * @ORM\Column(type="integer", name="offer_count", options={"default"=0})
      */
@@ -64,6 +70,23 @@ abstract class BaseSite extends AbstractEntity
      * @ORM\Column(type="datetime", name="updated_at")
      */
     protected $updatedAt;
+
+
+    /**
+     * @return mixed
+     */
+    public function getIsSecure()
+    {
+        return $this->isSecure;
+    }
+
+    /**
+     * @param mixed $isSecure
+     */
+    public function setIsSecure($isSecure)
+    {
+        $this->isSecure = $isSecure;
+    }
 
     /**
      * @return mixed
