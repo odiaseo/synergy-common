@@ -1367,6 +1367,9 @@ class Util
         if (stripos($url, 'tradedoubler') !== false) {
             $url .= '&f=0';
         }
+        if (stripos($url, 'cityads') !== false) {
+            $url .= '&no_cookie=1';
+        }
         $url = stripslashes($url);
         // first do some quick sanity checks:
         if (!$url || !is_string($url)) {
@@ -1415,6 +1418,10 @@ class Util
                 'http://click.cptrack.de/?rd=true&k=',
                 'http://www.lcoffers.com',
                 'http://ho.novem.pl',
+                'https://www.belboon.com',
+                'http://www.affiliatefuture.co.uk',
+                'http://discount.pushpro.ru',
+                'https://springmall.ru/redirect.php',
             ];
 
             foreach ($badEnd as $end) {
@@ -1430,6 +1437,10 @@ class Util
 
             if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
                 return true;
+            }
+
+            if ($code == 200 and stripos($body, 'HTTP/1.1 303') !== false) {
+                return false;
             }
 
             if ($code == 403) {
