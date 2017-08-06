@@ -1527,6 +1527,7 @@ class Util
                     'Page not found',
                     'Unfortunately, the link that you’ve used is not valid',
                     'Leider konnte Ihre Anfrage nicht weitergeleitet werden',
+                    'There is no relationship between this site and the advertiser',
                     'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
                     ''
                 ];
