@@ -49,8 +49,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onPreRoute'], 200);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'initEntityManager'], -500);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'compressOutput'], 103);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'setHeaders'], -100);
+       // $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'compressOutput'], 103);
+       // $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'setHeaders'], -100);
     }
 
     public function detach(EventManagerInterface $events)
@@ -382,7 +382,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                     ->addHeader(Expires::fromString("Expires: {$expire->format('r')}"))
                     ->addHeader(Pragma::fromString('Pragma: no-cache'));
             }
-            
+
             $response->setHeaders($headers);
         }
     }
