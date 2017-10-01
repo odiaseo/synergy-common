@@ -68,7 +68,8 @@ class Bootstrap
         $app            = Application::init($config);
         $serviceManager = $app->getServiceManager();
         $serviceManager->setAllowOverride(true);
-        $serviceManager->setService('active\site', new Site());
+        $site = new Site();
+        $serviceManager->setService('active\site', $site);
         static::$serviceManager = $serviceManager;
 
         self::setUpDatabase();
