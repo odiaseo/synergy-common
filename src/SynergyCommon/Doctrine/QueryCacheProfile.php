@@ -38,28 +38,6 @@ class QueryCacheProfile extends DoctrineProfile
     }
 
     /**
-     * Generates the real cache key from query, params and types.
-     *
-     * @param string $query
-     * @param array $params
-     * @param array $types
-     *
-     * @return array
-     */
-    public function generateCacheKeys($query, $params, $types)
-    {
-        $realCacheKey = hash('sha512', $query . "-" . serialize($params) . "-" . serialize($types));
-        // should the key be automatically generated using the inputs or is the cache key set?
-        if ($this->cacheKey === null) {
-            $cacheKey = sha1($realCacheKey);
-        } else {
-            $cacheKey = $this->cacheKey;
-        }
-
-        return array($cacheKey, $realCacheKey);
-    }
-
-    /**
      * @return Cache|null
      */
     public function getResultCacheDriver()

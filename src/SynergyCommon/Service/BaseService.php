@@ -357,6 +357,7 @@ class BaseService extends AbstractService
                 /** @var \Doctrine\ORM\Mapping\ClassMetadata $class */
                 foreach ($classes as $class) {
                     $className       = $class->getName();
+                    $nameList[] = $className;
                     $reflectionClass = new \ReflectionClass($className);
                     if (!($reflectionClass->isAbstract() || $class->isMappedSuperclass)) {
                         $name   = str_replace($class->namespace . '\\', '', $className);
@@ -367,12 +368,15 @@ class BaseService extends AbstractService
 
                         $key          = strtolower($filter->filter($name));
                         $output[$key] = $className;
+                    }else{
+                        $notAdded = $className;
                     }
                 }
             }
         }
 
         ksort($output);
+        asort($nameList);
         $data = '<?php return ' . var_export($output, true) . ';';
 
         if (!is_dir(dirname($filename))) {
