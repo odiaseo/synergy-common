@@ -313,7 +313,7 @@ class BaseService extends AbstractService
 
     public function getEntityCacheFile($force =false)
     {
-        $config   = $this->getServiceLocator()->get('config');
+        $config   = $this->getServiceLocator()->get('Config');
         $filename = $config['synergy']['entity_cache']['orm'];
 
         if ($force or !empty($config['synergy']['check_entity_cache_file'])) {
@@ -345,7 +345,7 @@ class BaseService extends AbstractService
     {
         /** @var $entityManager  \Doctrine\ORM\EntityManager */
         $output = array();
-        $config = $this->getServiceLocator()->get('config');
+        $config = $this->getServiceLocator()->get('Config');
         foreach ($config['doctrine']['connection'] as $orm => $data) {
             $ormAlias = 'doctrine.entitymanager.' . $orm;
             if ($this->getServiceLocator()->has($ormAlias)) {

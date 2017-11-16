@@ -28,7 +28,7 @@ class DoctrineMemcacheFactory implements FactoryInterface
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $request = $serviceLocator->get('application')->getRequest();
         $status  = $serviceLocator->get('synergy\cache\status');
-        $config  = $serviceLocator->get('config');
+        $config  = $serviceLocator->get('Config');
 
         if ($status->enabled) {
             if ($request instanceof Request) {

@@ -23,7 +23,7 @@ class CacheStatusFactory implements FactoryInterface
         /** @var $authService \Zend\Authentication\AuthenticationService */
         /** @var ServiceLocatorInterface $serviceLocator */
         $request = $serviceLocator->get('request');
-        $config  = $serviceLocator->get('config');
+        $config  = $serviceLocator->get('Config');
 
         if ($request instanceof Request or php_sapi_name() == 'cli') {
             $enabled = false;

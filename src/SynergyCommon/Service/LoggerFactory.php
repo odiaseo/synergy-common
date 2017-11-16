@@ -22,7 +22,7 @@ class LoggerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
-        $config    = $serviceLocator->get('config');
+        $config    = $serviceLocator->get('Config');
         $directory = 'data/logs/';
         $namespace = __NAMESPACE__;
 

@@ -249,7 +249,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 }
             }
 
-            $config = $sm->get('config');
+            $config = $sm->get('Config');
             foreach ($config['doctrine']['configuration'] as $name => $data) {
                 $proxyNamespace = $data['proxy_namespace'];
                 $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
@@ -326,7 +326,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function compressOutput(MvcEvent $event)
     {
-        $config = $event->getApplication()->getServiceManager()->get('config');
+        $config = $event->getApplication()->getServiceManager()->get('Config');
         if ((defined('APPLICATION_ENV') and APPLICATION_ENV == 'production') || $config['synergy']['compress_output']) {
             $response = $event->getResponse();
 

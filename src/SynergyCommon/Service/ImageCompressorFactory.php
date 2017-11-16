@@ -16,7 +16,7 @@ class ImageCompressorFactory implements FactoryInterface
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
-        $config      = $serviceLocator->get('config');
+        $config      = $serviceLocator->get('Config');
         $imageConfig = isset($config['synergy']['image_compressor']) ? $config['synergy']['image_compressor']
             : array();
 

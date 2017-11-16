@@ -21,7 +21,7 @@ class DoctrineSessionSaveHandlerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         /** @var ServiceLocatorInterface $serviceLocator */
-        $config  = $serviceLocator->get('config');
+        $config  = $serviceLocator->get('Config');
         $model   = $serviceLocator->get($config['session']['config']['model']);
         $handler = new DoctrineSaveHandler($model);
 

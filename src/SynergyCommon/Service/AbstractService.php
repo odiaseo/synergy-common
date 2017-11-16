@@ -87,7 +87,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
     public function getModel($key, $options = array(), $additionalOptions = array())
     {
         /** @var $model \SynergyCommon\Model\AbstractModel */
-        $config = $this->getServiceLocator()->get('config');
+        $config = $this->getServiceLocator()->get('Config');
         $model  = $this->getServiceLocator()->get($config['synergy']['model_factory_prefix'] . $key);
         $model->setOptions(
             new ModelOptions(
