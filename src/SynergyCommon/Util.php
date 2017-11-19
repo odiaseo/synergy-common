@@ -1422,6 +1422,7 @@ class Util
                 'http://www.affiliatefuture.co.uk',
                 'http://discount.pushpro.ru',
                 'https://springmall.ru/redirect.php',
+                'http://lpgenerator.ru'
             ];
 
             foreach ($badEnd as $end) {
@@ -1903,12 +1904,13 @@ class Util
         $from = urlencode($from);
         $toCurrency = urlencode($toCurrency);
 
-        $url = "http://www.google.com/finance/converter?a=$amount&from=$from&to=$toCurrency";
+        $url = "https://finance.google.com/finance/converter?a=$amount&from=$from&to=$toCurrency";
 
         $handler = curl_init();
         $timeout = 0;
         curl_setopt($handler, CURLOPT_URL, $url);
         curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($handler, CURLOPT_FOLLOWLOCATION, true);
 
         curl_setopt($handler, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
         curl_setopt($handler, CURLOPT_CONNECTTIMEOUT, $timeout);
