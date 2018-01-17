@@ -1,15 +1,16 @@
 <?php
+
 namespace SynergyCommon\Event\Listener;
 
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
 use SynergyCommon\PageRendererInterface;
+use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Header\CacheControl;
 use Zend\Http\Header\Expires;
-use Zend\Http\Header\GenericHeader;
 use Zend\Http\Header\Pragma;
 use Zend\Http\PhpEnvironment\Response as HttpResponse;
 use Zend\Http\Request;
@@ -20,7 +21,6 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
 use Zend\View\Model\JsonModel;
-use Zend\Authentication\AuthenticationService;
 
 /**
  * Class SynergyModuleListener
@@ -29,13 +29,10 @@ use Zend\Authentication\AuthenticationService;
  */
 class SynergyModuleListener implements ListenerAggregateInterface
 {
-    protected $listeners = [];
-
     protected static $initialised = false;
-
-    protected $callback;
-
     protected static $handled = false;
+    protected $listeners = [];
+    protected $callback;
 
     /**
      * @param EventManagerInterface $events
@@ -49,8 +46,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
         //$this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'initSession'), 50000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onPreRoute'], 200);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'initEntityManager'], -500);
-       // $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'compressOutput'], 103);
-       // $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'setHeaders'], -100);
+        // $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'compressOutput'], 103);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, [$this, 'setHeaders'], -100);
     }
 
     public function detach(EventManagerInterface $events)
@@ -96,14 +93,14 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $services = $event->getApplication()->getServiceManager();
 
             /** @var $request \Zend\Http\PhpEnvironment\Request */
-            $request  = $event->getRequest();
+            $request = $event->getRequest();
             $callback = $this->getCallback();
 
             if ($request instanceof Request and $request->isXmlHttpRequest()) {
                 $viewModel = new JsonModel();
                 $viewModel->setVariables(
                     [
-                        'error'   => true,
+                        'error' => true,
                         'message' => $event->getError(),
                     ]
                 );
@@ -127,7 +124,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             if ($logException and $services->has('logger')) {
                 /** @var $logget \Zend\Log\Logger */
                 $logger = $services->get('logger');
-                $uri    = '';
+                $uri = '';
                 if ($request instanceof Request) {
                     $uri = $request->getUriString();
                 }
@@ -137,15 +134,25 @@ class SynergyModuleListener implements ListenerAggregateInterface
         }
     }
 
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+    }
+
     /**
      * @param MvcEvent $event
      */
     public function initSession(MvcEvent $event)
     {
         /** @var $e \Zend\Mvc\MvcEvent */
-        $app            = $event->getApplication();
+        $app = $event->getApplication();
         $serviceManager = $app->getServiceManager();
-        $request        = $serviceManager->get('Request');
+        $request = $serviceManager->get('Request');
 
         if (php_sapi_name() != 'cli' and $request instanceof Request) {
             /** @var $session SessionManager */
@@ -153,7 +160,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $session->start();
 
             if ($serviceManager->has('active\site')) {
-                $site      = $serviceManager->get('active\site');
+                $site = $serviceManager->get('active\site');
                 $namespace = $site->getSessionNamespace();
             } else {
                 $namespace = 'initialised';
@@ -167,8 +174,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
             }
 
             $session->regenerateId(true);
-            $container->init          = 1;
-            $container->remoteAddr    = $request->getServer()->get('REMOTE_ADDR');
+            $container->init = 1;
+            $container->remoteAddr = $request->getServer()->get('REMOTE_ADDR');
             $container->httpUserAgent = $request->getServer()->get('HTTP_USER_AGENT');
 
             $config = $serviceManager->get('Config');
@@ -252,8 +259,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $config = $sm->get('Config');
             foreach ($config['doctrine']['configuration'] as $name => $data) {
                 $proxyNamespace = $data['proxy_namespace'];
-                $path           = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
-                $proxyDir       = getcwd() . DIRECTORY_SEPARATOR . $path;
+                $path = ltrim($data['proxy_dir'], DIRECTORY_SEPARATOR);
+                $proxyDir = getcwd() . DIRECTORY_SEPARATOR . $path;
 
                 Autoloader::register($proxyDir, $proxyNamespace, [$logger, 'logProxyNotFound']);
             }
@@ -265,10 +272,19 @@ class SynergyModuleListener implements ListenerAggregateInterface
         }
     }
 
+    private function setCliTimeout(EntityManager $entityManager)
+    {
+        if (php_sapi_name() == 'cli') {
+            $init = ' SET NAMES utf8mb4; SET session wait_timeout=28800; set innodb_lock_wait_timeout=6000;';
+            $statement = $entityManager->getConnection()->prepare($init);
+            $statement->execute();
+        }
+    }
+
     private function setDbConnectionCleanup(EntityManager $entityManager)
     {
         if (PHP_SAPI == 'cli') {
-            declare (ticks = 1);
+            declare (ticks=1);
 
             $handler = function () use ($entityManager) {
                 $entityManager->getConnection()->close();
@@ -278,15 +294,6 @@ class SynergyModuleListener implements ListenerAggregateInterface
             \pcntl_signal(SIGINT, $handler);
             \pcntl_signal(SIGTERM, $handler);
             \pcntl_signal(SIGTSTP, $handler);
-        }
-    }
-
-    private function setCliTimeout(EntityManager $entityManager)
-    {
-        if (php_sapi_name() == 'cli') {
-            $init      = ' SET NAMES utf8mb4; SET session wait_timeout=28800; set innodb_lock_wait_timeout=6000;';
-            $statement = $entityManager->getConnection()->prepare($init);
-            $statement->execute();
         }
     }
 
@@ -301,7 +308,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             $app = $e->getTarget();
             /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
-            $router         = $serviceManager->get('router');
+            $router = $serviceManager->get('router');
             if ($router and $router instanceof TranslatorAwareTreeRouteStack) {
                 if ($serviceManager->has('route\translator')) {
                     /** @var $translator \Zend\Mvc\I18n\Translator */
@@ -348,8 +355,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
         /** @var HttpResponse $response */
 
         $serviceManager = $event->getApplication()->getServiceManager();
-        $response       = $event->getResponse();
-        $cacheStatus    = $serviceManager->get('synergy\cache\status');
+        $response = $event->getResponse();
+        $cacheStatus = $serviceManager->get('synergy\cache\status');
 
         if ($response instanceof HttpResponse) {
             $headers = $response->getHeaders();
@@ -362,10 +369,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             if (!$hasIdentity and ($response->isSuccess() or $response->isRedirect()) and $cacheStatus->enabled) {
                 $config = $serviceManager->get('Config');
-                $max    = 1 * $config['synergy']['cache_control'];
-                $rand   = (int)mt_rand(4, 24);
-                $hours  = abs($max + $rand);
-                $age    = $hours * 3600;
+                $max = 1 * $config['synergy']['cache_control'];
+                $rand = (int)mt_rand(4, 24);
+                $hours = abs($max + $rand);
+                $age = $hours * 3600;
                 $expire = new \DateTime("+{$hours} hours");
 
                 //$nginxExpire = $age * 2;
@@ -385,15 +392,5 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             $response->setHeaders($headers);
         }
-    }
-
-    public function setCallback($callback)
-    {
-        $this->callback = $callback;
-    }
-
-    public function getCallback()
-    {
-        return $this->callback;
     }
 }
