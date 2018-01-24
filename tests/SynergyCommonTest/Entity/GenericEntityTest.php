@@ -31,10 +31,7 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
             BasePage::class,
             BaseRole::class,
             BaseUser::class,
-            BaseLicence::class,
             BaseSite::class,
-            Session::class,
-            UserGroup::class
         ];
 
         $this->serviceManager = Bootstrap::getServicemanager();

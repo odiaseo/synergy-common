@@ -26,7 +26,7 @@ class BasePage extends BaseEntity
      */
     protected $label;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true, length=255)
      * @Gedmo\Translatable
      */
     protected $description;

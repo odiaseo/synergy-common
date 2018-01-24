@@ -15,10 +15,7 @@ abstract class BaseEntity extends AbstractEntity
      * @var bool
      */
     protected $localized = false;
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $timezone = 'UTC';
+
     /**
      * @var \DateTime createdAt
      *
@@ -72,24 +69,6 @@ abstract class BaseEntity extends AbstractEntity
     public function getLocalized()
     {
         return $this->localized;
-    }
-
-    public function setTimezone($timezone)
-    {
-        $this->timezone = $timezone;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTimezone()
-    {
-        if (!$this->timezone) {
-            $date           = new \DateTime('now');
-            $this->timezone = $date->getTimezone()->getName();
-        }
-
-        return $this->timezone;
     }
 
     /**
