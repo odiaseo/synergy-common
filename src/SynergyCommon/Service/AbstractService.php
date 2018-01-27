@@ -214,6 +214,9 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
      */
     public function getLogger()
     {
+        if(!$this->logger){
+            $this->logger = $this->getServiceLocator()->get('logger');
+        }
         return $this->logger;
     }
 
