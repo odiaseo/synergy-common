@@ -233,305 +233,1010 @@ class Util
         }
     }
 
-    private static function getFirstPartFromString($original, array $list)
+    public static function mimeTypeToExtension($mimeType)
     {
-        $text = mb_convert_encoding((string)$original, 'UTF-8', mb_list_encodings());
-        $text = mb_convert_case($text, MB_CASE_TITLE, "UTF-8");
-
-        foreach ($list as $sep) {
-            $paths = explode($sep, $text);
-            $text = trim($paths[0]);
-        }
-
-        return $text;
+        return array_search($mimeType, self::$_mimeTypes) ?: 'txt';
     }
 
-    public static function prepareTitleForSlug($text, $unAccent = true, $firstPart = true)
+    public static function humanFileSize($bytes, $decimals = 2)
     {
-        $original = $text;
+        $sz = 'BKMGTP';
+        /** @var $factor int */
+        $factor = floor((strlen($bytes) - 1) / 3);
 
-        if ('Купистол' == $original) {
-            $text = 'Kupistol';
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+    }
+
+    public static function printMessage($msg, $repeat = 1, $lineBreak = true, $forceOutput = false)
+    {
+        if (self::$_enablePrint or $forceOutput) {
+            $msg = is_array($msg) ? print_r($msg, true) : $msg;
+            $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
+            if ($lineBreak) {
+                echo "{$sign}$msg\n";
+            } else {
+                echo "{$sign}$msg";
+            }
         }
-        if ($firstPart) {
-            $sepList = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
-            $separators = [
-                'closing',
-                'via',
-                'loja',
-                'ihr',
-                '.com-'
-            ];
-            $regex = '/\b(?:' . implode('|', $separators) . ')\b/i';
-            $text = preg_replace($regex, '<>', $text);
-            $text = self::getFirstPartFromString($text, $sepList);
-        }
+    }
 
-        $text = str_ireplace(
-            array(
-                "'s",
-                'hoteles',
-                'Hoteles',
-                ' and ',
-                ' And ',
-                ' AND ',
-            ),
-            array(
-                '',
-                'hotels',
-                'Hotels',
-                ' & ',
-                ' & ',
-                ' & ',
-            ),
-            $text
-        );
+    public static function getEnablePrint()
+    {
+        return self::$_enablePrint;
+    }
 
-        $text = str_ireplace(
-            array(
-                '(US & CA)',
-                'US  CA',
-                'US CA',
-                '(US & amp; CA)',
-                '(us)',
-                '(usa)',
-                '.com',
-                '.co.uk',
-                '.org',
-                ' &#39;',
-                '.pl',
-                '.de',
-                'GMBH',
-                'llc',
-                'LLC',
-                '.ca',
-                '.ch',
-                '.at',
-                '.it',
-                '.se',
-                '.es',
-                '.hu',
-                '.no',
-                '.fr',
-                '.nl',
-                '.be',
-                '.ie',
-                '.tr',
-                '.au',
-                '.sk',
-                '.cz',
-                '.nz',
-                '.biz',
-                '.us',
-                '.ee',
-                '.ro',
-                'gmbh',
-                'Vouchers',
-                'Affiliate Programme',
-                'Affiliate Program',
-                'Programme',
-                'programme',
-                'Program',
-                'programs',
-                '.lt',
-                '.fi',
-                '.in',
-                '.net',
-                '.dk',
-                'Affiliate Program',
-                'Partnerprogramm',
-                'affiliation',
-                'ireland',
-                'Programmes',
-                'Ireland',
-                'International',
-                'Poland',
-                'Onlineshop',
-                'Schuhe',
-                'Program',
-                'Star Program',
-                'Deutschland',
-                'Schweiz',
-                'Closed',
-                'www.',
-                '.cz',
-                'http://',
-                '.pt',
-                'Fiesta',
-                'affiliate',
-                'Affiliate',
-                '(Global)',
-                '(AU)',
-                '(NZ)',
-                'Inc.',
-                'Co.',
-                'AFFILIATE LINK TRACKING',
-                'Couponeur',
-                'Couponeurs',
-                'Couponneurs',
-                'Bons de réduction',
-                'Gutscheinpartner',
-                'Gutschein Partner',
-                'Cupón',
-                'Coupons et Cashback',
-                'Bon Plan',
-                'Referral',
-                'Cashback',
-                '(Public)',
-                'BEFR',
-                'Partnerm',
-                'BeFR',
-                'Be NL',
-                'Benl',
-                'Befr',
-                'Intl.',
-                'FRBE',
-                'Belgium',
-                'Campaign',
-                'Mexico',
-                'Portugal',
-                'Android',
-                'CPI',
-                'CPL',
-                'CPS',
-                'Cps',
-                'Cpa',
-                'CPA',
-                'CPR',
-                'CPV',
-                'CPI',
-                'U.S.',
-                '.comcz',
-                'Mac only',
-                'Per Sale',
-                'Nederland',
-                'Sweden',
-                'Polska',
-                '*suspended*',
-                'suspended',
-                'Nigeria',
-                'Hungary',
-                'DACH',
-                'Affiliate Team',
-                'Gutschein Gewinnspiel',
-                'Gutschein',
-                'Gewinnspiel',
-                'Gewinnspiele',
-                'oesterreich',
-                'Oesterreich',
-                'Österreich',
-            ),
-            '',
-            $text
-        );
+    public static function setEnablePrint($enablePrint)
+    {
+        self::$_enablePrint = $enablePrint;
+    }
 
-        if (preg_match('/(tchibo|art2chine|armordirect|deichmann|sercotel)\-[\d]+$/i', $text, $match)) {
-            $text = $match[1];
-        }
-        $text = html_entity_decode($text, \ENT_QUOTES, 'utf-8');
-        $text = str_replace('_', ' ', $text);
-        if ($unAccent) {
-            $text = Urlizer::unaccent($text);
-        }
-        $filter = new FilterChain(
-            array(
-                'filters' => array(
-                    //array('name' => 'stringToLower', 'options' => array('encoding' => 'utf-8')),
-                    array('name' => 'stripTags'),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\.(com|co\.uk)$/i',
-                            'replacement' => '',
-                        ),
-                    ),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
-                            'replacement' => '',
-                        ),
-                    ),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
-                            'replacement' => '',
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
-                            'replacement' => ''
-                        ),
-                    ),
-                    array('name' => 'stringTrim'),
-                ),
-            )
-        );
-
-        $name = trim($filter->filter($text));
-        $name = trim($name, '-., :');
-
-        switch (mb_strtolower($name, 'UTF-8')) {
-            case 'n design center':
-                $name = $original;
-                break;
-            case 'host europe':
-                $name = 'Host Europe';
-                break;
-            case 'from':
-                $name = 'From US';
-                break;
-            case 'hut':
-                $name = 'The Hut';
-                break;
-            case 'toysr':
-            case 'toys r':
-                $name = 'Toys R US';
-                break;
-            case 'babies r':
-                $name = 'Babies R US';
-                break;
-            case 'miniinthebox':
-            case 'mini the box':
-            case 'mini box':
-                $name = 'Mini in the Box';
-                break;
-            case 'light the box':
-            case 'light box':
-                $name = 'Light in the Box';
-                break;
-            case 'blue':
-            case 'shoes':
-            case 'vision direct':
-                $name = $original;
-                break;
-            case 'dx':
-                $name = 'deal-extreme';
-                break;
+    /**
+     * Gets the column headers from the feed. It is assumed  that the headers are
+     * in the first row of the file
+     *
+     * @param        $filename
+     * @param string $separator
+     * @param int $offSet
+     * @param bool $sort
+     *
+     * @return array
+     */
+    public static function getFeedColumns($filename, $separator = ',', $offSet = 0, $sort = true)
+    {
+        $columns = array();
+        if (file_exists($filename)) {
+            $handle = fopen($filename, 'r');
+            if ($offSet == 0) {
+                $columns = fgetcsv($handle, null, $separator);
+            } else {
+                for ($i = 0; $i <= $offSet; $i++) {
+                    $columns = fgetcsv($handle, null, $separator);
+                    if ($i > $offSet) {
+                        break;
+                    }
+                }
+            }
+            fclose($handle);
         }
 
-        if (empty($name) || strtolower($original) == 'affiliate window') {
-            $name = $original;
+        if ($sort) {
+            sort($columns);
+
+            return array_filter($columns);
         }
 
-        if (strlen(str_replace('-', '', $name)) < 3) {
-            $name = trim($original);
+        return $columns;
+    }
+
+    /**
+     * @param $routeName
+     * @param $uniqueId
+     *
+     * @return string
+     */
+    public static function getResourceString($routeName, $uniqueId)
+    {
+        return 'mvc:' . strtolower($routeName) . '.' . strtolower($uniqueId);
+    }
+
+    /**
+     * @param $date
+     *
+     * @return bool|string
+     */
+    public static function formatToUTC($date)
+    {
+        $date = ($date instanceof \DateTime) ? $date->getTimestamp() : $date;
+        // Get the default timezone
+        $default_tz = date_default_timezone_get();
+        // Set timezone to UTC
+        date_default_timezone_set("UTC");
+        // convert datetime into UTC
+        $utc_format = date("Y-m-d\\TH:i:s\\Z", $date);
+        // Might not need to set back to the default but did just in case
+        date_default_timezone_set($default_tz);
+
+        return $utc_format;
+    }
+
+    /**
+     * Determines if the date is expired
+     *
+     * @param $end
+     *
+     * @return bool
+     */
+    public static function isExpired($end)
+    {
+        if ($end) {
+            try {
+                $now = new \DateTime();
+                $endDate = ($end instanceof \DateTime) ? $end : new \DateTime($end);
+
+                return ($now > $endDate);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
 
-        if (preg_match('/[0-9]+/i', $name)) {
-            $name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
+        return false;
+    }
+
+    /**
+     * Deters memcached version
+     *
+     * @return int
+     */
+    public static function getMemcachedVersion()
+    {
+        $version = (string)phpversion('memcached');
+
+        return ($version !== '') ? (int)$version[0] : 0;
+    }
+
+    public static function isMemcacheAvailable()
+    {
+        return version_compare('2.0.0', phpversion('memcache')) <= 0;
+    }
+
+    public static function isApcuAvailable()
+    {
+        return version_compare(phpversion('apcu'), '5.1.0', '<');
+    }
+
+    /**
+     * Converts XML to Array
+     *
+     * @param $file
+     *
+     * @return array
+     */
+    public static function XmlArray($file)
+    {
+        $string = file_get_contents($file);
+        $xml = simplexml_load_string($string);
+        $json = json_encode($xml);
+
+        $array = json_decode($json, true);
+
+        return $array;
+    }
+
+    /**
+     * @param string $logoPath
+     *
+     * @return array
+     */
+    public static function getLogoInventory($logoPath = 'data/logo-inventory.txt')
+    {
+        $list = array();
+
+        if (self::isFileExpired($logoPath, 4)) {
+            $destination = getcwd() . '/' . $logoPath;
+            $remotePath = '/var/www/vhost/static/assets/merchants/compressed/png/';
+            $remoteUser = 'live@37.61.202.70';
+
+            $command = sprintf(
+                'ssh %s ls %s > %s',
+                $remoteUser,
+                escapeshellarg($remotePath),
+                escapeshellarg($destination)
+            );
+
+            exec($command);
+        }
+
+        if (file_exists($logoPath)) {
+            $handle = fopen($logoPath, 'r');
+            $count = 0;
+            while ($logo = fgets($handle)) {
+                if ($logo) {
+                    if ($clean = str_replace('-', '', $logo)) {
+                        $list[trim($clean)] = $count;
+                    } else {
+                        $list[trim($logo)] = $count;
+                    }
+                    $count++;
+                }
+            }
+
+            fclose($handle);
+        }
+
+        return $list;
+    }
+
+    public static function isFileExpired($filename, $hours = 72)
+    {
+        $cutOff = time() - (60 * 60 * $hours);
+        if (is_readable($filename) and filemtime($filename) > $cutOff) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $logoPath
+     * @param string $dir
+     *
+     * @return array
+     */
+    public static function getScreenShotInventory($logoPath = 'data/screen-inventory.txt', $dir = 'png')
+    {
+        $list = array();
+
+        if (self::isFileExpired($logoPath, 4)) {
+            $destination = getcwd() . '/' . $logoPath;;
+            $remoteUser = 'live@37.61.202.70';
+            $remotePath = '/var/www/vhost/static/assets/merchants/screenshot/' . $dir;
+            $command = sprintf(
+                'ssh %s ls %s > %s',
+                $remoteUser,
+                escapeshellarg($remotePath),
+                escapeshellarg($destination)
+            );
+
+            exec($command);
+        }
+
+        if (file_exists($logoPath)) {
+            $handle = fopen($logoPath, 'r');
+            $count = 0;
+            while ($logo = fgets($handle)) {
+                if ($logo) {
+                    $list[trim($logo)] = $count;
+                    $count++;
+                }
+            }
+            fclose($handle);
+        }
+
+        return $list;
+    }
+
+    public static function cleanUrl($url)
+    {
+        $validator = new Uri();
+
+        if ($url and strpos($url, 'http') === false) {
+            $url = 'http://' . $url;
+        }
+
+        $url = trim($url);
+
+        if (!$validator->isValid($url)) {
+            return '';
+        }
+
+        if (self::isTrackingDomain($url)) {
+            return '';
+        }
+
+        $paths = parse_url($url);
+
+        if (isset($paths['host'])) {
+            $path = isset($paths['path']) ? $paths['path'] : '';
+            $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
+
+            return rtrim($clean, '/');
+        }
+
+        return '';
+    }
+
+    public static function isTrackingDomain($url)
+    {
+        $invalidDomain = [
+            'track.condatix.de',
+            'kl.adspirit.de',
+            'tycoonpartner.adspirit.net',
+            'bit.ly',
+
+        ];
+        foreach ($invalidDomain as $dom) {
+            if (stripos($url, $dom) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getMerchantLinkFromDeepLink($deepLink)
+    {
+
+        if (stripos($deepLink, 'tradedoubler') !== false) {
+            $paths = explode('url(', $deepLink);
+            $deepLink = Util::removeLineBreaks($paths[0]);
+        } elseif (stripos($deepLink, 'http://ad.zanox.com') !== false) {
+            $parts = explode('&', $deepLink);
+            foreach ($parts as $key => $part) {
+                if (strpos($part, 'ULP') === 0) {
+                    unset($parts[$key]);
+                }
+            }
+
+            $deepLink = implode('&', $parts);
+        } elseif (stripos($deepLink, 'tracking.mailsectkr.com') !== false) {
+            $paths = parse_url($deepLink);
+            $params = urldecode($paths['query']);
+            parse_str($params, $query);
+            unset($query['url']);
+
+            return sprintf('%s://%s%s?%s', $paths['scheme'], $paths['host'], $paths['path'], http_build_query($query));
+        } elseif (stripos($deepLink, 'track.webgains.com') !== false) {
+            $paths = parse_url($deepLink);
+            $params = urldecode($paths['query']);
+            parse_str($params, $query);
+            unset($query['wgtarget']);
+            unset($query['utm_source']);
+            unset($query['utm_medium']);
+            unset($query['utm_campaign']);
+            unset($query['utm_content']);
+            unset($query['wmid']);
+            unset($query['nvc']);
+            unset($query['ord']);
+
+            $queryString = '';
+            if (!empty($query)) {
+                $queryString = '?' . http_build_query($query);
+            }
+
+            return sprintf('%s://%s%s%s', $paths['scheme'], $paths['host'], $paths['path'], $queryString);
+        }
+
+        return self::removeLineBreaks($deepLink);
+    }
+
+    /**
+     * @param $domain
+     * @param $isSubDomain
+     *
+     * @return string
+     */
+    public static function formatDomain($domain, $isSubDomain)
+    {
+        if ($isSubDomain) {
+            return 'http://' . rtrim($domain, '/');
         } else {
-            $camelFilter = new CamelCaseToSeparator(' ');
-            $name = $camelFilter->filter($name);
+            return 'http://www.' . rtrim($domain, '/');
+        }
+    }
+
+    /**
+     * @param $source
+     * @param $destination
+     *
+     * @return string
+     */
+    public static function curlDownload($source, $destination)
+    {
+        if ($source and $destination) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $source);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+            $data = curl_exec($ch);
+            $error = curl_error($ch);
+
+            curl_close($ch);
+            if ($data) {
+                $file = fopen($destination, "w+");
+                $size = fputs($file, $data);
+                fclose($file);
+
+                return $size;
+            }
+
+            return $error;
         }
 
-        $name = trim($name, ' &-!,._');
+        return false;
+    }
 
-        return $name;
+    /**
+     * converts XML to array
+     *
+     * @param $xmlstring
+     *
+     * @return mixed
+     */
+    public static function xml2Array($xmlstring)
+    {
+        $array = [];
+        if ($xmlstring) {
+            $xml = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
+            $json = json_encode($xml);
+            $array = json_decode($json, true);
+        }
+
+        return (array)$array;
+    }
+
+    public static function isValidUrl($url)
+    {
+        // first do some quick sanity checks:
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+
+        if (strlen($url) > 150) {
+            return false;
+        }
+        // quick check url is roughly a valid http request: ( http://blah/... )
+        if (!preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)) {
+            return false;
+        }
+
+        $parts = parse_url($url);
+        $url = $parts['scheme'] . '://' . $parts['host'];
+        // the next bit could be slow:
+        //if (self::getHttpResponseCode_using_curl($url) != 200) {
+        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
+            return false;
+        }
+
+        return $url;
+    }
+
+    public static function getHttpResponseCodeUsingGetheaders($url, $followredirects = true)
+    {
+        // returns string responsecode, or false if no responsecode found in headers (or url does not exist)
+        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
+        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
+        // if $followredirects == true : return the LAST  known httpcode (when redirected)
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+        $headers = @get_headers($url);
+        if ($headers and is_array($headers)) {
+            if ($followredirects) {
+                // we want the the last errorcode, reverse array so we start at the end:
+                $headers = array_reverse($headers);
+            }
+            foreach ($headers as $hline) {
+                // search for things like "HTTP/1.1 200 OK" , "HTTP/1.0 200 OK" , "HTTP/1.1 301 PERMANENTLY MOVED" , "HTTP/1.1 400 Not Found" , etc.
+                // note that the exact syntax/version/output differs, so there is some string magic involved here
+                if (preg_match('/^HTTP\/\S+\s+([1-9][0-9][0-9])\s+.*/', $hline, $matches)) {// "HTTP/*** ### ***"
+                    $code = $matches[1];
+
+                    return $code;
+                }
+            }
+
+            // no HTTP/xxx found in headers:
+            return false;
+        }
+
+        // no headers :
+        return false;
+    }
+
+    public static function isImageValid($url)
+    {
+        // first do some quick sanity checks:
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+
+        //if (self::getHttpResponseCode_using_curl($url) != 200) {
+        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
+            return false;
+        }
+
+        return $url;
+    }
+
+    /**
+     * @param $url
+     * @param bool $usePost
+     * @return bool|string
+     */
+    public static function isValidDeepLink($url, $usePost = false)
+    {
+        $lastUrl = '';
+        if (stripos($url, 'tradedoubler') !== false) {
+            $url .= '&f=0';
+        }
+        if (stripos($url, 'cityads') !== false) {
+            $url .= '&no_cookie=1';
+        }
+        $url = stripslashes($url);
+        // first do some quick sanity checks:
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+
+        $validator = new Uri();
+        if (!$isValid = $validator->isValid($url)) {
+            return false;
+        }
+        // quick check url is roughly a valid http request: ( http://blah/... )
+        /*   if (!preg_match('/^http(s)?:\/\/[a-z0-9-\(\)\_]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)) {
+               return false;
+           }
+   */
+        // the next bit could be slow:
+        //if (self::getHttpResponseCode_using_curl($url) != 200) {
+        if (!$data = self::getHttpResponseUsingCurl($url, true, $usePost)) {
+            // use this one if you cant use curl
+            return false;
+        } else {
+            if ($data[0] == 503) {
+                $code = 302;
+                $body = $data[1];
+
+                if (stripos($body, 'Location:') !== false) {
+                    return true;
+                }
+            } else {
+                list($code, $body, $lastUrl) = $data;
+                $lastUrl = rtrim($lastUrl, '/');
+            }
+
+            $badEnd = [
+                'http://localhost/error.html',
+                'http://www.couponhives.com/discounts/latest.html',
+                'http://scripts.affilired.com',
+                'http://www.flexoffers.com/invalidlink',
+                'http://www.pepperjamnetwork.com/tracking/error.php',
+                'http://www.flexoffers.com/invalidlink/',
+                'http://www.lcoffers.com',
+                'http://www.shareasale.com/notactive.html',
+                'http://www.pepperjamnetwork.com/tracking/error.php',
+                'http://cityadspix.com/blank-page',
+                'https://lenkmio.com/dummy/?r=3',
+                'http://click.cptrack.de/?rd=true&k=',
+                'http://www.lcoffers.com',
+                'http://ho.novem.pl',
+                'https://www.belboon.com',
+                'http://www.affiliatefuture.co.uk',
+                'http://discount.pushpro.ru',
+                'https://springmall.ru/redirect.php',
+                'http://lpgenerator.ru',
+                'http://www.flexoffers.com/invalidlink',
+                'http://aff12.com',
+                'https://www.affili.net',
+                'http://www.voucherhive.co.uk',
+                'https://ssl.clickbank.net',
+            ];
+
+            foreach ($badEnd as $end) {
+                if (stripos($end, $lastUrl) !== false) {
+                    return false;
+                }
+            }
+
+            if (stripos($lastUrl, 'manymorestores.com') !== false) {
+                return false;
+            }
+
+            if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
+                return true;
+            }
+
+            if ($code == 200 and stripos($body, 'HTTP/1.1 303') !== false) {
+                return false;
+            }
+
+            if ($code == 403) {
+                return false;
+            }
+
+            if ($code !== 200) {
+                if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
+                    return false;
+                }
+            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false && stripos($body,
+                    'http-equiv="refresh"') === false
+            ) { //
+                return false;
+            }
+
+            if ($body) {
+                $texts = [
+                    '<title>Webgains</title>',
+                    '<h1>Forbidden</h1>',
+                    'You’ve been redirected to this page because the link you clicked is now inactive',
+                    'no relationship',
+                    'advertiser is not active',
+                    'link is incorrect',
+                    'now inactive',
+                    //'not permitted',
+                    'contact the webmaster',
+                    'have permission to access',
+                    'offer could not be found',
+                    'campaign has been deactivated',
+                    'this link is not active',
+                    'This page cannot be found',
+                    'this shop is currently unavailable',
+                    'Welcome to TradeTracker',
+                    'product is no longer available via this affiliate link',
+                    'Campaign is not Active',
+                    'Unfortunately we cannot redirect you to the website requested',
+                    //'www.voucherhive.co.uk', //redirected back
+                    'Начните экономить',
+                    'the web page I was looking for is no longer available',
+                    'the page you are looking for no longer exists',
+                    'Unfortunately, the link that you’ve used is not valid',
+                    'http://www.voucherhive.co.uk/koupon.appcache',
+                    'Runtime Error',
+                    'This product is no longer available via this affiliate link',
+                    'File or directory not found',
+                    'This link is not valid',
+                    'Invalid link',
+                    'Invalid Publisher',
+                    'You don\'t have permission to access',
+                    'Service Unavailable',
+                    '<h1>Forbidden</h1>',
+                    'The advertiser is not active',
+                    'The target URL was invalid. Please contact the vendor',
+                    'This site is no longer in service or has been disabled',
+                    'OOPS! Your offer could not be found',
+                    'Invalid link or an error occured processing this request',
+                    'If you are the owner of this website, please contact your hosting provider',
+                    'Directory listing denied',
+                    'You have selected an invalid link. Possible causes for this',
+                    'The partnership no longer exists or has been paused',
+                    'Unfortunately, this link is no longer available.',
+                    'The requested URL is not valid anymore',
+                    'Oops, we couldnt find what you were looking for',
+                    'Oops, something went wrong there',
+                    'An unexpected error occurred while processing the requested URL. We have been notified and are taking the appropriate actions',
+                    'The link you clicked on has expired',
+                    'The website you requested is no longer accessible via this link',
+                    'Invalid Publisher Code',
+                    'This link is not valid',
+                    'Invalid link or an error',
+                    'Invalid link or an error occured processing this request',
+                    'Sorry, this shop is currently unavailable',
+                    'Invalid link or an error occured processing this request',
+                    'This Web page is parked for FREE',
+                    'This web site is no longer available through this link',
+                    'This domain has recently been listed in the marketplace',
+                    'the page you are looking for no longer exists',
+                    'Our Web site is temporarily unavailable while we perform routine system maintenance. We are working on the site to improve its appearance and functionality',
+                    'http://www.webaddresshelp.bt.com',
+                    'Für diese Domain steht momentan keine Website zur Verfügung',
+                    'The link is not currently active',
+                    'This link is now inactive',
+                    'Page not found',
+                    'Unfortunately, the link that you’ve used is not valid',
+                    'Leider konnte Ihre Anfrage nicht weitergeleitet werden',
+                    'There is no relationship between this site and the advertiser',
+                    'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
+                    ''
+                ];
+
+                $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
+                foreach ($texts as $text) {
+                    if (stripos($body, $text) !== false) {
+                        return false;
+                    }
+                }
+
+                if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body,
+                    stripos($lastUrl, 'http://r.srvtrck.com/v2') === false)
+                ) {
+                    if (stripos($url, 'kelkoo.co.uk') !== false and stripos($hiddenRedirectUrl, 'http') !== 0) {
+                        $hiddenRedirectUrl = 'http://ecs-uk.kelkoo.co.uk' . $hiddenRedirectUrl;
+                        return self:: isValidDeepLink($hiddenRedirectUrl);
+                    }
+                    $destHost = str_replace(['www.'], '', parse_url($hiddenRedirectUrl, PHP_URL_HOST));
+                    if ($destHost != $sourceHost) {
+                        return self:: isValidDeepLink($hiddenRedirectUrl);
+                    }
+                }
+
+                if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body,
+                        $matches)
+                ) {
+                    $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
+                    if ($newLink != $url and stripos($sourceHost, 'track.flexlinks') === false) {
+                        return self:: isValidDeepLink($newLink, true);
+                    }
+                }
+
+                if (stripos($lastUrl, 'http://r.srvtrck.com/v2') !== false and $url != $lastUrl) {
+                    return self:: isValidDeepLink($lastUrl);
+                }
+            }
+        }
+
+        // }
+
+        return $url;
+    }
+
+    /**
+     * @param $url
+     * @param bool $followredirects
+     * @param bool $usePost
+     * @return array|bool
+     */
+    public static function getHttpResponseUsingCurl($url, $followredirects = true, $usePost = false)
+    {
+        // returns int responsecode, or false (if url does not exist or connection timeout occurs)
+        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
+        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
+        // if $followredirects == true : return the LAST  known httpcode (when redirected)
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+        $ch = @curl_init($url);
+        if ($ch === false) {
+            return false;
+        }
+        @curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
+        //@curl_setopt($ch, CURLOPT_NOBODY, true);    // dont need body
+        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    // catch output (do NOT print!)
+        if ($followredirects) {
+            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            @curl_setopt(
+                $ch, CURLOPT_MAXREDIRS, 10
+            );  // fairly random number, but could prevent unwanted endless redirects with followlocation=true
+        } else {
+            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        }
+        @curl_setopt(
+            $ch, CURLOPT_CONNECTTIMEOUT, 30
+        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
+        @curl_setopt(
+            $ch, CURLOPT_TIMEOUT, 30
+        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
+        @curl_setopt(
+            $ch, CURLOPT_USERAGENT,
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:49.0) Gecko/20100101 Firefox/49.0"
+        );   // pretend we're a regular browser
+
+        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if ($usePost) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+
+        $return = @curl_exec($ch);
+
+        if (@curl_errno($ch)) {   // should be 0
+            @curl_close($ch);
+
+            return false;
+        }
+        $code = @curl_getinfo(
+            $ch, CURLINFO_HTTP_CODE
+        ); // note: php.net documentation shows this returns a string, but really it returns an int
+        $lastUrl = @curl_getinfo(
+            $ch, CURLINFO_EFFECTIVE_URL
+        ); // note: php.net documentation shows this returns a string, but really it returns an int
+        @curl_close($ch);
+
+        return [$code, $return, $lastUrl];
+    }
+
+    public static function getHttpResponseCodeUsingCurl($url, $followredirects = true, $usePost = false)
+    {
+        // returns int responsecode, or false (if url does not exist or connection timeout occurs)
+        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
+        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
+        // if $followredirects == true : return the LAST  known httpcode (when redirected)
+        if (!$url || !is_string($url)) {
+            return false;
+        }
+        $ch = @curl_init($url);
+        if ($ch === false) {
+            return false;
+        }
+        @curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
+        @curl_setopt($ch, CURLOPT_NOBODY, true);    // dont need body
+        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    // catch output (do NOT print!)
+        if ($followredirects) {
+            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            @curl_setopt(
+                $ch, CURLOPT_MAXREDIRS, 10
+            );  // fairly random number, but could prevent unwanted endless redirects with followlocation=true
+        } else {
+            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        }
+        @curl_setopt(
+            $ch, CURLOPT_CONNECTTIMEOUT, 10
+        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
+        @curl_setopt(
+            $ch, CURLOPT_TIMEOUT, 10
+        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
+        @curl_setopt(
+            $ch, CURLOPT_USERAGENT,
+            "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1"
+        );   // pretend we're a regular browser
+
+        if ($usePost) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+
+        @curl_exec($ch);
+        if (@curl_errno($ch)) {   // should be 0
+            @curl_close($ch);
+            return false;
+        }
+        $code = @curl_getinfo(
+            $ch, CURLINFO_HTTP_CODE
+        ); // note: php.net documentation shows this returns a string, but really it returns an int
+        @curl_close($ch);
+
+        return $code;
+    }
+
+    /**
+     * @param $content
+     * @param bool $checkQuery
+     * @return bool
+     */
+    private static function getHiddenRedirectUrl($content, $checkQuery = true)
+    {
+        $url = false;
+        if (preg_match('/(referLink\.href)\s?\=(.*)\;.*/i', $content, $matches)) {
+            $url = trim($matches[2], '"\'');
+        } elseif (preg_match('/(window\.location\.replace\()(.*)\).*/i', $content, $moreMatches)) {
+            $url = trim($moreMatches[2], '"\'');
+        }
+
+        if ($url and $checkQuery) {
+            if (!$query = parse_url($url, PHP_URL_QUERY)) {
+                return $query;
+            }
+        }
+
+        return $url;
+    }
+
+    public static function getRedirectUrl($url, $count = 0)
+    {
+        $url = stripslashes($url);
+        if ($data = self::getHttpResponseUsingCurl($url)) {
+            list(, $body, $redirectUrl) = $data;
+            if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body, false)) {
+                if ($hiddenRedirectUrl != $url) {
+                    return self:: getRedirectUrl($hiddenRedirectUrl, ++$count);
+                }
+            } elseif ($url != $hiddenRedirectUrl) {
+                return $redirectUrl;
+            }
+        } elseif ($count > 0 and $url) {
+            return $url;
+        }
+
+        return false;
+    }
+
+    public static function getMemoryUsed()
+    {
+        $size = memory_get_usage(true);
+        $unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+
+        return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
+    }
+
+    public static function xmlToArrayWithAttributes($xml, $options = array())
+    {
+        $defaults = array(
+            'namespaceSeparator' => ':',//you may want this to be something other than a colon
+            'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name
+            'alwaysArray' => array(),   //array of xml tag names which should always become arrays
+            'autoArray' => true,        //only create arrays for tags which appear more than once
+            'textContent' => '$',       //key used for the text content of elements
+            'autoText' => true,         //skip textContent key if node has no attributes or child nodes
+            'keySearch' => false,       //optional search and replace on tag and attribute names
+            'keyReplace' => false       //replace values for above search values (as passed to str_replace())
+        );
+        $options = array_merge($defaults, $options);
+        $namespaces = $xml->getDocNamespaces();
+        $namespaces[''] = null; //add base (empty) namespace
+
+        //get attributes from all namespaces
+        $attributesArray = array();
+        foreach ($namespaces as $prefix => $namespace) {
+            foreach ($xml->attributes($namespace) as $attributeName => $attribute) {
+                //replace characters in attribute name
+                if ($options['keySearch']) {
+                    $attributeName =
+                        str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
+                }
+                $attributeKey = $options['attributePrefix']
+                    . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
+                    . $attributeName;
+                $attributesArray[$attributeKey] = (string)$attribute;
+            }
+        }
+
+        //get child nodes from all namespaces
+        $tagsArray = array();
+        foreach ($namespaces as $prefix => $namespace) {
+            foreach ($xml->children($namespace) as $childXml) {
+                //recurse into child nodes
+                $childArray = self::xmlToArrayWithAttributes($childXml, $options);
+                list($childTagName, $childProperties) = each($childArray);
+
+                //replace characters in tag name
+                if ($options['keySearch']) {
+                    $childTagName =
+                        str_replace($options['keySearch'], $options['keyReplace'], $childTagName);
+                }
+                //add namespace prefix, if any
+                if ($prefix) {
+                    $childTagName = $prefix . $options['namespaceSeparator'] . $childTagName;
+                }
+
+                if (!isset($tagsArray[$childTagName])) {
+                    //only entry with this key
+                    //test if tags of this type should always be arrays, no matter the element count
+                    $tagsArray[$childTagName] =
+                        in_array($childTagName, $options['alwaysArray']) || !$options['autoArray']
+                            ? array($childProperties) : $childProperties;
+                } elseif (
+                    is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName])
+                    === range(0, count($tagsArray[$childTagName]) - 1)
+                ) {
+                    //key already exists and is integer indexed array
+                    $tagsArray[$childTagName][] = $childProperties;
+                } else {
+                    //key exists so convert to integer indexed array with previous value in position 0
+                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
+                }
+            }
+        }
+
+        //get text content of node
+        $textContentArray = array();
+        $plainText = trim((string)$xml);
+        if ($plainText !== '') {
+            $textContentArray[$options['textContent']] = $plainText;
+        }
+
+        //stick it all together
+        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || ($plainText === '')
+            ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
+
+        //return node as array
+        return array(
+            $xml->getName() => $propertiesArray
+        );
+    }
+
+    public static function cleanKeywords($value, $asArray = false)
+    {
+        $data = array();
+        foreach ((array)$value as $val) {
+            if (is_array($val)) {
+                $data[] = self::cleanKeywords($val);
+            } else {
+                $val = trim($val);
+                $val = str_replace(
+                    array(
+                        '>',
+                        ',',
+                        '-',
+                        '&',
+                        ':',
+                        '_',
+                    ),
+                    '/',
+                    $val
+                );
+                $val = explode('/', $val);
+                $data = array_merge($data, $val);
+            }
+        }
+
+        foreach ($data as $k => $v) {
+            $val = trim(str_replace('-', ' ', self::urlize($v)));
+            if (strlen($val) > 2) {
+                $data[$k] = $val;
+            }
+        }
+
+        $data = array_unique(array_filter($data));
+        sort($data);
+
+        return $asArray ? $data : implode(', ', $data);
     }
 
     /**
@@ -881,997 +1586,305 @@ class Util
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
     }
 
-    public static function mimeTypeToExtension($mimeType)
+    public static function prepareTitleForSlug($text, $unAccent = true, $firstPart = true)
     {
-        return array_search($mimeType, self::$_mimeTypes) ?: 'txt';
-    }
+        $original = $text;
 
-    public static function humanFileSize($bytes, $decimals = 2)
-    {
-        $sz = 'BKMGTP';
-        /** @var $factor int */
-        $factor = floor((strlen($bytes) - 1) / 3);
-
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
-    }
-
-    public static function printMessage($msg, $repeat = 1, $lineBreak = true, $forceOutput = false)
-    {
-        if (self::$_enablePrint or $forceOutput) {
-            $msg = is_array($msg) ? print_r($msg, true) : $msg;
-            $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
-            if ($lineBreak) {
-                echo "{$sign}$msg\n";
-            } else {
-                echo "{$sign}$msg";
-            }
+        if ('Купистол' == $original) {
+            $text = 'Kupistol';
         }
-    }
-
-    public static function setEnablePrint($enablePrint)
-    {
-        self::$_enablePrint = $enablePrint;
-    }
-
-    public static function getEnablePrint()
-    {
-        return self::$_enablePrint;
-    }
-
-    /**
-     * Gets the column headers from the feed. It is assumed  that the headers are
-     * in the first row of the file
-     *
-     * @param        $filename
-     * @param string $separator
-     * @param int $offSet
-     * @param bool $sort
-     *
-     * @return array
-     */
-    public static function getFeedColumns($filename, $separator = ',', $offSet = 0, $sort = true)
-    {
-        $columns = array();
-        if (file_exists($filename)) {
-            $handle = fopen($filename, 'r');
-            if ($offSet == 0) {
-                $columns = fgetcsv($handle, null, $separator);
-            } else {
-                for ($i = 0; $i <= $offSet; $i++) {
-                    $columns = fgetcsv($handle, null, $separator);
-                    if ($i > $offSet) {
-                        break;
-                    }
-                }
-            }
-            fclose($handle);
+        if ($firstPart) {
+            $sepList = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
+            $separators = [
+                'closing',
+                'via',
+                'loja',
+                'ihr',
+                '.com-'
+            ];
+            $regex = '/\b(?:' . implode('|', $separators) . ')\b/i';
+            $text = preg_replace($regex, '<>', $text);
+            $text = self::getFirstPartFromString($text, $sepList);
         }
 
-        if ($sort) {
-            sort($columns);
-
-            return array_filter($columns);
-        }
-
-        return $columns;
-    }
-
-    /**
-     * @param $routeName
-     * @param $uniqueId
-     *
-     * @return string
-     */
-    public static function getResourceString($routeName, $uniqueId)
-    {
-        return 'mvc:' . strtolower($routeName) . '.' . strtolower($uniqueId);
-    }
-
-    /**
-     * @param $date
-     *
-     * @return bool|string
-     */
-    public static function formatToUTC($date)
-    {
-        $date = ($date instanceof \DateTime) ? $date->getTimestamp() : $date;
-        // Get the default timezone
-        $default_tz = date_default_timezone_get();
-        // Set timezone to UTC
-        date_default_timezone_set("UTC");
-        // convert datetime into UTC
-        $utc_format = date("Y-m-d\\TH:i:s\\Z", $date);
-        // Might not need to set back to the default but did just in case
-        date_default_timezone_set($default_tz);
-
-        return $utc_format;
-    }
-
-    /**
-     * Determines if the date is expired
-     *
-     * @param $end
-     *
-     * @return bool
-     */
-    public static function isExpired($end)
-    {
-        if ($end) {
-            try {
-                $now = new \DateTime();
-                $endDate = ($end instanceof \DateTime) ? $end : new \DateTime($end);
-
-                return ($now > $endDate);
-            } catch (\Exception $e) {
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Deters memcached version
-     *
-     * @return int
-     */
-    public static function getMemcachedVersion()
-    {
-        $version = (string)phpversion('memcached');
-
-        return ($version !== '') ? (int)$version[0] : 0;
-    }
-
-    public static function isMemcacheAvailable()
-    {
-        return version_compare('2.0.0', phpversion('memcache')) <= 0;
-    }
-
-    public static function isApcuAvailable()
-    {
-        return version_compare(phpversion('apcu'), '5.1.0', '<');
-    }
-
-    /**
-     * Converts XML to Array
-     *
-     * @param $file
-     *
-     * @return array
-     */
-    public static function XmlArray($file)
-    {
-        $string = file_get_contents($file);
-        $xml = simplexml_load_string($string);
-        $json = json_encode($xml);
-
-        $array = json_decode($json, true);
-
-        return $array;
-    }
-
-    /**
-     * @param string $logoPath
-     *
-     * @return array
-     */
-    public static function getLogoInventory($logoPath = 'data/logo-inventory.txt')
-    {
-        $list = array();
-
-        if (self::isFileExpired($logoPath, 4)) {
-            $destination = getcwd() . '/' . $logoPath;
-            $remotePath = '/var/www/vhost/static/assets/merchants/compressed/png/';
-            $remoteUser = 'live@37.61.202.70';
-
-            $command = sprintf(
-                'ssh %s ls %s > %s',
-                $remoteUser,
-                escapeshellarg($remotePath),
-                escapeshellarg($destination)
-            );
-
-            exec($command);
-        }
-
-        if (file_exists($logoPath)) {
-            $handle = fopen($logoPath, 'r');
-            $count = 0;
-            while ($logo = fgets($handle)) {
-                if ($logo) {
-                    if ($clean = str_replace('-', '', $logo)) {
-                        $list[trim($clean)] = $count;
-                    } else {
-                        $list[trim($logo)] = $count;
-                    }
-                    $count++;
-                }
-            }
-
-            fclose($handle);
-        }
-
-        return $list;
-    }
-
-    /**
-     * @param string $logoPath
-     * @param string $dir
-     *
-     * @return array
-     */
-    public static function getScreenShotInventory($logoPath = 'data/screen-inventory.txt', $dir = 'png')
-    {
-        $list = array();
-
-        if (self::isFileExpired($logoPath, 4)) {
-            $destination = getcwd() . '/' . $logoPath;;
-            $remoteUser = 'live@37.61.202.70';
-            $remotePath = '/var/www/vhost/static/assets/merchants/screenshot/' . $dir;
-            $command = sprintf(
-                'ssh %s ls %s > %s',
-                $remoteUser,
-                escapeshellarg($remotePath),
-                escapeshellarg($destination)
-            );
-
-            exec($command);
-        }
-
-        if (file_exists($logoPath)) {
-            $handle = fopen($logoPath, 'r');
-            $count = 0;
-            while ($logo = fgets($handle)) {
-                if ($logo) {
-                    $list[trim($logo)] = $count;
-                    $count++;
-                }
-            }
-            fclose($handle);
-        }
-
-        return $list;
-    }
-
-    public static function cleanUrl($url)
-    {
-        $validator = new Uri();
-        if (!$validator->isValid($url)) {
-            return '';
-        }
-
-        if (self::isTrackingDomain($url)) {
-            return '';
-        }
-        $paths = parse_url($url);
-        if (isset($paths['host'])) {
-            $path = isset($paths['path']) ? $paths['path'] : '';
-            $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
-
-            return rtrim($clean, '/');
-        }
-
-        return '';
-    }
-
-    public static function isTrackingDomain($url)
-    {
-        $invalidDomain = [
-            'track.condatix.de',
-            'kl.adspirit.de',
-            'tycoonpartner.adspirit.net',
-            'bit.ly',
-
-        ];
-        foreach ($invalidDomain as $dom) {
-            if (stripos($url, $dom) !== false) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static function getMerchantLinkFromDeepLink($deepLink)
-    {
-
-        if (stripos($deepLink, 'tradedoubler') !== false) {
-            $paths = explode('url(', $deepLink);
-            $deepLink = Util::removeLineBreaks($paths[0]);
-        } elseif (stripos($deepLink, 'http://ad.zanox.com') !== false) {
-            $parts = explode('&', $deepLink);
-            foreach ($parts as $key => $part) {
-                if (strpos($part, 'ULP') === 0) {
-                    unset($parts[$key]);
-                }
-            }
-
-            $deepLink = implode('&', $parts);
-        } elseif (stripos($deepLink, 'tracking.mailsectkr.com') !== false) {
-            $paths = parse_url($deepLink);
-            $params = urldecode($paths['query']);
-            parse_str($params, $query);
-            unset($query['url']);
-
-            return sprintf('%s://%s%s?%s', $paths['scheme'], $paths['host'], $paths['path'], http_build_query($query));
-        } elseif (stripos($deepLink, 'track.webgains.com') !== false) {
-            $paths = parse_url($deepLink);
-            $params = urldecode($paths['query']);
-            parse_str($params, $query);
-            unset($query['wgtarget']);
-            unset($query['utm_source']);
-            unset($query['utm_medium']);
-            unset($query['utm_campaign']);
-            unset($query['utm_content']);
-            unset($query['wmid']);
-            unset($query['nvc']);
-            unset($query['ord']);
-
-            $queryString = '';
-            if (!empty($query)) {
-                $queryString = '?' . http_build_query($query);
-            }
-
-            return sprintf('%s://%s%s%s', $paths['scheme'], $paths['host'], $paths['path'], $queryString);
-        }
-
-        return self::removeLineBreaks($deepLink);
-    }
-
-    public static function isFileExpired($filename, $hours = 72)
-    {
-        $cutOff = time() - (60 * 60 * $hours);
-        if (is_readable($filename) and filemtime($filename) > $cutOff) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $domain
-     *
-     * @return mixed
-     */
-    public static function cleanDomain($domain)
-    {
-        //remove port number
-
-        list($domain,) = explode(':', $domain);
-
-        return str_replace(
+        $text = str_ireplace(
             array(
-                'http://',
-                'https://',
+                "'s",
+                'hoteles',
+                'Hoteles',
+                ' and ',
+                ' And ',
+                ' AND ',
+            ),
+            array(
+                '',
+                'hotels',
+                'Hotels',
+                ' & ',
+                ' & ',
+                ' & ',
+            ),
+            $text
+        );
+
+        $text = str_ireplace(
+            array(
+                '(US & CA)',
+                'US  CA',
+                'US CA',
+                '(US & amp; CA)',
+                '(us)',
+                '(usa)',
+                '.com',
+                '.co.uk',
+                '.org',
+                ' &#39;',
+                '.pl',
+                '.de',
+                'GMBH',
+                'llc',
+                'LLC',
+                '.ca',
+                '.ch',
+                '.at',
+                '.it',
+                '.se',
+                '.es',
+                '.hu',
+                '.no',
+                '.fr',
+                '.nl',
+                '.be',
+                '.ie',
+                '.tr',
+                '.au',
+                '.sk',
+                '.cz',
+                '.nz',
+                '.biz',
+                '.us',
+                '.ee',
+                '.ro',
+                'gmbh',
+                'Vouchers',
+                'Affiliate Programme',
+                'Affiliate Program',
+                'Programme',
+                'programme',
+                'Program',
+                'programs',
+                '.lt',
+                '.fi',
+                '.in',
+                '.net',
+                '.dk',
+                'Affiliate Program',
+                'Partnerprogramm',
+                'affiliation',
+                'ireland',
+                'Programmes',
+                'Ireland',
+                'International',
+                'Poland',
+                'Onlineshop',
+                'Schuhe',
+                'Program',
+                'Star Program',
+                'Deutschland',
+                'Schweiz',
+                'Closed',
                 'www.',
-                'admin.'
+                '.cz',
+                'http://',
+                '.pt',
+                'Fiesta',
+                'affiliate',
+                'Affiliate',
+                '(Global)',
+                '(AU)',
+                '(NZ)',
+                'Inc.',
+                'Co.',
+                'AFFILIATE LINK TRACKING',
+                'Couponeur',
+                'Couponeurs',
+                'Couponneurs',
+                'Bons de réduction',
+                'Gutscheinpartner',
+                'Gutschein Partner',
+                'Cupón',
+                'Coupons et Cashback',
+                'Bon Plan',
+                'Referral',
+                'Cashback',
+                '(Public)',
+                'BEFR',
+                'Partnerm',
+                'BeFR',
+                'Be NL',
+                'Benl',
+                'Befr',
+                'Intl.',
+                'FRBE',
+                'Belgium',
+                'Campaign',
+                'Mexico',
+                'Portugal',
+                'Android',
+                'CPI',
+                'CPL',
+                'CPS',
+                'Cps',
+                'Cpa',
+                'CPA',
+                'CPR',
+                'CPV',
+                'CPI',
+                'U.S.',
+                '.comcz',
+                'Mac only',
+                'Per Sale',
+                'Nederland',
+                'Sweden',
+                'Polska',
+                '*suspended*',
+                'suspended',
+                'Nigeria',
+                'Hungary',
+                'DACH',
+                'Affiliate Team',
+                'Gutschein Gewinnspiel',
+                'Gutschein',
+                'Gewinnspiel',
+                'Gewinnspiele',
+                'oesterreich',
+                'Oesterreich',
+                'Österreich',
             ),
             '',
-            $domain
+            $text
         );
-    }
 
-    /**
-     * @param $domain
-     * @param $isSubDomain
-     *
-     * @return string
-     */
-    public static function formatDomain($domain, $isSubDomain)
-    {
-        if ($isSubDomain) {
-            return 'http://' . rtrim($domain, '/');
-        } else {
-            return 'http://www.' . rtrim($domain, '/');
+        if (preg_match('/(tchibo|art2chine|armordirect|deichmann|sercotel)\-[\d]+$/i', $text, $match)) {
+            $text = $match[1];
         }
-    }
-
-    /**
-     * @param $source
-     * @param $destination
-     *
-     * @return string
-     */
-    public static function curlDownload($source, $destination)
-    {
-        if ($source and $destination) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $source);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-            $data = curl_exec($ch);
-            $error = curl_error($ch);
-
-            curl_close($ch);
-            if ($data) {
-                $file = fopen($destination, "w+");
-                $size = fputs($file, $data);
-                fclose($file);
-
-                return $size;
-            }
-
-            return $error;
+        $text = html_entity_decode($text, \ENT_QUOTES, 'utf-8');
+        $text = str_replace('_', ' ', $text);
+        if ($unAccent) {
+            $text = Urlizer::unaccent($text);
         }
-
-        return false;
-    }
-
-    /**
-     * converts XML to array
-     *
-     * @param $xmlstring
-     *
-     * @return mixed
-     */
-    public static function xml2Array($xmlstring)
-    {
-        $array = [];
-        if ($xmlstring) {
-            $xml = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
-            $json = json_encode($xml);
-            $array = json_decode($json, true);
-        }
-
-        return (array)$array;
-    }
-
-    public static function isValidUrl($url)
-    {
-        // first do some quick sanity checks:
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-
-        if (strlen($url) > 150) {
-            return false;
-        }
-        // quick check url is roughly a valid http request: ( http://blah/... )
-        if (!preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)) {
-            return false;
-        }
-
-        $parts = parse_url($url);
-        $url = $parts['scheme'] . '://' . $parts['host'];
-        // the next bit could be slow:
-        //if (self::getHttpResponseCode_using_curl($url) != 200) {
-        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
-            return false;
-        }
-
-        return $url;
-    }
-
-    public static function isImageValid($url)
-    {
-        // first do some quick sanity checks:
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-
-        //if (self::getHttpResponseCode_using_curl($url) != 200) {
-        if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
-            return false;
-        }
-
-        return $url;
-    }
-
-    /**
-     * @param $url
-     * @param bool $usePost
-     * @return bool|string
-     */
-    public static function isValidDeepLink($url, $usePost = false)
-    {
-        $lastUrl = '';
-        if (stripos($url, 'tradedoubler') !== false) {
-            $url .= '&f=0';
-        }
-        if (stripos($url, 'cityads') !== false) {
-            $url .= '&no_cookie=1';
-        }
-        $url = stripslashes($url);
-        // first do some quick sanity checks:
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-
-        $validator = new Uri();
-        if (!$isValid = $validator->isValid($url)) {
-            return false;
-        }
-        // quick check url is roughly a valid http request: ( http://blah/... )
-        /*   if (!preg_match('/^http(s)?:\/\/[a-z0-9-\(\)\_]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)) {
-               return false;
-           }
-   */
-        // the next bit could be slow:
-        //if (self::getHttpResponseCode_using_curl($url) != 200) {
-        if (!$data = self::getHttpResponseUsingCurl($url, true, $usePost)) {
-            // use this one if you cant use curl
-            return false;
-        } else {
-            if ($data[0] == 503) {
-                $code = 302;
-                $body = $data[1];
-
-                if (stripos($body, 'Location:') !== false) {
-                    return true;
-                }
-            } else {
-                list($code, $body, $lastUrl) = $data;
-                $lastUrl = rtrim($lastUrl, '/');
-            }
-
-            $badEnd = [
-                'http://localhost/error.html',
-                'http://www.couponhives.com/discounts/latest.html',
-                'http://scripts.affilired.com',
-                'http://www.flexoffers.com/invalidlink',
-                'http://www.pepperjamnetwork.com/tracking/error.php',
-                'http://www.flexoffers.com/invalidlink/',
-                'http://www.lcoffers.com',
-                'http://www.shareasale.com/notactive.html',
-                'http://www.pepperjamnetwork.com/tracking/error.php',
-                'http://cityadspix.com/blank-page',
-                'https://lenkmio.com/dummy/?r=3',
-                'http://click.cptrack.de/?rd=true&k=',
-                'http://www.lcoffers.com',
-                'http://ho.novem.pl',
-                'https://www.belboon.com',
-                'http://www.affiliatefuture.co.uk',
-                'http://discount.pushpro.ru',
-                'https://springmall.ru/redirect.php',
-                'http://lpgenerator.ru'
-            ];
-
-            foreach ($badEnd as $end) {
-                if (stripos($end, $lastUrl) !== false) {
-                    return false;
-                }
-            }
-
-
-            if (stripos($lastUrl, 'manymorestores.com') !== false) {
-                return false;
-            }
-
-            if ($code == 403 and stripos($body, 'HTTP/1.1 302') !== false and $lastUrl and $url != $lastUrl) {
-                return true;
-            }
-
-            if ($code == 200 and stripos($body, 'HTTP/1.1 303') !== false) {
-                return false;
-            }
-
-            if ($code == 403) {
-                return false;
-            }
-
-            if ($code !== 200) {
-                if (!(self::getHttpResponseCodeUsingCurl($url, false) == 302 and $body)) {
-                    return false;
-                }
-            } elseif (stripos($body, '<html') === false && stripos($body, 'DOCTYPE html') === false && stripos($body,
-                    'http-equiv="refresh"') === false
-            ) { //
-                return false;
-            }
-
-            if ($body) {
-                $texts = [
-                    '<title>Webgains</title>',
-                    '<h1>Forbidden</h1>',
-                    'You’ve been redirected to this page because the link you clicked is now inactive',
-                    'no relationship',
-                    'advertiser is not active',
-                    'link is incorrect',
-                    'now inactive',
-                    //'not permitted',
-                    'contact the webmaster',
-                    'have permission to access',
-                    'offer could not be found',
-                    'campaign has been deactivated',
-                    'this link is not active',
-                    'This page cannot be found',
-                    'this shop is currently unavailable',
-                    'Welcome to TradeTracker',
-                    'product is no longer available via this affiliate link',
-                    'Campaign is not Active',
-                    'Unfortunately we cannot redirect you to the website requested',
-                    //'www.voucherhive.co.uk', //redirected back
-                    'Начните экономить',
-                    'the web page I was looking for is no longer available',
-                    'the page you are looking for no longer exists',
-                    'Unfortunately, the link that you’ve used is not valid',
-                    'http://www.voucherhive.co.uk/koupon.appcache',
-                    'Runtime Error',
-                    'This product is no longer available via this affiliate link',
-                    'File or directory not found',
-                    'This link is not valid',
-                    'Invalid link',
-                    'Invalid Publisher',
-                    'You don\'t have permission to access',
-                    'Service Unavailable',
-                    '<h1>Forbidden</h1>',
-                    'The advertiser is not active',
-                    'The target URL was invalid. Please contact the vendor',
-                    'This site is no longer in service or has been disabled',
-                    'OOPS! Your offer could not be found',
-                    'Invalid link or an error occured processing this request',
-                    'If you are the owner of this website, please contact your hosting provider',
-                    'Directory listing denied',
-                    'You have selected an invalid link. Possible causes for this',
-                    'The partnership no longer exists or has been paused',
-                    'Unfortunately, this link is no longer available.',
-                    'The requested URL is not valid anymore',
-                    'Oops, we couldnt find what you were looking for',
-                    'Oops, something went wrong there',
-                    'An unexpected error occurred while processing the requested URL. We have been notified and are taking the appropriate actions',
-                    'The link you clicked on has expired',
-                    'The website you requested is no longer accessible via this link',
-                    'Invalid Publisher Code',
-                    'This link is not valid',
-                    'Invalid link or an error',
-                    'Invalid link or an error occured processing this request',
-                    'Sorry, this shop is currently unavailable',
-                    'Invalid link or an error occured processing this request',
-                    'This Web page is parked for FREE',
-                    'This web site is no longer available through this link',
-                    'This domain has recently been listed in the marketplace',
-                    'the page you are looking for no longer exists',
-                    'Our Web site is temporarily unavailable while we perform routine system maintenance. We are working on the site to improve its appearance and functionality',
-                    'http://www.webaddresshelp.bt.com',
-                    'Für diese Domain steht momentan keine Website zur Verfügung',
-                    'The link is not currently active',
-                    'This link is now inactive',
-                    'Page not found',
-                    'Unfortunately, the link that you’ve used is not valid',
-                    'Leider konnte Ihre Anfrage nicht weitergeleitet werden',
-                    'There is no relationship between this site and the advertiser',
-                    'This link was created by an affiliate of the ClickBank network who is not authorized to promote this product',
-                    ''
-                ];
-
-                $sourceHost = str_replace(['www.'], '', parse_url($url, PHP_URL_HOST));
-                foreach ($texts as $text) {
-                    if (stripos($body, $text) !== false) {
-                        return false;
-                    }
-                }
-
-                if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body,
-                    stripos($lastUrl, 'http://r.srvtrck.com/v2') === false)
-                ) {
-                    if (stripos($url, 'kelkoo.co.uk') !== false and stripos($hiddenRedirectUrl, 'http') !== 0) {
-                        $hiddenRedirectUrl = 'http://ecs-uk.kelkoo.co.uk' . $hiddenRedirectUrl;
-                        return self:: isValidDeepLink($hiddenRedirectUrl);
-                    }
-                    $destHost = str_replace(['www.'], '', parse_url($hiddenRedirectUrl, PHP_URL_HOST));
-                    if ($destHost != $sourceHost) {
-                        return self:: isValidDeepLink($hiddenRedirectUrl);
-                    }
-                }
-
-                if (stripos($body, "method='POST'") and $repUrl = preg_match('/\b(?:action=\')([^"\']+)/i', $body,
-                        $matches)
-                ) {
-                    $newLink = 'http://clk.tradedoubler.com/' . $matches[1];
-                    if ($newLink != $url and stripos($sourceHost, 'track.flexlinks') === false) {
-                        return self:: isValidDeepLink($newLink, true);
-                    }
-                }
-
-                if (stripos($lastUrl, 'http://r.srvtrck.com/v2') !== false and $url != $lastUrl) {
-                    return self:: isValidDeepLink($lastUrl);
-                }
-            }
-        }
-
-        // }
-
-        return $url;
-    }
-
-    public static function getHttpResponseCodeUsingCurl($url, $followredirects = true, $usePost = false)
-    {
-        // returns int responsecode, or false (if url does not exist or connection timeout occurs)
-        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
-        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
-        // if $followredirects == true : return the LAST  known httpcode (when redirected)
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-        $ch = @curl_init($url);
-        if ($ch === false) {
-            return false;
-        }
-        @curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
-        @curl_setopt($ch, CURLOPT_NOBODY, true);    // dont need body
-        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    // catch output (do NOT print!)
-        if ($followredirects) {
-            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            @curl_setopt(
-                $ch, CURLOPT_MAXREDIRS, 10
-            );  // fairly random number, but could prevent unwanted endless redirects with followlocation=true
-        } else {
-            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-        }
-        @curl_setopt(
-            $ch, CURLOPT_CONNECTTIMEOUT, 10
-        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
-        @curl_setopt(
-            $ch, CURLOPT_TIMEOUT, 10
-        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
-        @curl_setopt(
-            $ch, CURLOPT_USERAGENT,
-            "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1"
-        );   // pretend we're a regular browser
-
-        if ($usePost) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-        }
-
-        @curl_exec($ch);
-        if (@curl_errno($ch)) {   // should be 0
-            @curl_close($ch);
-            return false;
-        }
-        $code = @curl_getinfo(
-            $ch, CURLINFO_HTTP_CODE
-        ); // note: php.net documentation shows this returns a string, but really it returns an int
-        @curl_close($ch);
-
-        return $code;
-    }
-
-    /**
-     * @param $url
-     * @param bool $followredirects
-     * @param bool $usePost
-     * @return array|bool
-     */
-    public static function getHttpResponseUsingCurl($url, $followredirects = true, $usePost = false)
-    {
-        // returns int responsecode, or false (if url does not exist or connection timeout occurs)
-        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
-        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
-        // if $followredirects == true : return the LAST  known httpcode (when redirected)
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-        $ch = @curl_init($url);
-        if ($ch === false) {
-            return false;
-        }
-        @curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
-        //@curl_setopt($ch, CURLOPT_NOBODY, true);    // dont need body
-        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    // catch output (do NOT print!)
-        if ($followredirects) {
-            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            @curl_setopt(
-                $ch, CURLOPT_MAXREDIRS, 10
-            );  // fairly random number, but could prevent unwanted endless redirects with followlocation=true
-        } else {
-            @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-        }
-        @curl_setopt(
-            $ch, CURLOPT_CONNECTTIMEOUT, 30
-        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
-        @curl_setopt(
-            $ch, CURLOPT_TIMEOUT, 30
-        );   // fairly random number (seconds)... but could prevent waiting forever to get a result
-        @curl_setopt(
-            $ch, CURLOPT_USERAGENT,
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:49.0) Gecko/20100101 Firefox/49.0"
-        );   // pretend we're a regular browser
-
-        @curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        if ($usePost) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-        }
-
-        $return = @curl_exec($ch);
-
-        if (@curl_errno($ch)) {   // should be 0
-            @curl_close($ch);
-
-            return false;
-        }
-        $code = @curl_getinfo(
-            $ch, CURLINFO_HTTP_CODE
-        ); // note: php.net documentation shows this returns a string, but really it returns an int
-        $lastUrl = @curl_getinfo(
-            $ch, CURLINFO_EFFECTIVE_URL
-        ); // note: php.net documentation shows this returns a string, but really it returns an int
-        @curl_close($ch);
-
-        return [$code, $return, $lastUrl];
-    }
-
-    public static function getHttpResponseCodeUsingGetheaders($url, $followredirects = true)
-    {
-        // returns string responsecode, or false if no responsecode found in headers (or url does not exist)
-        // NOTE: could potentially take up to 0-30 seconds , blocking further code execution (more or less depending on connection, target site, and local timeout settings))
-        // if $followredirects == false: return the FIRST known httpcode (ignore redirects)
-        // if $followredirects == true : return the LAST  known httpcode (when redirected)
-        if (!$url || !is_string($url)) {
-            return false;
-        }
-        $headers = @get_headers($url);
-        if ($headers and is_array($headers)) {
-            if ($followredirects) {
-                // we want the the last errorcode, reverse array so we start at the end:
-                $headers = array_reverse($headers);
-            }
-            foreach ($headers as $hline) {
-                // search for things like "HTTP/1.1 200 OK" , "HTTP/1.0 200 OK" , "HTTP/1.1 301 PERMANENTLY MOVED" , "HTTP/1.1 400 Not Found" , etc.
-                // note that the exact syntax/version/output differs, so there is some string magic involved here
-                if (preg_match('/^HTTP\/\S+\s+([1-9][0-9][0-9])\s+.*/', $hline, $matches)) {// "HTTP/*** ### ***"
-                    $code = $matches[1];
-
-                    return $code;
-                }
-            }
-
-            // no HTTP/xxx found in headers:
-            return false;
-        }
-
-        // no headers :
-        return false;
-    }
-
-    public static function getRedirectUrl($url, $count = 0)
-    {
-        $url = stripslashes($url);
-        if ($data = self::getHttpResponseUsingCurl($url)) {
-            list(, $body, $redirectUrl) = $data;
-            if ($hiddenRedirectUrl = self::getHiddenRedirectUrl($body, false)) {
-                if ($hiddenRedirectUrl != $url) {
-                    return self:: getRedirectUrl($hiddenRedirectUrl, ++$count);
-                }
-            } elseif ($url != $hiddenRedirectUrl) {
-                return $redirectUrl;
-            }
-        } elseif ($count > 0 and $url) {
-            return $url;
-        }
-
-        return false;
-    }
-
-    public static function getMemoryUsed()
-    {
-        $size = memory_get_usage(true);
-        $unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-
-        return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
-    }
-
-    public static function xmlToArrayWithAttributes($xml, $options = array())
-    {
-        $defaults = array(
-            'namespaceSeparator' => ':',//you may want this to be something other than a colon
-            'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name
-            'alwaysArray' => array(),   //array of xml tag names which should always become arrays
-            'autoArray' => true,        //only create arrays for tags which appear more than once
-            'textContent' => '$',       //key used for the text content of elements
-            'autoText' => true,         //skip textContent key if node has no attributes or child nodes
-            'keySearch' => false,       //optional search and replace on tag and attribute names
-            'keyReplace' => false       //replace values for above search values (as passed to str_replace())
-        );
-        $options = array_merge($defaults, $options);
-        $namespaces = $xml->getDocNamespaces();
-        $namespaces[''] = null; //add base (empty) namespace
-
-        //get attributes from all namespaces
-        $attributesArray = array();
-        foreach ($namespaces as $prefix => $namespace) {
-            foreach ($xml->attributes($namespace) as $attributeName => $attribute) {
-                //replace characters in attribute name
-                if ($options['keySearch']) {
-                    $attributeName =
-                        str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
-                }
-                $attributeKey = $options['attributePrefix']
-                    . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
-                    . $attributeName;
-                $attributesArray[$attributeKey] = (string)$attribute;
-            }
-        }
-
-        //get child nodes from all namespaces
-        $tagsArray = array();
-        foreach ($namespaces as $prefix => $namespace) {
-            foreach ($xml->children($namespace) as $childXml) {
-                //recurse into child nodes
-                $childArray = self::xmlToArrayWithAttributes($childXml, $options);
-                list($childTagName, $childProperties) = each($childArray);
-
-                //replace characters in tag name
-                if ($options['keySearch']) {
-                    $childTagName =
-                        str_replace($options['keySearch'], $options['keyReplace'], $childTagName);
-                }
-                //add namespace prefix, if any
-                if ($prefix) {
-                    $childTagName = $prefix . $options['namespaceSeparator'] . $childTagName;
-                }
-
-                if (!isset($tagsArray[$childTagName])) {
-                    //only entry with this key
-                    //test if tags of this type should always be arrays, no matter the element count
-                    $tagsArray[$childTagName] =
-                        in_array($childTagName, $options['alwaysArray']) || !$options['autoArray']
-                            ? array($childProperties) : $childProperties;
-                } elseif (
-                    is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName])
-                    === range(0, count($tagsArray[$childTagName]) - 1)
-                ) {
-                    //key already exists and is integer indexed array
-                    $tagsArray[$childTagName][] = $childProperties;
-                } else {
-                    //key exists so convert to integer indexed array with previous value in position 0
-                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
-                }
-            }
-        }
-
-        //get text content of node
-        $textContentArray = array();
-        $plainText = trim((string)$xml);
-        if ($plainText !== '') {
-            $textContentArray[$options['textContent']] = $plainText;
-        }
-
-        //stick it all together
-        $propertiesArray = !$options['autoText'] || $attributesArray || $tagsArray || ($plainText === '')
-            ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
-
-        //return node as array
-        return array(
-            $xml->getName() => $propertiesArray
-        );
-    }
-
-    public static function cleanKeywords($value, $asArray = false)
-    {
-        $data = array();
-        foreach ((array)$value as $val) {
-            if (is_array($val)) {
-                $data[] = self::cleanKeywords($val);
-            } else {
-                $val = trim($val);
-                $val = str_replace(
+        $filter = new FilterChain(
+            array(
+                'filters' => array(
+                    //array('name' => 'stringToLower', 'options' => array('encoding' => 'utf-8')),
+                    array('name' => 'stripTags'),
                     array(
-                        '>',
-                        ',',
-                        '-',
-                        '&',
-                        ':',
-                        '_',
+                        'name' => 'pregReplace',
+                        'options' => array(
+                            'pattern' => '/\.(com|co\.uk)$/i',
+                            'replacement' => '',
+                        ),
                     ),
-                    '/',
-                    $val
-                );
-                $val = explode('/', $val);
-                $data = array_merge($data, $val);
-            }
+                    array(
+                        'name' => 'pregReplace',
+                        'options' => array(
+                            'pattern' => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                            'replacement' => '',
+                        ),
+                    ),
+                    array(
+                        'name' => 'pregReplace',
+                        'options' => array(
+                            'pattern' => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
+                            'replacement' => '',
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'pregReplace',
+                        'options' => array(
+                            'pattern' => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
+                            'replacement' => ''
+                        ),
+                    ),
+                    array('name' => 'stringTrim'),
+                ),
+            )
+        );
+
+        $name = trim($filter->filter($text));
+        $name = trim($name, '-., :');
+
+        switch (mb_strtolower($name, 'UTF-8')) {
+            case 'n design center':
+                $name = $original;
+                break;
+            case 'host europe':
+                $name = 'Host Europe';
+                break;
+            case 'from':
+                $name = 'From US';
+                break;
+            case 'hut':
+                $name = 'The Hut';
+                break;
+            case 'toysr':
+            case 'toys r':
+                $name = 'Toys R US';
+                break;
+            case 'babies r':
+                $name = 'Babies R US';
+                break;
+            case 'miniinthebox':
+            case 'mini the box':
+            case 'mini box':
+                $name = 'Mini in the Box';
+                break;
+            case 'light the box':
+            case 'light box':
+                $name = 'Light in the Box';
+                break;
+            case 'blue':
+            case 'shoes':
+            case 'vision direct':
+                $name = $original;
+                break;
+            case 'dx':
+                $name = 'deal-extreme';
+                break;
         }
 
-        foreach ($data as $k => $v) {
-            $val = trim(str_replace('-', ' ', self::urlize($v)));
-            if (strlen($val) > 2) {
-                $data[$k] = $val;
-            }
+        if (empty($name) || strtolower($original) == 'affiliate window') {
+            $name = $original;
         }
 
-        $data = array_unique(array_filter($data));
-        sort($data);
+        if (strlen(str_replace('-', '', $name)) < 3) {
+            $name = trim($original);
+        }
 
-        return $asArray ? $data : implode(', ', $data);
+        if (preg_match('/[0-9]+/i', $name)) {
+            $name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
+        } else {
+            $camelFilter = new CamelCaseToSeparator(' ');
+            $name = $camelFilter->filter($name);
+        }
+
+        $name = trim($name, ' &-!,._');
+
+        return $name;
+    }
+
+    private static function getFirstPartFromString($original, array $list)
+    {
+        $text = mb_convert_encoding((string)$original, 'UTF-8', mb_list_encodings());
+        $text = mb_convert_case($text, MB_CASE_TITLE, "UTF-8");
+
+        foreach ($list as $sep) {
+            $paths = explode($sep, $text);
+            $text = trim($paths[0]);
+        }
+
+        return $text;
     }
 
     /**
@@ -1940,29 +1953,6 @@ class Util
     }
 
     /**
-     * @param $content
-     * @param bool $checkQuery
-     * @return bool
-     */
-    private static function getHiddenRedirectUrl($content, $checkQuery = true)
-    {
-        $url = false;
-        if (preg_match('/(referLink\.href)\s?\=(.*)\;.*/i', $content, $matches)) {
-            $url = trim($matches[2], '"\'');
-        } elseif (preg_match('/(window\.location\.replace\()(.*)\).*/i', $content, $moreMatches)) {
-            $url = trim($moreMatches[2], '"\'');
-        }
-
-        if ($url and $checkQuery) {
-            if (!$query = parse_url($url, PHP_URL_QUERY)) {
-                return $query;
-            }
-        }
-
-        return $url;
-    }
-
-    /**
      * @param Form $form
      * @return string
      */
@@ -2010,6 +2000,29 @@ class Util
         }
 
         return [$isConsole, self::cleanDomain($host)];
+    }
+
+    /**
+     * @param $domain
+     *
+     * @return mixed
+     */
+    public static function cleanDomain($domain)
+    {
+        //remove port number
+
+        list($domain,) = explode(':', $domain);
+
+        return str_replace(
+            array(
+                'http://',
+                'https://',
+                'www.',
+                'admin.'
+            ),
+            '',
+            $domain
+        );
     }
 
     public static function tidyHtml($html)
