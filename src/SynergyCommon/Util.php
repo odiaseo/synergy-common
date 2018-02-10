@@ -497,17 +497,11 @@ class Util
 
     public static function cleanUrl($url)
     {
-        $validator = new Uri();
-
         if ($url and strpos($url, 'http') === false) {
             $url = 'http://' . $url;
         }
 
         $url = trim($url);
-
-        if (!$validator->isValid($url)) {
-            return '';
-        }
 
         if (self::isTrackingDomain($url)) {
             return '';
@@ -530,6 +524,7 @@ class Util
         $invalidDomain = [
             'track.condatix.de',
             'kl.adspirit.de',
+            'affiliates.digitalriver.com',
             'tycoonpartner.adspirit.net',
             'bit.ly',
 
