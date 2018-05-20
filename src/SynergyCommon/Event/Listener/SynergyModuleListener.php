@@ -284,16 +284,22 @@ class SynergyModuleListener implements ListenerAggregateInterface
     private function setDbConnectionCleanup(EntityManager $entityManager)
     {
         if (PHP_SAPI == 'cli') {
-            declare (ticks=1);
+            if (function_exists('pcntl_async_signals')) {
+                pcntl_async_signals(true);
+            } else {
+                declare(ticks = 1);
+            }
 
             $handler = function () use ($entityManager) {
                 $entityManager->getConnection()->close();
                 \posix_kill(\posix_getpid(), SIGKILL);
             };
 
-            \pcntl_signal(SIGINT, $handler);
-            \pcntl_signal(SIGTERM, $handler);
-            \pcntl_signal(SIGTSTP, $handler);
+            if (function_exists('pcntl_signal')) {
+                \pcntl_signal(SIGINT, $handler);
+                \pcntl_signal(SIGTERM, $handler);
+                \pcntl_signal(SIGTSTP, $handler);
+            }
         }
     }
 

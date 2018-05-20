@@ -1912,7 +1912,7 @@ class Util
         $from = urlencode($from);
         $toCurrency = urlencode($toCurrency);
 
-        $url = "https://finance.google.com/finance/converter?a=$amount&from=$from&to=$toCurrency";
+        $url = "https://finance.google.com/bctzjpnsun/converter?a=$amount&from=$from&to=$toCurrency";
 
         $handler = curl_init();
         $timeout = 0;
