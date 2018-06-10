@@ -3,6 +3,7 @@
 namespace SynergyCommon;
 
 use Gedmo\Sluggable\Util\Urlizer;
+use SynergyCommon\Util\CurlRequestTrait;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Filter\FilterChain;
 use Zend\Filter\Word\CamelCaseToSeparator;
@@ -19,151 +20,153 @@ use Zend\Validator\Uri;
 class Util
 {
 
-    const DEFAULT_LOCALE = 'en_GB';
-    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    use CurlRequestTrait;
+
+    const DEFAULT_LOCALE    = 'en_GB';
+    const DB_DATE_FORMAT    = 'Y-m-d H:i:s';
     const CLIENT_DOMAIN_KEY = 'client_domain';
 
     protected static $_enablePrint = false;
 
     protected static $_mimeTypes
-        = array(
-            "ez" => "application/andrew-inset",
-            "hqx" => "application/mac-binhex40",
-            "cpt" => "application/mac-compactpro",
-            "doc" => "application/msword",
-            "bin" => "application/octet-stream",
-            "dms" => "application/octet-stream",
-            "lha" => "application/octet-stream",
-            "lzh" => "application/octet-stream",
-            "exe" => "application/octet-stream",
-            "class" => "application/octet-stream",
-            "so" => "application/octet-stream",
-            "dll" => "application/octet-stream",
-            "oda" => "application/oda",
-            "pdf" => "application/pdf",
-            "ai" => "application/postscript",
-            "eps" => "application/postscript",
-            "ps" => "application/postscript",
-            "smi" => "application/smil",
-            "smil" => "application/smil",
-            "wbxml" => "application/vnd.wap.wbxml",
-            "wmlc" => "application/vnd.wap.wmlc",
-            "wmlsc" => "application/vnd.wap.wmlscriptc",
-            "bcpio" => "application/x-bcpio",
-            "vcd" => "application/x-cdlink",
-            "pgn" => "application/x-chess-pgn",
-            "cpio" => "application/x-cpio",
-            "csh" => "application/x-csh",
-            "dcr" => "application/x-director",
-            "dir" => "application/x-director",
-            "dxr" => "application/x-director",
-            "dvi" => "application/x-dvi",
-            "spl" => "application/x-futuresplash",
-            "gtar" => "application/x-gtar",
-            "hdf" => "application/x-hdf",
-            "js" => "application/x-javascript",
-            "skp" => "application/x-koan",
-            "skd" => "application/x-koan",
-            "skt" => "application/x-koan",
-            "skm" => "application/x-koan",
-            "latex" => "application/x-latex",
-            "nc" => "application/x-netcdf",
-            "cdf" => "application/x-netcdf",
-            "sh" => "application/x-sh",
-            "shar" => "application/x-shar",
-            "swf" => "application/x-shockwave-flash",
-            "sit" => "application/x-stuffit",
+        = [
+            "ez"      => "application/andrew-inset",
+            "hqx"     => "application/mac-binhex40",
+            "cpt"     => "application/mac-compactpro",
+            "doc"     => "application/msword",
+            "bin"     => "application/octet-stream",
+            "dms"     => "application/octet-stream",
+            "lha"     => "application/octet-stream",
+            "lzh"     => "application/octet-stream",
+            "exe"     => "application/octet-stream",
+            "class"   => "application/octet-stream",
+            "so"      => "application/octet-stream",
+            "dll"     => "application/octet-stream",
+            "oda"     => "application/oda",
+            "pdf"     => "application/pdf",
+            "ai"      => "application/postscript",
+            "eps"     => "application/postscript",
+            "ps"      => "application/postscript",
+            "smi"     => "application/smil",
+            "smil"    => "application/smil",
+            "wbxml"   => "application/vnd.wap.wbxml",
+            "wmlc"    => "application/vnd.wap.wmlc",
+            "wmlsc"   => "application/vnd.wap.wmlscriptc",
+            "bcpio"   => "application/x-bcpio",
+            "vcd"     => "application/x-cdlink",
+            "pgn"     => "application/x-chess-pgn",
+            "cpio"    => "application/x-cpio",
+            "csh"     => "application/x-csh",
+            "dcr"     => "application/x-director",
+            "dir"     => "application/x-director",
+            "dxr"     => "application/x-director",
+            "dvi"     => "application/x-dvi",
+            "spl"     => "application/x-futuresplash",
+            "gtar"    => "application/x-gtar",
+            "hdf"     => "application/x-hdf",
+            "js"      => "application/x-javascript",
+            "skp"     => "application/x-koan",
+            "skd"     => "application/x-koan",
+            "skt"     => "application/x-koan",
+            "skm"     => "application/x-koan",
+            "latex"   => "application/x-latex",
+            "nc"      => "application/x-netcdf",
+            "cdf"     => "application/x-netcdf",
+            "sh"      => "application/x-sh",
+            "shar"    => "application/x-shar",
+            "swf"     => "application/x-shockwave-flash",
+            "sit"     => "application/x-stuffit",
             "sv4cpio" => "application/x-sv4cpio",
-            "sv4crc" => "application/x-sv4crc",
-            "tar" => "application/x-tar",
-            "tcl" => "application/x-tcl",
-            "tex" => "application/x-tex",
+            "sv4crc"  => "application/x-sv4crc",
+            "tar"     => "application/x-tar",
+            "tcl"     => "application/x-tcl",
+            "tex"     => "application/x-tex",
             "texinfo" => "application/x-texinfo",
-            "texi" => "application/x-texinfo",
-            "t" => "application/x-troff",
-            "tr" => "application/x-troff",
-            "roff" => "application/x-troff",
-            "man" => "application/x-troff-man",
-            "me" => "application/x-troff-me",
-            "ms" => "application/x-troff-ms",
-            "ustar" => "application/x-ustar",
-            "src" => "application/x-wais-source",
-            "xhtml" => "application/xhtml+xml",
-            "xht" => "application/xhtml+xml",
-            "zip" => "application/zip",
-            "au" => "audio/basic",
-            "snd" => "audio/basic",
-            "mid" => "audio/midi",
-            "midi" => "audio/midi",
-            "kar" => "audio/midi",
-            "mpga" => "audio/mpeg",
-            "mp2" => "audio/mpeg",
-            "mp3" => "audio/mpeg",
-            "aif" => "audio/x-aiff",
-            "aiff" => "audio/x-aiff",
-            "aifc" => "audio/x-aiff",
-            "m3u" => "audio/x-mpegurl",
-            "ram" => "audio/x-pn-realaudio",
-            "rm" => "audio/x-pn-realaudio",
-            "rpm" => "audio/x-pn-realaudio-plugin",
-            "ra" => "audio/x-realaudio",
-            "wav" => "audio/x-wav",
-            "pdb" => "chemical/x-pdb",
-            "xyz" => "chemical/x-xyz",
-            "bmp" => "image/bmp",
-            "gif" => "image/gif",
-            "ief" => "image/ief",
-            "jpeg" => "image/jpeg",
-            "jpg" => "image/jpeg",
-            "jpe" => "image/jpeg",
-            "png" => "image/png",
-            "tiff" => "image/tiff",
-            "tif" => "image/tif",
-            "djvu" => "image/vnd.djvu",
-            "djv" => "image/vnd.djvu",
-            "wbmp" => "image/vnd.wap.wbmp",
-            "ras" => "image/x-cmu-raster",
-            "pnm" => "image/x-portable-anymap",
-            "pbm" => "image/x-portable-bitmap",
-            "pgm" => "image/x-portable-graymap",
-            "ppm" => "image/x-portable-pixmap",
-            "rgb" => "image/x-rgb",
-            "xbm" => "image/x-xbitmap",
-            "xpm" => "image/x-xpixmap",
-            "xwd" => "image/x-windowdump",
-            "igs" => "model/iges",
-            "iges" => "model/iges",
-            "msh" => "model/mesh",
-            "mesh" => "model/mesh",
-            "silo" => "model/mesh",
-            "wrl" => "model/vrml",
-            "vrml" => "model/vrml",
-            "css" => "text/css",
-            "csv" => "text/csv",
-            "html" => "text/html",
-            "htm" => "text/html",
-            "txt" => "text/plain",
-            "asc" => "text/plain",
-            "rtx" => "text/richtext",
-            "rtf" => "text/rtf",
-            "sgml" => "text/sgml",
-            "sgm" => "text/sgml",
-            "tsv" => "text/tab-seperated-values",
-            "wml" => "text/vnd.wap.wml",
-            "wmls" => "text/vnd.wap.wmlscript",
-            "etx" => "text/x-setext",
-            "xml" => "text/xml",
-            "xsl" => "text/xml",
-            "mpeg" => "video/mpeg",
-            "mpg" => "video/mpeg",
-            "mpe" => "video/mpeg",
-            "qt" => "video/quicktime",
-            "mov" => "video/quicktime",
-            "mxu" => "video/vnd.mpegurl",
-            "avi" => "video/x-msvideo",
-            "movie" => "video/x-sgi-movie",
-            "ice" => "x-conference-xcooltalk"
-        );
+            "texi"    => "application/x-texinfo",
+            "t"       => "application/x-troff",
+            "tr"      => "application/x-troff",
+            "roff"    => "application/x-troff",
+            "man"     => "application/x-troff-man",
+            "me"      => "application/x-troff-me",
+            "ms"      => "application/x-troff-ms",
+            "ustar"   => "application/x-ustar",
+            "src"     => "application/x-wais-source",
+            "xhtml"   => "application/xhtml+xml",
+            "xht"     => "application/xhtml+xml",
+            "zip"     => "application/zip",
+            "au"      => "audio/basic",
+            "snd"     => "audio/basic",
+            "mid"     => "audio/midi",
+            "midi"    => "audio/midi",
+            "kar"     => "audio/midi",
+            "mpga"    => "audio/mpeg",
+            "mp2"     => "audio/mpeg",
+            "mp3"     => "audio/mpeg",
+            "aif"     => "audio/x-aiff",
+            "aiff"    => "audio/x-aiff",
+            "aifc"    => "audio/x-aiff",
+            "m3u"     => "audio/x-mpegurl",
+            "ram"     => "audio/x-pn-realaudio",
+            "rm"      => "audio/x-pn-realaudio",
+            "rpm"     => "audio/x-pn-realaudio-plugin",
+            "ra"      => "audio/x-realaudio",
+            "wav"     => "audio/x-wav",
+            "pdb"     => "chemical/x-pdb",
+            "xyz"     => "chemical/x-xyz",
+            "bmp"     => "image/bmp",
+            "gif"     => "image/gif",
+            "ief"     => "image/ief",
+            "jpeg"    => "image/jpeg",
+            "jpg"     => "image/jpeg",
+            "jpe"     => "image/jpeg",
+            "png"     => "image/png",
+            "tiff"    => "image/tiff",
+            "tif"     => "image/tif",
+            "djvu"    => "image/vnd.djvu",
+            "djv"     => "image/vnd.djvu",
+            "wbmp"    => "image/vnd.wap.wbmp",
+            "ras"     => "image/x-cmu-raster",
+            "pnm"     => "image/x-portable-anymap",
+            "pbm"     => "image/x-portable-bitmap",
+            "pgm"     => "image/x-portable-graymap",
+            "ppm"     => "image/x-portable-pixmap",
+            "rgb"     => "image/x-rgb",
+            "xbm"     => "image/x-xbitmap",
+            "xpm"     => "image/x-xpixmap",
+            "xwd"     => "image/x-windowdump",
+            "igs"     => "model/iges",
+            "iges"    => "model/iges",
+            "msh"     => "model/mesh",
+            "mesh"    => "model/mesh",
+            "silo"    => "model/mesh",
+            "wrl"     => "model/vrml",
+            "vrml"    => "model/vrml",
+            "css"     => "text/css",
+            "csv"     => "text/csv",
+            "html"    => "text/html",
+            "htm"     => "text/html",
+            "txt"     => "text/plain",
+            "asc"     => "text/plain",
+            "rtx"     => "text/richtext",
+            "rtf"     => "text/rtf",
+            "sgml"    => "text/sgml",
+            "sgm"     => "text/sgml",
+            "tsv"     => "text/tab-seperated-values",
+            "wml"     => "text/vnd.wap.wml",
+            "wmls"    => "text/vnd.wap.wmlscript",
+            "etx"     => "text/x-setext",
+            "xml"     => "text/xml",
+            "xsl"     => "text/xml",
+            "mpeg"    => "video/mpeg",
+            "mpg"     => "video/mpeg",
+            "mpe"     => "video/mpeg",
+            "qt"      => "video/quicktime",
+            "mov"     => "video/quicktime",
+            "mxu"     => "video/vnd.mpegurl",
+            "avi"     => "video/x-msvideo",
+            "movie"   => "video/x-sgi-movie",
+            "ice"     => "x-conference-xcooltalk"
+        ];
 
     /**
      * Ensure string is returned
@@ -229,7 +232,7 @@ class Util
             case 7:
                 return $object->$method($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
             default:
-                return call_user_func_array(array($object, $method), $args);
+                return call_user_func_array([$object, $method], $args);
         }
     }
 
@@ -250,7 +253,7 @@ class Util
     public static function printMessage($msg, $repeat = 1, $lineBreak = true, $forceOutput = false)
     {
         if (self::$_enablePrint or $forceOutput) {
-            $msg = is_array($msg) ? print_r($msg, true) : $msg;
+            $msg  = is_array($msg) ? print_r($msg, true) : $msg;
             $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
             if ($lineBreak) {
                 echo "{$sign}$msg\n";
@@ -283,7 +286,7 @@ class Util
      */
     public static function getFeedColumns($filename, $separator = ',', $offSet = 0, $sort = true)
     {
-        $columns = array();
+        $columns = [];
         if (file_exists($filename)) {
             $handle = fopen($filename, 'r');
             if ($offSet == 0) {
@@ -350,7 +353,7 @@ class Util
     {
         if ($end) {
             try {
-                $now = new \DateTime();
+                $now     = new \DateTime();
                 $endDate = ($end instanceof \DateTime) ? $end : new \DateTime($end);
 
                 return ($now > $endDate);
@@ -394,8 +397,8 @@ class Util
     public static function XmlArray($file)
     {
         $string = file_get_contents($file);
-        $xml = simplexml_load_string($string);
-        $json = json_encode($xml);
+        $xml    = simplexml_load_string($string);
+        $json   = json_encode($xml);
 
         $array = json_decode($json, true);
 
@@ -409,12 +412,12 @@ class Util
      */
     public static function getLogoInventory($logoPath = 'data/logo-inventory.txt')
     {
-        $list = array();
+        $list = [];
 
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;
-            $remotePath = '/var/www/vhost/static/assets/merchants/compressed/png/';
-            $remoteUser = 'live@37.61.202.70';
+            $remotePath  = '/var/www/vhost/static/assets/merchants/compressed/png/';
+            $remoteUser  = 'live@37.61.202.70';
 
             $command = sprintf(
                 'ssh %s ls %s > %s',
@@ -428,7 +431,7 @@ class Util
 
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
-            $count = 0;
+            $count  = 0;
             while ($logo = fgets($handle)) {
                 if ($logo) {
                     if ($clean = str_replace('-', '', $logo)) {
@@ -464,13 +467,13 @@ class Util
      */
     public static function getScreenShotInventory($logoPath = 'data/screen-inventory.txt', $dir = 'png')
     {
-        $list = array();
+        $list = [];
 
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;;
             $remoteUser = 'live@37.61.202.70';
             $remotePath = '/var/www/vhost/static/assets/merchants/screenshot/' . $dir;
-            $command = sprintf(
+            $command    = sprintf(
                 'ssh %s ls %s > %s',
                 $remoteUser,
                 escapeshellarg($remotePath),
@@ -482,7 +485,7 @@ class Util
 
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
-            $count = 0;
+            $count  = 0;
             while ($logo = fgets($handle)) {
                 if ($logo) {
                     $list[trim($logo)] = $count;
@@ -510,7 +513,7 @@ class Util
         $paths = parse_url($url);
 
         if (isset($paths['host'])) {
-            $path = isset($paths['path']) ? $paths['path'] : '';
+            $path  = isset($paths['path']) ? $paths['path'] : '';
             $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
 
             return rtrim($clean, '/');
@@ -534,6 +537,7 @@ class Util
                 return true;
             }
         }
+
         return false;
     }
 
@@ -541,7 +545,7 @@ class Util
     {
 
         if (stripos($deepLink, 'tradedoubler') !== false) {
-            $paths = explode('url(', $deepLink);
+            $paths    = explode('url(', $deepLink);
             $deepLink = Util::removeLineBreaks($paths[0]);
         } elseif (stripos($deepLink, 'http://ad.zanox.com') !== false) {
             $parts = explode('&', $deepLink);
@@ -553,14 +557,14 @@ class Util
 
             $deepLink = implode('&', $parts);
         } elseif (stripos($deepLink, 'tracking.mailsectkr.com') !== false) {
-            $paths = parse_url($deepLink);
+            $paths  = parse_url($deepLink);
             $params = urldecode($paths['query']);
             parse_str($params, $query);
             unset($query['url']);
 
             return sprintf('%s://%s%s?%s', $paths['scheme'], $paths['host'], $paths['path'], http_build_query($query));
         } elseif (stripos($deepLink, 'track.webgains.com') !== false) {
-            $paths = parse_url($deepLink);
+            $paths  = parse_url($deepLink);
             $params = urldecode($paths['query']);
             parse_str($params, $query);
             unset($query['wgtarget']);
@@ -611,7 +615,7 @@ class Util
             curl_setopt($ch, CURLOPT_URL, $source);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-            $data = curl_exec($ch);
+            $data  = curl_exec($ch);
             $error = curl_error($ch);
 
             curl_close($ch);
@@ -640,8 +644,8 @@ class Util
     {
         $array = [];
         if ($xmlstring) {
-            $xml = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
-            $json = json_encode($xml);
+            $xml   = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
+            $json  = json_encode($xml);
             $array = json_decode($json, true);
         }
 
@@ -664,7 +668,7 @@ class Util
         }
 
         $parts = parse_url($url);
-        $url = $parts['scheme'] . '://' . $parts['host'];
+        $url   = $parts['scheme'] . '://' . $parts['host'];
         // the next bit could be slow:
         //if (self::getHttpResponseCode_using_curl($url) != 200) {
         if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
@@ -725,6 +729,7 @@ class Util
     /**
      * @param $url
      * @param bool $usePost
+     *
      * @return bool|string
      */
     public static function isValidDeepLink($url, $usePost = false)
@@ -915,6 +920,7 @@ class Util
                 ) {
                     if (stripos($url, 'kelkoo.co.uk') !== false and stripos($hiddenRedirectUrl, 'http') !== 0) {
                         $hiddenRedirectUrl = 'http://ecs-uk.kelkoo.co.uk' . $hiddenRedirectUrl;
+
                         return self:: isValidDeepLink($hiddenRedirectUrl);
                     }
                     $destHost = str_replace(['www.'], '', parse_url($hiddenRedirectUrl, PHP_URL_HOST));
@@ -947,6 +953,7 @@ class Util
      * @param $url
      * @param bool $followredirects
      * @param bool $usePost
+     *
      * @return array|bool
      */
     public static function getHttpResponseUsingCurl($url, $followredirects = true, $usePost = false)
@@ -997,7 +1004,7 @@ class Util
 
             return false;
         }
-        $code = @curl_getinfo(
+        $code    = @curl_getinfo(
             $ch, CURLINFO_HTTP_CODE
         ); // note: php.net documentation shows this returns a string, but really it returns an int
         $lastUrl = @curl_getinfo(
@@ -1050,6 +1057,7 @@ class Util
         @curl_exec($ch);
         if (@curl_errno($ch)) {   // should be 0
             @curl_close($ch);
+
             return false;
         }
         $code = @curl_getinfo(
@@ -1063,6 +1071,7 @@ class Util
     /**
      * @param $content
      * @param bool $checkQuery
+     *
      * @return bool
      */
     private static function getHiddenRedirectUrl($content, $checkQuery = true)
@@ -1105,29 +1114,29 @@ class Util
     public static function getMemoryUsed()
     {
         $size = memory_get_usage(true);
-        $unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
+        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
 
         return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
     }
 
-    public static function xmlToArrayWithAttributes($xml, $options = array())
+    public static function xmlToArrayWithAttributes($xml, $options = [])
     {
-        $defaults = array(
+        $defaults       = [
             'namespaceSeparator' => ':',//you may want this to be something other than a colon
-            'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name
-            'alwaysArray' => array(),   //array of xml tag names which should always become arrays
-            'autoArray' => true,        //only create arrays for tags which appear more than once
-            'textContent' => '$',       //key used for the text content of elements
-            'autoText' => true,         //skip textContent key if node has no attributes or child nodes
-            'keySearch' => false,       //optional search and replace on tag and attribute names
-            'keyReplace' => false       //replace values for above search values (as passed to str_replace())
-        );
-        $options = array_merge($defaults, $options);
-        $namespaces = $xml->getDocNamespaces();
+            'attributePrefix'    => '@',   //to distinguish between attributes and nodes with the same name
+            'alwaysArray'        => [],   //array of xml tag names which should always become arrays
+            'autoArray'          => true,        //only create arrays for tags which appear more than once
+            'textContent'        => '$',       //key used for the text content of elements
+            'autoText'           => true,         //skip textContent key if node has no attributes or child nodes
+            'keySearch'          => false,       //optional search and replace on tag and attribute names
+            'keyReplace'         => false       //replace values for above search values (as passed to str_replace())
+        ];
+        $options        = array_merge($defaults, $options);
+        $namespaces     = $xml->getDocNamespaces();
         $namespaces[''] = null; //add base (empty) namespace
 
         //get attributes from all namespaces
-        $attributesArray = array();
+        $attributesArray = [];
         foreach ($namespaces as $prefix => $namespace) {
             foreach ($xml->attributes($namespace) as $attributeName => $attribute) {
                 //replace characters in attribute name
@@ -1135,7 +1144,7 @@ class Util
                     $attributeName =
                         str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
                 }
-                $attributeKey = $options['attributePrefix']
+                $attributeKey                   = $options['attributePrefix']
                     . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
                     . $attributeName;
                 $attributesArray[$attributeKey] = (string)$attribute;
@@ -1143,7 +1152,7 @@ class Util
         }
 
         //get child nodes from all namespaces
-        $tagsArray = array();
+        $tagsArray = [];
         foreach ($namespaces as $prefix => $namespace) {
             foreach ($xml->children($namespace) as $childXml) {
                 //recurse into child nodes
@@ -1165,7 +1174,7 @@ class Util
                     //test if tags of this type should always be arrays, no matter the element count
                     $tagsArray[$childTagName] =
                         in_array($childTagName, $options['alwaysArray']) || !$options['autoArray']
-                            ? array($childProperties) : $childProperties;
+                            ? [$childProperties] : $childProperties;
                 } elseif (
                     is_array($tagsArray[$childTagName]) && array_keys($tagsArray[$childTagName])
                     === range(0, count($tagsArray[$childTagName]) - 1)
@@ -1174,14 +1183,14 @@ class Util
                     $tagsArray[$childTagName][] = $childProperties;
                 } else {
                     //key exists so convert to integer indexed array with previous value in position 0
-                    $tagsArray[$childTagName] = array($tagsArray[$childTagName], $childProperties);
+                    $tagsArray[$childTagName] = [$tagsArray[$childTagName], $childProperties];
                 }
             }
         }
 
         //get text content of node
-        $textContentArray = array();
-        $plainText = trim((string)$xml);
+        $textContentArray = [];
+        $plainText        = trim((string)$xml);
         if ($plainText !== '') {
             $textContentArray[$options['textContent']] = $plainText;
         }
@@ -1191,32 +1200,32 @@ class Util
             ? array_merge($attributesArray, $tagsArray, $textContentArray) : $plainText;
 
         //return node as array
-        return array(
+        return [
             $xml->getName() => $propertiesArray
-        );
+        ];
     }
 
     public static function cleanKeywords($value, $asArray = false)
     {
-        $data = array();
+        $data = [];
         foreach ((array)$value as $val) {
             if (is_array($val)) {
                 $data[] = self::cleanKeywords($val);
             } else {
-                $val = trim($val);
-                $val = str_replace(
-                    array(
+                $val  = trim($val);
+                $val  = str_replace(
+                    [
                         '>',
                         ',',
                         '-',
                         '&',
                         ':',
                         '_',
-                    ),
+                    ],
                     '/',
                     $val
                 );
-                $val = explode('/', $val);
+                $val  = explode('/', $val);
                 $data = array_merge($data, $val);
             }
         }
@@ -1241,24 +1250,24 @@ class Util
      *
      * @return string
      */
-    public static function urlize($data, $options = array(), $firstPart = true)
+    public static function urlize($data, $options = [], $firstPart = true)
     {
         $str = self::prepareTitleForSlug($data, true, $firstPart);
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
         $str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
 
-        $defaults = array(
-            'delimiter' => '-',
-            'limit' => null,
-            'lowercase' => true,
-            'replacements' => array(),
+        $defaults = [
+            'delimiter'     => '-',
+            'limit'         => null,
+            'lowercase'     => true,
+            'replacements'  => [],
             'transliterate' => false,
-        );
+        ];
 
         // Merge options
         $options = array_merge($defaults, $options);
 
-        $char_map = array(
+        $char_map = [
             // Latin
             'À' => 'A',
             'Á' => 'A',
@@ -1556,7 +1565,7 @@ class Util
             'š' => 's',
             'ū' => 'u',
             'ž' => 'z'
-        );
+        ];
 
         // Make custom replacements
         $str = preg_replace(array_keys($options['replacements']), $options['replacements'], $str);
@@ -1589,7 +1598,7 @@ class Util
             $text = 'Kupistol';
         }
         if ($firstPart) {
-            $sepList = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
+            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
             $separators = [
                 'closing',
                 'via',
@@ -1597,33 +1606,33 @@ class Util
                 'ihr',
                 '.com-'
             ];
-            $regex = '/\b(?:' . implode('|', $separators) . ')\b/i';
-            $text = preg_replace($regex, '<>', $text);
-            $text = self::getFirstPartFromString($text, $sepList);
+            $regex      = '/\b(?:' . implode('|', $separators) . ')\b/i';
+            $text       = preg_replace($regex, '<>', $text);
+            $text       = self::getFirstPartFromString($text, $sepList);
         }
 
         $text = str_ireplace(
-            array(
+            [
                 "'s",
                 'hoteles',
                 'Hoteles',
                 ' and ',
                 ' And ',
                 ' AND ',
-            ),
-            array(
+            ],
+            [
                 '',
                 'hotels',
                 'Hotels',
                 ' & ',
                 ' & ',
                 ' & ',
-            ),
+            ],
             $text
         );
 
         $text = str_ireplace(
-            array(
+            [
                 '(US & CA)',
                 'US  CA',
                 'US CA',
@@ -1755,7 +1764,7 @@ class Util
                 'oesterreich',
                 'Oesterreich',
                 'Österreich',
-            ),
+            ],
             '',
             $text
         );
@@ -1769,42 +1778,42 @@ class Util
             $text = Urlizer::unaccent($text);
         }
         $filter = new FilterChain(
-            array(
-                'filters' => array(
+            [
+                'filters' => [
                     //array('name' => 'stringToLower', 'options' => array('encoding' => 'utf-8')),
-                    array('name' => 'stripTags'),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\.(com|co\.uk)$/i',
+                    ['name' => 'stripTags'],
+                    [
+                        'name'    => 'pregReplace',
+                        'options' => [
+                            'pattern'     => '/\.(com|co\.uk)$/i',
                             'replacement' => '',
-                        ),
-                    ),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                        ],
+                    ],
+                    [
+                        'name'    => 'pregReplace',
+                        'options' => [
+                            'pattern'     => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
                             'replacement' => '',
-                        ),
-                    ),
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
+                        ],
+                    ],
+                    [
+                        'name'    => 'pregReplace',
+                        'options' => [
+                            'pattern'     => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
                             'replacement' => '',
-                        ),
-                    ),
+                        ],
+                    ],
 
-                    array(
-                        'name' => 'pregReplace',
-                        'options' => array(
-                            'pattern' => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
+                    [
+                        'name'    => 'pregReplace',
+                        'options' => [
+                            'pattern'     => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
                             'replacement' => ''
-                        ),
-                    ),
-                    array('name' => 'stringTrim'),
-                ),
-            )
+                        ],
+                    ],
+                    ['name' => 'stringTrim'],
+                ],
+            ]
         );
 
         $name = trim($filter->filter($text));
@@ -1861,7 +1870,7 @@ class Util
             $name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         } else {
             $camelFilter = new CamelCaseToSeparator(' ');
-            $name = $camelFilter->filter($name);
+            $name        = $camelFilter->filter($name);
         }
 
         $name = trim($name, ' &-!,._');
@@ -1876,7 +1885,7 @@ class Util
 
         foreach ($list as $sep) {
             $paths = explode($sep, $text);
-            $text = trim($paths[0]);
+            $text  = trim($paths[0]);
         }
 
         return $text;
@@ -1907,27 +1916,27 @@ class Util
      */
     private static function convert($from, $toCurrency, $amount)
     {
+        $endPoint = 'https://v3.exchangerate-api.com/bulk/74449c575d8b6caf152d472b/' . $toCurrency;
+        $filename = sys_get_temp_dir() . '/exchange-rate-' . $toCurrency;
+        $curl     = new self();
 
-        $amount = urlencode($amount);
-        $from = urlencode($from);
-        $toCurrency = urlencode($toCurrency);
+        if (self::isFileExpired($filename, 24)) {
+            $data = $curl->curlRequest($endPoint);
+            file_put_contents($filename, $data);
+        } else {
+            $data = file_get_contents($filename);
+        }
 
-        $url = "https://finance.google.com/bctzjpnsun/converter?a=$amount&from=$from&to=$toCurrency";
+        $result = json_decode($data, true);
+        $rates  = $result['rates'];
 
-        $handler = curl_init();
-        $timeout = 0;
-        curl_setopt($handler, CURLOPT_URL, $url);
-        curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($handler, CURLOPT_FOLLOWLOCATION, true);
+        if (isset($rates[$from])) {
+            $rate = $rates[$from];
 
-        curl_setopt($handler, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
-        curl_setopt($handler, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $rawData = curl_exec($handler);
-        curl_close($handler);
-        $data = explode('bld>', $rawData);
-        $data = explode($toCurrency, $data[1]);
+            return round($amount / $rate, 2);
+        }
 
-        return round($data[0], 2);
+        return 0;
     }
 
     /**
@@ -1949,6 +1958,7 @@ class Util
 
     /**
      * @param Form $form
+     *
      * @return string
      */
     public static function renderFormErrors(Form $form)
@@ -1961,25 +1971,28 @@ class Util
                 $input = $form->get($element);
                 if (is_array($message)) {
                     $field = key($message);
-                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
+                    $html  .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
                 } else {
                     $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message . '</li>';
                 }
             }
+
             return $html . '</ol>';
         }
+
         return '';
     }
 
     /**
      * @param $request
      * @param MvcEvent $event
+     *
      * @return array
      */
     public static function getDomainFromRequest($request, MvcEvent $event = null)
     {
         $isConsole = false;
-        $host = null;
+        $host      = null;
         if ($request instanceof ConsoleRequest) {
             $isConsole = true;
             /** @var $routeMatch \Zend\Router\RouteMatch */
@@ -2009,12 +2022,12 @@ class Util
         list($domain,) = explode(':', $domain);
 
         return str_replace(
-            array(
+            [
                 'http://',
                 'https://',
                 'www.',
                 'admin.'
-            ),
+            ],
             '',
             $domain
         );
@@ -2022,9 +2035,9 @@ class Util
 
     public static function tidyHtml($html)
     {
-        $tidy = new \Tidy();
-        $options = array('indent' => false, 'doctype' => false, 'show-body-only' => true);
-        $return = $tidy->repairString($html, $options, 'UTF8');
+        $tidy    = new \Tidy();
+        $options = ['indent' => false, 'doctype' => false, 'show-body-only' => true];
+        $return  = $tidy->repairString($html, $options, 'UTF8');
 
         return $return;
     }
