@@ -27,7 +27,7 @@
   "require-dev": {
     "zfcampus/zf-development-mode": "^3",
     "phpunit/phpunit": "~4.0",
-    "satooshi/php-coveralls": "^1.0"
+    "satooshi/php-coveralls": "^2.0"
   },
   "suggest": {
     "monolog/monolog": "For enhanced logging features"
