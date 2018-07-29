@@ -40,7 +40,7 @@ class CommonSiteSettings extends AbstractOptions
     protected $merchantCore = 'merchant';
     protected $categoryCore = 'category';
     protected $solrIP = 'localhost';
-    protected $solrPort = 8621;
+    protected $solrPort = 8449;
 
     //verification code
     protected $bingVerification;

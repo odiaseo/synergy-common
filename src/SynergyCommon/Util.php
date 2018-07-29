@@ -416,11 +416,11 @@ class Util
 
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;
-            $remotePath  = '/var/www/vhost/static/assets/merchants/compressed/png/';
-            $remoteUser  = 'live@37.61.202.70';
+            $remotePath  = '~/logo-inventory.txt';
+            $remoteUser  = 'live@console.vaboose.org';
 
             $command = sprintf(
-                'ssh %s ls %s > %s',
+                'rsync -avi %s:%s %s',
                 $remoteUser,
                 escapeshellarg($remotePath),
                 escapeshellarg($destination)
@@ -432,8 +432,11 @@ class Util
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
             $count  = 0;
-            while ($logo = fgets($handle)) {
-                if ($logo) {
+            while ($row = fgets($handle)) {
+                if ($row) {
+                    $cols = explode(' ', $row);
+                    $logo = trim(end($cols));
+
                     if ($clean = str_replace('-', '', $logo)) {
                         $list[trim($clean)] = $count;
                     } else {
@@ -471,10 +474,10 @@ class Util
 
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;;
-            $remoteUser = 'live@37.61.202.70';
-            $remotePath = '/var/www/vhost/static/assets/merchants/screenshot/' . $dir;
+            $remoteUser = 'live@console.vaboose.org';
+            $remotePath = '~/screen-inventory.txt';
             $command    = sprintf(
-                'ssh %s ls %s > %s',
+                'rsync -avi %s:%s %s',
                 $remoteUser,
                 escapeshellarg($remotePath),
                 escapeshellarg($destination)
@@ -486,8 +489,11 @@ class Util
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
             $count  = 0;
-            while ($logo = fgets($handle)) {
-                if ($logo) {
+            while ($row = fgets($handle)) {
+                if ($row) {
+                    $cols = explode(' ', $row);
+                    $logo = trim(end($cols));
+
                     $list[trim($logo)] = $count;
                     $count++;
                 }
