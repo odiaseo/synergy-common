@@ -22,10 +22,11 @@ class Util
 
     use CurlRequestTrait;
 
-    const DEFAULT_LOCALE    = 'en_GB';
-    const DB_DATE_FORMAT    = 'Y-m-d H:i:s';
-    const CLIENT_DOMAIN_KEY = 'client_domain';
-    const ADMIN_IP          = '83.169.39.196';
+    const DEFAULT_LOCALE      = 'en_GB';
+    const DB_DATE_FORMAT      = 'Y-m-d H:i:s';
+    const CLIENT_DOMAIN_KEY   = 'client_domain';
+    const ADMIN_IP            = '83.169.39.196';
+    const LOGO_INVENTORY_PATH = 'data/logo-inventory.txt';
 
     protected static $_enablePrint = false;
 
@@ -408,14 +409,15 @@ class Util
 
     /**
      * @param string $logoPath
+     * @param int $hours
      *
      * @return array
      */
-    public static function getLogoInventory($logoPath = 'data/logo-inventory.txt')
+    public static function getLogoInventory($logoPath = self::LOGO_INVENTORY_PATH, $hours = 4)
     {
         $list = [];
 
-        if (self::isFileExpired($logoPath, 4)) {
+        if (self::isFileExpired($logoPath, $hours)) {
             $destination = getcwd() . '/' . $logoPath;
             $remotePath  = '~/logo-inventory.txt';
             $remoteUser  = 'live@' . self::ADMIN_IP;
