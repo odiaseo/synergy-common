@@ -25,6 +25,7 @@ class Util
     const DEFAULT_LOCALE    = 'en_GB';
     const DB_DATE_FORMAT    = 'Y-m-d H:i:s';
     const CLIENT_DOMAIN_KEY = 'client_domain';
+    const ADMIN_IP          = '83.169.39.196';
 
     protected static $_enablePrint = false;
 
@@ -417,16 +418,23 @@ class Util
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;
             $remotePath  = '~/logo-inventory.txt';
-            $remoteUser  = 'live@console.vaboose.org';
+            $remoteUser  = 'live@' . self::ADMIN_IP;
 
-            $command = sprintf(
-                'rsync -avi %s:%s %s',
-                $remoteUser,
-                escapeshellarg($remotePath),
-                escapeshellarg($destination)
-            );
+            $ip = self::getLocalhostIp();
 
-            exec($command);
+            if ($ip == self::ADMIN_IP) {
+                copy('/home/live/logo-inventory.txt', $destination);
+            } else {
+
+                $command = sprintf(
+                    'rsync -avi %s:%s %s',
+                    $remoteUser,
+                    escapeshellarg($remotePath),
+                    escapeshellarg($destination)
+                );
+
+                exec($command);
+            }
         }
 
         if (file_exists($logoPath)) {
@@ -462,6 +470,35 @@ class Util
         return true;
     }
 
+    public static function getLocalhostIp()
+    {
+        $localhostIp = '';
+
+        try {
+            $commands = [
+                'hostname -I',
+                'hostname -i',
+                'hostname'
+            ];
+            $ipString = null;
+
+            foreach ($commands as $command) {
+                if ($ipString = exec($command)) {
+                    $ipParts = explode(' ', $ipString);
+                    foreach ($ipParts as $part) {
+                        if (substr($part, 0, 4) != '127.') {
+                            $localhostIp = $part;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $exception) {
+        }
+
+        return $localhostIp;
+    }
+
     /**
      * @param string $logoPath
      * @param string $dir
@@ -474,16 +511,22 @@ class Util
 
         if (self::isFileExpired($logoPath, 4)) {
             $destination = getcwd() . '/' . $logoPath;;
-            $remoteUser = 'live@console.vaboose.org';
+            $remoteUser = 'live@' . self::ADMIN_IP;
             $remotePath = '~/screen-inventory.txt';
-            $command    = sprintf(
-                'rsync -avi %s:%s %s',
-                $remoteUser,
-                escapeshellarg($remotePath),
-                escapeshellarg($destination)
-            );
+            $ip         = self::getLocalhostIp();
 
-            exec($command);
+            if ($ip == self::ADMIN_IP) {
+                copy('/home/live/screen-inventory.txt', $destination);
+            } else {
+                $command = sprintf(
+                    'rsync -avi %s:%s %s',
+                    $remoteUser,
+                    escapeshellarg($remotePath),
+                    escapeshellarg($destination)
+                );
+
+                exec($command);
+            }
         }
 
         if (file_exists($logoPath)) {
@@ -2046,34 +2089,5 @@ class Util
         $return  = $tidy->repairString($html, $options, 'UTF8');
 
         return $return;
-    }
-
-    public static function getLocalhostIp()
-    {
-        $localhostIp = '';
-
-        try {
-            $commands = [
-                'hostname -I',
-                'hostname -i',
-                'hostname'
-            ];
-            $ipString = null;
-
-            foreach ($commands as $command) {
-                if ($ipString = exec($command)) {
-                    $ipParts = explode(' ', $ipString);
-                    foreach ($ipParts as $part) {
-                        if (substr($part, 0, 4) != '127.') {
-                            $localhostIp = $part;
-                            break 2;
-                        }
-                    }
-                }
-            }
-        } catch (\Exception $exception) {
-        }
-
-        return $localhostIp;
     }
 }
