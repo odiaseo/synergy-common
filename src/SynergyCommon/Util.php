@@ -2047,4 +2047,33 @@ class Util
 
         return $return;
     }
+
+    public static function getLocalhostIp()
+    {
+        $localhostIp = '';
+
+        try {
+            $commands = [
+                'hostname -I',
+                'hostname -i',
+                'hostname'
+            ];
+            $ipString = null;
+
+            foreach ($commands as $command) {
+                if ($ipString = exec($command)) {
+                    $ipParts = explode(' ', $ipString);
+                    foreach ($ipParts as $part) {
+                        if (substr($part, 0, 4) != '127.') {
+                            $localhostIp = $part;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $exception) {
+        }
+
+        return $localhostIp;
+    }
 }
