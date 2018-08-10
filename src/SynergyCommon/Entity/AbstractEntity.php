@@ -1,7 +1,7 @@
 <?php
+
 namespace SynergyCommon\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 use Zend\InputFilter\InputFilter;
@@ -16,30 +16,6 @@ abstract class AbstractEntity
 {
     /** @var \Zend\InputFilter\InputFilter */
     protected $inputFilter;
-
-    /**
-     * Convert the object to an array.
-     *
-     * @param null $object
-     *
-     * @return array
-     */
-    public function toArray($object = null)
-    {
-        $list   = array();
-        $object = $object ?: $this;
-        foreach (get_object_vars($object) as $key => $value) {
-            if (substr($key, 0, 1) != '_') {
-                if (is_object($value)) {
-                    $list[$key] = $this->toArray($value);
-                } else {
-                    $list[$key] = $value;
-                }
-            }
-        }
-
-        return $list;
-    }
 
     /**
      * Populate object attributes from array
@@ -68,9 +44,43 @@ abstract class AbstractEntity
         }
     }
 
+    /**
+     * Convert the object to an array.
+     *
+     * @param null $object
+     *
+     * @return array
+     */
+    public function toArray($object = null)
+    {
+        $list = array();
+        $object = $object ?: $this;
+
+        foreach (get_object_vars($object) as $key => $value) {
+
+            if (substr($key, 0, 1) != '_') {
+                if ($value instanceof AbstractEntity) {
+                    if ($this->basename() == $value->basename()) {
+                        continue;
+                    }
+                    $list[$key] = $this->toArray($value);
+                } else {
+                    $list[$key] = $value;
+                }
+            }
+        }
+
+        return $list;
+    }
+
+    protected function basename()
+    {
+        return basename(str_replace('\\', '/', get_class($this)));
+    }
+
     public function __call($method, $args)
     {
-        $type     = substr($method, 0, 3);
+        $type = substr($method, 0, 3);
         $property = lcfirst(substr($method, 3));
 
         if ($type == 'set') {
@@ -128,7 +138,7 @@ abstract class AbstractEntity
     public function exchangeArray(array $data)
     {
         $wordFilter = new UnderscoreToCamelCase();
-        $filters    = $this->getInputFilter();
+        $filters = $this->getInputFilter();
         foreach ($data as $field => $value) {
             $method = 'set' . ucfirst($wordFilter->filter($field));
 
@@ -151,14 +161,6 @@ abstract class AbstractEntity
     }
 
     /**
-     * @param \Zend\InputFilter\InputFilter $inputFilter
-     */
-    public function setInputFilter($inputFilter)
-    {
-        $this->inputFilter = $inputFilter;
-    }
-
-    /**
      * @return \Zend\InputFilter\InputFilter
      */
     public function getInputFilter()
@@ -167,6 +169,14 @@ abstract class AbstractEntity
             $this->inputFilter = new InputFilter();
         }
         return $this->inputFilter;
+    }
+
+    /**
+     * @param \Zend\InputFilter\InputFilter $inputFilter
+     */
+    public function setInputFilter($inputFilter)
+    {
+        $this->inputFilter = $inputFilter;
     }
 
     public function removeWhiteSpace($value)
