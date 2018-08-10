@@ -2,6 +2,8 @@
 
 namespace SynergyCommon\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\Collection;
 use SynergyCommon\Exception\InvalidArgumentException;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 use Zend\InputFilter\InputFilter;
@@ -64,7 +66,11 @@ abstract class AbstractEntity
                         continue;
                     }
                     $list[$key] = $this->toArray($value);
-                } else {
+                } elseif ($value instanceof DateTime) {
+                    $list[$key] = $value->format('Y-m-d H:i:s');
+                } elseif ($value instanceof Collection) {
+                    $list[$key] = $this->toArray($value);
+                } elseif (!is_object($value)) {
                     $list[$key] = $value;
                 }
             }
