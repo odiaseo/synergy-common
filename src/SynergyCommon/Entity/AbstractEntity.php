@@ -65,11 +65,11 @@ abstract class AbstractEntity
                     if ($this->basename() == $value->basename()) {
                         continue;
                     }
-                    $list[$key] = $this->toArray($value);
+                    $list[$key] = $value->toArray();
                 } elseif ($value instanceof DateTime) {
                     $list[$key] = $value->format('Y-m-d H:i:s');
                 } elseif ($value instanceof Collection) {
-                    $list[$key] = $this->toArray($value);
+                    $list[$key] = $value->toArray();
                 } elseif (!is_object($value)) {
                     $list[$key] = $value;
                 }
