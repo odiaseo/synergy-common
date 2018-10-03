@@ -447,11 +447,7 @@ class Util
                     $cols = explode(' ', $row);
                     $logo = trim(end($cols));
 
-                    if ($clean = str_replace('-', '', $logo)) {
-                        $list[trim($clean)] = $count;
-                    } else {
-                        $list[trim($logo)] = $count;
-                    }
+                    $list[$logo] = $count;
                     $count++;
                 }
             }
