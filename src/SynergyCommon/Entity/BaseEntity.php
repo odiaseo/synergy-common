@@ -117,8 +117,8 @@ abstract class BaseEntity extends AbstractEntity
     public function isFlexOfferLink($deepLink)
     {
         $links = [
-            'http://track.flexlinks.com',
-            'http://track.flexlinkspro.com',
+            'track.flexlinks.com',
+            'track.flexlinkspro.com',
         ];
 
         if (empty($deepLink)) {
