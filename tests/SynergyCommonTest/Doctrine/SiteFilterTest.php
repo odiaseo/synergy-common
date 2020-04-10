@@ -11,13 +11,13 @@ namespace SynergyCommonTest\Doctrine;
 use SynergyCommonTest\Stub\SiteStub;
 use SynergyCommon\Doctrine\Filter\SiteFilter;
 use SynergyCommonTest\Bootstrap;
-use Zend\Log\Logger;
+use Laminas\Log\Logger;
 
 /**
  * Class SiteFilterTest
  * @package SynergyCommonTest\Doctrine
  */
-class SiteFilterTest extends \PHPUnit_Framework_TestCase
+class SiteFilterTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testSiteFilter()

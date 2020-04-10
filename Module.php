@@ -13,8 +13,8 @@ use SynergyCommon\Session\SessionManagerFactory;
 use SynergyCommon\View\Helper\Factory\FlashMessagesHelperFactory;
 use SynergyCommon\View\Helper\Factory\MicroDataHelperFactory;
 use SynergyCommon\View\Helper\RenderGoogleCaptcha;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Session\SessionManager;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Session\SessionManager;
 
 /**
  * Class Module
@@ -41,7 +41,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
+            'Laminas\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),

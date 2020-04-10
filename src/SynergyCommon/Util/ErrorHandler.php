@@ -4,8 +4,8 @@ namespace SynergyCommon\Util;
 use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Log\Logger;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Log\Logger;
 
 /**
  * Class ErrorHandler
@@ -33,7 +33,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
         }
         $log = $uri . $this->processException($e);
         if ($logger = $this->getLoggerWithName()) {
-            /** @var  $logger \Zend\Log\LoggerInterface */
+            /** @var  $logger \Laminas\Log\LoggerInterface */
             $logger->err($log);
         }
 
@@ -92,7 +92,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @param \Zend\Log\LoggerInterface | \Psr\Log\LoggerInterface $logger
+     * @param \Laminas\Log\LoggerInterface | \Psr\Log\LoggerInterface $logger
      */
     public function setLogger($logger)
     {
@@ -100,7 +100,7 @@ class ErrorHandler implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @return \Zend\Log\LoggerInterface
+     * @return \Laminas\Log\LoggerInterface
      */
     public function getLogger()
     {

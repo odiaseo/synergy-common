@@ -4,7 +4,7 @@ namespace SynergyCommon\Doctrine;
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * Class QueryBuilder

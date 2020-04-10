@@ -2,9 +2,9 @@
 
 namespace SynergyCommon\Client;
 
-use Zend\Http\Client as HttpClient;
-use Zend\Http\Request;
-use Zend\Stdlib\Parameters;
+use Laminas\Http\Client as HttpClient;
+use Laminas\Http\Request;
+use Laminas\Stdlib\Parameters;
 
 class HttpRestJsonClient
 {
@@ -12,7 +12,7 @@ class HttpRestJsonClient
 
     /** @var \SynergyCommon\Client\ClientOptions */
     protected $_options;
-    /** @var \Zend\Http\Request */
+    /** @var \Laminas\Http\Request */
     protected $_request;
 
     public function __construct(HttpClient $httpClient, $request = null)
@@ -52,7 +52,7 @@ class HttpRestJsonClient
             }
         }
 
-        /** @var $response \Zend\Http\Response */
+        /** @var $response \Laminas\Http\Response */
         $response = $this->httpClient->dispatch($request);
 
         # should interrogate response status, throwing appropriate exceptions for error codes
@@ -90,7 +90,7 @@ class HttpRestJsonClient
     }
 
     /**
-     * @param \Zend\Http\Request $request
+     * @param \Laminas\Http\Request $request
      */
     public function setRequest($request)
     {
@@ -98,7 +98,7 @@ class HttpRestJsonClient
     }
 
     /**
-     * @return \Zend\Http\Request
+     * @return \Laminas\Http\Request
      */
     public function getRequest()
     {

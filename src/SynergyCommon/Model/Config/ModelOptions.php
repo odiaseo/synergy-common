@@ -2,7 +2,7 @@
 namespace SynergyCommon\Model\Config;
 
 use Doctrine\ORM\AbstractQuery;
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Class ModelOptions

@@ -3,8 +3,8 @@ namespace SynergyCommon\View\Helper\Factory;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\View\Helper\FlashMessages;
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class FlashMessagesHelperFactory

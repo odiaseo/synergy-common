@@ -10,8 +10,8 @@
 namespace SynergyCommonTest;
 
 use SynergyCommon\Event\Listener\SynergyModuleListener;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class Module
@@ -21,12 +21,12 @@ class Module
 {
     public function onBootstrap(MvcEvent $event)
     {
-        /** @var $eventManager \Zend\EventManager\EventManager */
+        /** @var $eventManager \Laminas\EventManager\EventManager */
         $eventManager        = $event->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        /** @var $serviceLocator \Zend\ServiceManager\ServiceManager */
+        /** @var $serviceLocator \Laminas\ServiceManager\ServiceManager */
         $serviceLocator  = $event->getApplication()->getServiceManager();
         $synergyListener = new SynergyModuleListener();
         $synergyListener->attach($eventManager);
@@ -43,7 +43,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
+            'Laminas\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),

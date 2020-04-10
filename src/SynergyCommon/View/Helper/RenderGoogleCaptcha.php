@@ -2,8 +2,8 @@
 
 namespace SynergyCommon\View\Helper;
 
-use Zend\Form\ElementInterface;
-use Zend\Form\View\Helper\AbstractHelper;
+use Laminas\Form\ElementInterface;
+use Laminas\Form\View\Helper\AbstractHelper;
 
 /**
  * Class FormPlainText

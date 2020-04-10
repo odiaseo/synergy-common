@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util\ErrorHandler;
-use Zend\Log\LoggerInterface;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Log\LoggerInterface;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Class MicroData

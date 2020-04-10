@@ -12,7 +12,7 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\Tools\Pagination\WhereInWalker;
 use SynergyCommon\Paginator\IdentityProviderInterface;
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 
 /**
  * Class DoctrinePaginator

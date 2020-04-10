@@ -15,7 +15,7 @@ class ImageCompressor implements CompressionInterface, ServiceLocatorAwareInterf
     use ServiceLocatorAwareTrait;
     use ConsolePrinterTrait;
 
-    /** @var \Zend\Log\LoggerInterface */
+    /** @var \Laminas\Log\LoggerInterface */
     protected $_logger;
     /** @var Config\ImageCompressorOptions */
     protected $_config;

@@ -3,8 +3,8 @@
 namespace SynergyCommon\Controller;
 
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class BaseRestfulController

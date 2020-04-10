@@ -3,7 +3,7 @@ namespace SynergyCommon\Entity;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\Exception\InvalidEntityException;
-use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  * Class AbstractEntityFactory

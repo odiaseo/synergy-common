@@ -4,13 +4,13 @@ namespace SynergyCommon;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use SynergyCommon\Util\CurlRequestTrait;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Filter\FilterChain;
-use Zend\Filter\Word\CamelCaseToSeparator;
-use Zend\Form\Form;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Mvc\MvcEvent;
-use Zend\Validator\Uri;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Filter\FilterChain;
+use Laminas\Filter\Word\CamelCaseToSeparator;
+use Laminas\Form\Form;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Validator\Uri;
 
 /**
  * Class Util
@@ -2042,15 +2042,15 @@ class Util
         $host      = null;
         if ($request instanceof ConsoleRequest) {
             $isConsole = true;
-            /** @var $routeMatch \Zend\Router\RouteMatch */
+            /** @var $routeMatch \Laminas\Router\RouteMatch */
             if ($event and $routeMatch = $event->getRouteMatch()) {
                 $host = $routeMatch->getParam('host', $routeMatch->getParam(self::CLIENT_DOMAIN_KEY, null));
             }
         } elseif ($request instanceof Request and $uri = $request->getUri()) {
-            /** @var $request \Zend\Http\PhpEnvironment\Request */
+            /** @var $request \Laminas\Http\PhpEnvironment\Request */
             $host = $uri->getHost();
         } else {
-            /** @var $request \Zend\Http\PhpEnvironment\Request */
+            /** @var $request \Laminas\Http\PhpEnvironment\Request */
             $host = $request->getServer('HTTP_HOST', $request->getQuery(self::CLIENT_DOMAIN_KEY, null));
         }
 

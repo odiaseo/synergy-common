@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon\Session;
 
-use Zend\Session\Service\SessionManagerFactory as ZendSessionManagerFactory;
+use Laminas\Session\Service\SessionManagerFactory as ZendSessionManagerFactory;
 
 /**
  * Class SessionManager

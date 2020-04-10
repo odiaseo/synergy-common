@@ -4,7 +4,7 @@ namespace SynergyCommon\Factory;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\Service\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class LazyInvokableFactory

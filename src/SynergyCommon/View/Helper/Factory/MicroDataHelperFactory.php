@@ -3,7 +3,7 @@ namespace SynergyCommon\View\Helper\Factory;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\View\Helper\MicroData;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class FlashMessagesHelperFactory

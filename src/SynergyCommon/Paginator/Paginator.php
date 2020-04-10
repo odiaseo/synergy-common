@@ -2,13 +2,13 @@
 
 namespace SynergyCommon\Paginator;
 
-use Zend\Paginator\Paginator as ZendPaginator;
+use Laminas\Paginator\Paginator as LaminasPaginator;
 
 /**
  * Class Paginator
  * @package SynergyCommon\Paginator
  */
-class Paginator extends ZendPaginator
+class Paginator extends LaminasPaginator
 {
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace SynergyCommonTest\Lib;
 
+use PHPUnit\Framework\TestCase;
 use SynergyCommon\Service\BaseApiService;
 use SynergyCommonTest\Bootstrap;
 
@@ -9,9 +10,9 @@ use SynergyCommonTest\Bootstrap;
  *
  * @package SynergyCommonTest\Lib
  */
-class CommonLibraryTest extends \PHPUnit_Framework_TestCase
+class CommonLibraryTest extends TestCase
 {
-    /** @var \Zend\ServiceManager\ServiceManager */
+    /** @var \Laminas\ServiceManager\ServiceManager */
     protected $serviceManager;
 
     public function setUp()
@@ -31,7 +32,7 @@ class CommonLibraryTest extends \PHPUnit_Framework_TestCase
         if (class_exists('Monolog\Logger')) {
             $this->assertInstanceOf('Monolog\Logger', $adapter);
         } else {
-            $this->assertInstanceOf('Zend\Log\Logger', $adapter);
+            $this->assertInstanceOf('Laminas\Log\Logger', $adapter);
         }
     }
 

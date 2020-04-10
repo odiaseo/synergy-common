@@ -22,7 +22,7 @@ return array(
             'doctrine.cache.synergy_apc'          => 'SynergyCommon\Service\DoctrineApcCacheFactory',
             'doctrine.cache.cache\factory'        => 'SynergyCommon\Service\DoctrineCacheFactory',
             'doctrine.cache.result\cache\factory' => 'SynergyCommon\Service\DoctrineResultCacheFactory',
-            'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
+            'Laminas\Session\Config\ConfigInterface' => 'Laminas\Session\Service\SessionConfigFactory',
         ),
         'delegators'         => [
             'translator'    => [
@@ -41,7 +41,7 @@ return array(
     ),
     'controllers'     => [
         'abstract_factories' => [
-            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
+            \Laminas\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
 
@@ -55,19 +55,19 @@ return array(
     ],
     'session'         => [
         'config'     => [
-            'class'   => \Zend\Session\Config\SessionConfig::class,
+            'class'   => \Laminas\Session\Config\SessionConfig::class,
             'options' => [
                 'name' => 'synergy',
             ],
         ],
-        'storage'    => \Zend\Session\Storage\SessionArrayStorage::class,
+        'storage'    => \Laminas\Session\Storage\SessionArrayStorage::class,
         'validators' => [
-            //\Zend\Session\Validator\RemoteAddr::class,
-            //\Zend\Session\Validator\HttpUserAgent::class,
+            //\Laminas\Session\Validator\RemoteAddr::class,
+            //\Laminas\Session\Validator\HttpUserAgent::class,
         ],
     ],
     'session_storage' => [
-        'type' => \Zend\Session\Storage\SessionArrayStorage::class,
+        'type' => \Laminas\Session\Storage\SessionArrayStorage::class,
     ],
     'synergy'         => array(
         'check_entity_cache_file' => true,
@@ -85,7 +85,7 @@ return array(
             )
         ),
         'logger'                  => array(
-            'priority' => \Zend\Log\Logger::DEBUG
+            'priority' => \Laminas\Log\Logger::DEBUG
         ),
         'cache_control'           => 6
     ),

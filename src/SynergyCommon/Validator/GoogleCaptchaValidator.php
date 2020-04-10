@@ -1,8 +1,8 @@
 <?php
 namespace SynergyCommon\Validator;
 
-use Zend\Captcha\ReCaptcha;
-use Zend\Validator\AbstractValidator;
+use Laminas\Captcha\ReCaptcha;
+use Laminas\Validator\AbstractValidator;
 
 /**
  * Class GoogleRecaptchaValidator

@@ -4,7 +4,7 @@ namespace SynergyCommon\Service;
 use Doctrine\ORM\PersistentCollection;
 use SynergyCommon\Exception\InvalidArgumentException;
 use SynergyCommon\PrefixAwareInterface;
-use Zend\Filter\Word\CamelCaseToDash;
+use Laminas\Filter\Word\CamelCaseToDash;
 
 /**
  * Class BaseService

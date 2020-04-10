@@ -13,13 +13,13 @@ use SynergyCommon\Entity\BaseUser;
 use SynergyCommon\Member\Entity\Session;
 use SynergyCommon\Member\Entity\UserGroup;
 use SynergyCommonTest\Bootstrap;
-use Zend\Filter\StringTrim;
-use Zend\Server\Reflection\ReflectionParameter;
+use Laminas\Filter\StringTrim;
+use Laminas\Server\Reflection\ReflectionParameter;
 
 /**
  * Class run generic tests on entites. Verifies simple getters/setters
  */
-class GenericEntityTest extends \PHPUnit_Framework_TestCase
+class GenericEntityTest extends \PHPUnit\Framework\TestCase
 {
     protected $serviceManager;
     protected $stack = [];
@@ -156,7 +156,7 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $test
      * @param $result
-     * @dataProvider testDataProvider
+     * @dataProvider pageDataProvider
      */
     public function testRemoveWhiteSpace($test, $result)
     {
@@ -164,7 +164,7 @@ class GenericEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $entity->removeWhiteSpace($test));
     }
 
-    public function testDataProvider()
+    public function pageDataProvider()
     {
         return [
             ['test' . PHP_EOL, 'test'],

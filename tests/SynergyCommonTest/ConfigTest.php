@@ -8,7 +8,7 @@ use SynergyCommon\CommonSiteSettings;
 /**
  * Class run generic tests on entites. Verifies simple getters/setters
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     protected $serviceManager;
     protected $stack = [];

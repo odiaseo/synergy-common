@@ -4,7 +4,7 @@ namespace SynergyCommon\Paginator\Adapter;
 
 use Solarium\Client;
 use Solarium\QueryType\Select\Query\Query;
-use Zend\Paginator\Adapter\AdapterInterface;
+use Laminas\Paginator\Adapter\AdapterInterface;
 
 /**
  * Solarium result paginator

@@ -3,8 +3,8 @@ namespace SynergyCommon\Doctrine;
 ;
 
 use Interop\Container\ContainerInterface;
-use Zend\Authentication\AuthenticationService;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class ActiveClientSiteFactory

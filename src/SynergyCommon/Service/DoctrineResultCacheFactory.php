@@ -2,7 +2,7 @@
 namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\Cache\Storage\StorageInterface;
+use Laminas\Cache\Storage\StorageInterface;
 
 /**
  * Class DoctrineCacheFactory

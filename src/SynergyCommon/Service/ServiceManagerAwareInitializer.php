@@ -2,7 +2,7 @@
 namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Initializer\InitializerInterface;
+use Laminas\ServiceManager\Initializer\InitializerInterface;
 
 /**
  * Class ServiceManagerAwareInitializer

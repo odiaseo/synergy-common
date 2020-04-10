@@ -2,7 +2,7 @@
 namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class DoctrineCacheFactory
@@ -24,7 +24,7 @@ class DoctrineCacheFactory implements FactoryInterface
         $hasMemcache = extension_loaded('memcache') || extension_loaded('memcached');
         $hasApc      = extension_loaded('apcu') || extension_loaded('apc');
 
-        /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+        /** @var $serviceManager \Laminas\ServiceManager\ServiceManager */
         if (!$status->enabled) {
             return $serviceManager->get('doctrine.cache.array');
         } elseif ($appEnv == 'production' and $hasApc) {

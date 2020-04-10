@@ -4,9 +4,9 @@ namespace SynergyCommon\Service;
 use Interop\Container\ContainerInterface;
 use SynergyCommon\Client\ClientOptions;
 use SynergyCommon\Client\HttpRestJsonClient;
-use Zend\Http\Client as HttpClient;
-use Zend\Http\Request;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Http\Client as HttpClient;
+use Laminas\Http\Request;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Rest API service
@@ -31,7 +31,7 @@ class ApiServiceFactory implements FactoryInterface
         if (isset($config['synergy']['api']['adapter'])) {
             $adapter = $config['synergy']['api']['adapter'];
         } else {
-            $adapter = 'Zend\Http\Client\Adapter\Curl';
+            $adapter = 'Laminas\Http\Client\Adapter\Curl';
         }
 
         $httpClient = new HttpClient();

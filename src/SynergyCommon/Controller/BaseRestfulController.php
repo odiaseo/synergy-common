@@ -2,8 +2,8 @@
 namespace SynergyCommon\Controller;
 
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
-use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Controller\AbstractRestfulController;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class BaseRestfulController
@@ -26,13 +26,13 @@ abstract class BaseRestfulController extends AbstractRestfulController
      */
     protected $_acceptCriteria
         = array(
-            'Zend\View\Model\JsonModel' => array(
+            'Laminas\View\Model\JsonModel' => array(
                 'application/json',
                 'application/jsonp',
                 'application/javascript',
                 '*/*'
             ),
-            'Zend\View\Model\ViewModel' => array(
+            'Laminas\View\Model\ViewModel' => array(
                 '*/*'
             ),
         );
@@ -52,7 +52,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      * @method GET
      *
      * @endpoint /affiliate/:entity/:id
-     * @return mixed|\Zend\View\Model\ModelInterface
+     * @return mixed|\Laminas\View\Model\ModelInterface
      */
     public function get($entityId)
     {
@@ -68,7 +68,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      *
      * @method GET
      * @endpoint /affiliate/:entity
-     * @return mixed|\Zend\View\Model\ModelInterface
+     * @return mixed|\Laminas\View\Model\ModelInterface
      */
     public function getList()
     {
@@ -88,7 +88,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      *
      * @method POST
      * @endpoint /affiliate/:entity
-     * @return mixed|\Zend\View\Model\ModelInterface
+     * @return mixed|\Laminas\View\Model\ModelInterface
      */
     public function create($data)
     {
@@ -109,7 +109,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      * @method PUT
      *
      * @endpoint /affiliate/:entity/:id
-     * @return mixed|\Zend\View\Model\ModelInterface
+     * @return mixed|\Laminas\View\Model\ModelInterface
      */
     public function update($entityId, $data)
     {
@@ -125,7 +125,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      *
      * @method DELETE
      * @endpoint /affiliate/:entity/:id
-     * @return mixed|\Zend\View\Model\ModelInterface
+     * @return mixed|\Laminas\View\Model\ModelInterface
      */
     public function delete($entityId)
     {
@@ -137,7 +137,7 @@ abstract class BaseRestfulController extends AbstractRestfulController
      *
      * @param $payload
      *
-     * @return \Zend\View\Model\ModelInterface
+     * @return \Laminas\View\Model\ModelInterface
      */
     protected function _sendPayload($payload)
     {

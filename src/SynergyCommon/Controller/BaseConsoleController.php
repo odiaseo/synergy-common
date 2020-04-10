@@ -2,8 +2,8 @@
 namespace SynergyCommon\Controller;
 
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
-use Zend\Mvc\Console\Controller\AbstractConsoleController;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Console\Controller\AbstractConsoleController;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class BaseConsoleController
