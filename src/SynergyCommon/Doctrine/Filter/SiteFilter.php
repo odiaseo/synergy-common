@@ -23,7 +23,7 @@ class SiteFilter extends SQLFilter
      */
     protected $site;
 
-    /** @var \Zend\Log\Logger */
+    /** @var \Laminas\Log\Logger */
     protected $logger;
 
     /**

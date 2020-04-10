@@ -9,7 +9,7 @@ use SynergyCommon\Doctrine\QueryCacheProfile;
  *
  * @package SynergyCommonTest
  */
-class QueryCacheProfileTest extends \PHPUnit_Framework_TestCase
+class QueryCacheProfileTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testCacheKeyGeneration()

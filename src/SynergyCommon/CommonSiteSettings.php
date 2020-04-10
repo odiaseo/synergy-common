@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon;
 
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Class CommonSiteSettings

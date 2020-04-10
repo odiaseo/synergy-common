@@ -10,7 +10,7 @@
 namespace SynergyCommon\Session\SaveHandler;
 
 use SynergyCommon\Model\SessionModel;
-use Zend\Session\SaveHandler\SaveHandlerInterface;
+use Laminas\Session\SaveHandler\SaveHandlerInterface;
 
 /**
  * DB Table Gateway session save handler

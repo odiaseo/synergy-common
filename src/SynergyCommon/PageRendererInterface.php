@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon;
 
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 interface PageRendererInterface
 {

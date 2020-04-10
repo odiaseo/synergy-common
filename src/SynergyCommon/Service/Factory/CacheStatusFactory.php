@@ -2,9 +2,9 @@
 namespace SynergyCommon\Service\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\Console\Request;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Console\Request;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class CacheStatusFactory
@@ -20,7 +20,7 @@ class CacheStatusFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
-        /** @var $authService \Zend\Authentication\AuthenticationService */
+        /** @var $authService \Laminas\Authentication\AuthenticationService */
         /** @var ServiceLocatorInterface $serviceLocator */
         $request = $serviceLocator->get('request');
         $config  = $serviceLocator->get('Config');

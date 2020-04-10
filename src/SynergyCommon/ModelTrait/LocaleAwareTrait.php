@@ -10,7 +10,7 @@ use SynergyCommon\Doctrine\CachedEntityManager;
 use SynergyCommon\Model\AbstractModel;
 use SynergyCommon\Model\NestedSetRepositoryTrait;
 use SynergyCommon\Util;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * Class LocateAwareTrait

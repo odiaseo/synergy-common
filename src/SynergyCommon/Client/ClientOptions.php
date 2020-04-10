@@ -1,7 +1,7 @@
 <?php
 namespace SynergyCommon\Client;
 
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 class ClientOptions
     extends AbstractOptions

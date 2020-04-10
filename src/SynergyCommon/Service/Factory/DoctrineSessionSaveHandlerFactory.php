@@ -3,8 +3,8 @@ namespace SynergyCommon\Service\Factory;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\Session\SaveHandler\DoctrineSaveHandler;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class DoctrineSessionSaveHandlerFactory

@@ -2,8 +2,8 @@
 namespace SynergyCommon\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\Console\Request;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Console\Request;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class ActiveClientSiteFactory
@@ -21,11 +21,11 @@ class ActiveClientSiteFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
-        /** @var $request \Zend\Http\PhpEnvironment\Request */
+        /** @var $request \Laminas\Http\PhpEnvironment\Request */
         $request = $serviceLocator->get('application')->getRequest();
 
         if ($request instanceof Request) {
-            /** @var $event \Zend\Mvc\MvcEvent */
+            /** @var $event \Laminas\Mvc\MvcEvent */
             $event      = $serviceLocator->get('application')->getMvcEvent();
             $routeMatch = $event->getRouteMatch();
             $host       = $routeMatch->getParam('host');

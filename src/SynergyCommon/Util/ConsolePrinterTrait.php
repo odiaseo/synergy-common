@@ -1,8 +1,8 @@
 <?php
 namespace SynergyCommon\Util;
 
-use Zend\Console\ColorInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Console\ColorInterface;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class ConsolePrinterTrait
@@ -22,11 +22,11 @@ trait ConsolePrinterTrait
      * @param int $color
      * @param null $bgColor
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printMessage($msg, $repeat = 1, $lineBreak = true, $color = ColorInterface::WHITE, $bgColor = null)
     {
-        /** @var $console \Zend\Console\Adapter\Windows */
+        /** @var $console \Laminas\Console\Adapter\Windows */
         $console = $this->getInternalLocator()->get('console');
         if ($this->isVerbose()) {
             if (php_sapi_name() == 'cli') {
@@ -53,7 +53,7 @@ trait ConsolePrinterTrait
      * @param int $repeat
      * @param bool $lineBreak
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printErrorMessage($msg, $repeat = 1, $lineBreak = true)
     {
@@ -65,7 +65,7 @@ trait ConsolePrinterTrait
      * @param int $repeat
      * @param bool $lineBreak
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printSuccessMessage($msg, $repeat = 1, $lineBreak = true)
     {
@@ -77,7 +77,7 @@ trait ConsolePrinterTrait
      * @param int $repeat
      * @param bool $lineBreak
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printWarningMessage($msg, $repeat = 1, $lineBreak = true)
     {
@@ -89,7 +89,7 @@ trait ConsolePrinterTrait
      * @param int $repeat
      * @param bool $lineBreak
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printProgressMessage($msg, $repeat = 1, $lineBreak = true)
     {
@@ -101,7 +101,7 @@ trait ConsolePrinterTrait
      * @param int $repeat
      * @param bool $lineBreak
      *
-     * @return \Zend\Console\Adapter\Windows
+     * @return \Laminas\Console\Adapter\Windows
      */
     public function printInfo($msg, $repeat = 1, $lineBreak = true)
     {
@@ -109,7 +109,7 @@ trait ConsolePrinterTrait
     }
 
     /**
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \Laminas\ServiceManager\ServiceManager
      */
     private function getInternalLocator()
     {

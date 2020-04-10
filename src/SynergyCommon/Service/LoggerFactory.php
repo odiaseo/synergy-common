@@ -5,7 +5,7 @@ use Interop\Container\ContainerInterface;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use SynergyCommon\Util\ErrorHandler;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class LoggerFactory

@@ -2,11 +2,11 @@
 namespace SynergyCommon\Session;
 
 use Interop\Container\ContainerInterface;
-use Zend\Cache\StorageFactory as CacheStorageFactory;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\Session\Container;
-use Zend\Session\SaveHandler\Cache;
-use Zend\Session\SessionManager as ZendSessionManager;
+use Laminas\Cache\StorageFactory as CacheStorageFactory;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Session\Container;
+use Laminas\Session\SaveHandler\Cache;
+use Laminas\Session\SessionManager as ZendSessionManager;
 
 /**
  * Class SessionManager
@@ -31,10 +31,10 @@ class SessionManager implements FactoryInterface
             if (isset($session['config'])) {
                 $class   = isset($session['config']['class'])
                     ? $session['config']['class']
-                    : 'Zend\Session\Config\SessionConfig';
+                    : 'Laminas\Session\Config\SessionConfig';
                 $options = isset($session['config']['options']) ? $session['config']['options']
                     : array();
-                /** @var $sessionConfig \Zend\Session\Config\SessionConfig */
+                /** @var $sessionConfig \Laminas\Session\Config\SessionConfig */
                 $sessionConfig = new $class();
                 $sessionConfig->setOptions($options);
             }
@@ -45,7 +45,7 @@ class SessionManager implements FactoryInterface
                 $sessionStorage = new $class();
             }
 
-            /** @var $sessionSaveHandler \Zend\Session\SaveHandler\SaveHandlerInterface */
+            /** @var $sessionSaveHandler \Laminas\Session\SaveHandler\SaveHandlerInterface */
             $sessionSaveHandler = null;
             if (isset($session['save_handler']['cache'])) {
                 $cache              = CacheStorageFactory::factory($session['save_handler']['cache']);

@@ -3,7 +3,7 @@ namespace SynergyCommon\Model;
 
 use Interop\Container\ContainerInterface;
 use SynergyCommon\Doctrine\CachedEntityManager;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class SessionModelFactory

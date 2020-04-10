@@ -18,7 +18,7 @@ use SynergyCommon\Paginator\Paginator;
 use SynergyCommon\Service\ServiceLocatorAwareInterface;
 use SynergyCommon\Service\ServiceLocatorAwareTrait;
 use SynergyCommon\Util;
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class AbstractModel
@@ -130,7 +130,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
             self::NOT_IN                => 'NOT IN ?'
         );
 
-    /** @var \SynergyCommon\Util\ErrorHandler |\Zend\Log\Logger */
+    /** @var \SynergyCommon\Util\ErrorHandler |\Laminas\Log\Logger */
     protected $logger;
     /**
      * @var string
@@ -360,7 +360,7 @@ class AbstractModel implements NestedsetInterface, CacheAwareInterface, ServiceL
      * @param bool $paginate
      * @param int $page
      *
-     * @return array|null|\Zend\Paginator\Paginator
+     * @return array|null|\Laminas\Paginator\Paginator
      */
     public function findItemsByCriteria(
         $params,

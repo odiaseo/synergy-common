@@ -2,9 +2,9 @@
 namespace SynergyCommon\Delegator;
 
 use Interop\Container\ContainerInterface;
-use Zend\I18n\Translator\Resources;
-use Zend\I18n\Translator\Translator;
-use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
+use Laminas\I18n\Translator\Resources;
+use Laminas\I18n\Translator\Translator;
+use Laminas\ServiceManager\Factory\DelegatorFactoryInterface;
 
 /**
  * Class TranslatorDelegator

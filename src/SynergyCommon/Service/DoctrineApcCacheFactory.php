@@ -4,8 +4,8 @@ namespace SynergyCommon\Service;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Interop\Container\ContainerInterface;
-use Zend\Console\Request;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\Console\Request;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Class DoctrineApcCacheFactory
@@ -23,13 +23,13 @@ class DoctrineApcCacheFactory implements FactoryInterface
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $host = '';
-        /** @var $request \Zend\Http\PhpEnvironment\Request */
+        /** @var $request \Laminas\Http\PhpEnvironment\Request */
         $request = $serviceLocator->get('application')->getRequest();
         $status  = $serviceLocator->get('synergy\cache\status');
 
         if ($status->enabled) {
             if ($request instanceof Request) {
-                /** @var $event \Zend\Mvc\MvcEvent */
+                /** @var $event \Laminas\Mvc\MvcEvent */
                 $event = $serviceLocator->get('application')->getMvcEvent();
                 if ($event and $routeMatch = $event->getRouteMatch()) {
                     $host = $routeMatch->getParam('host');

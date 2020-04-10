@@ -1,8 +1,8 @@
 <?php
 namespace SynergyCommon\View\Helper;
 
-use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Class FlashMessages

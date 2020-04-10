@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use SynergyCommon\Doctrine\CacheAwareQueryTrait;
 use SynergyCommon\ModelTrait\LocaleAwareTrait;
-use Zend\Navigation\Navigation;
+use Laminas\Navigation\Navigation;
 
 /**
  * Class NestedSetRepository

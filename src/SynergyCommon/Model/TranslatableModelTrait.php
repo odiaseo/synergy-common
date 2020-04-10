@@ -2,7 +2,7 @@
 namespace SynergyCommon\Model;
 
 use SynergyCommon\Paginator\Adapter\DoctrinePaginator;
-use Zend\Paginator\Paginator;
+use Laminas\Paginator\Paginator;
 
 /**
  * Class TranslatableModelTrait

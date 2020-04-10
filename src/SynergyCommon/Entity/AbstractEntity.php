@@ -5,8 +5,8 @@ namespace SynergyCommon\Entity;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use SynergyCommon\Exception\InvalidArgumentException;
-use Zend\Filter\Word\UnderscoreToCamelCase;
-use Zend\InputFilter\InputFilter;
+use Laminas\Filter\Word\UnderscoreToCamelCase;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * Class AbstractEntity
@@ -16,7 +16,7 @@ use Zend\InputFilter\InputFilter;
  */
 abstract class AbstractEntity
 {
-    /** @var \Zend\InputFilter\InputFilter */
+    /** @var \Laminas\InputFilter\InputFilter */
     protected $inputFilter;
 
     /**
@@ -167,7 +167,7 @@ abstract class AbstractEntity
     }
 
     /**
-     * @return \Zend\InputFilter\InputFilter
+     * @return \Laminas\InputFilter\InputFilter
      */
     public function getInputFilter()
     {
@@ -178,7 +178,7 @@ abstract class AbstractEntity
     }
 
     /**
-     * @param \Zend\InputFilter\InputFilter $inputFilter
+     * @param \Laminas\InputFilter\InputFilter $inputFilter
      */
     public function setInputFilter($inputFilter)
     {

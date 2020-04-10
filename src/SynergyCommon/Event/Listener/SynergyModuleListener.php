@@ -6,21 +6,21 @@ use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\LoggableListener;
 use SynergyCommon\PageRendererInterface;
-use Zend\Authentication\AuthenticationService;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Http\Header\CacheControl;
-use Zend\Http\Header\Expires;
-use Zend\Http\Header\Pragma;
-use Zend\Http\PhpEnvironment\Response as HttpResponse;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Router\Http\TranslatorAwareTreeRouteStack;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Session\Container;
-use Zend\Session\SessionManager;
-use Zend\View\Model\JsonModel;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Http\Header\CacheControl;
+use Laminas\Http\Header\Expires;
+use Laminas\Http\Header\Pragma;
+use Laminas\Http\PhpEnvironment\Response as HttpResponse;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Router\Http\TranslatorAwareTreeRouteStack;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Session\Container;
+use Laminas\Session\SessionManager;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Class SynergyModuleListener
@@ -92,7 +92,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
         if ($event->isError() and static::$handled === false) {
             $services = $event->getApplication()->getServiceManager();
 
-            /** @var $request \Zend\Http\PhpEnvironment\Request */
+            /** @var $request \Laminas\Http\PhpEnvironment\Request */
             $request = $event->getRequest();
             $callback = $this->getCallback();
 
@@ -122,7 +122,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
             }
 
             if ($logException and $services->has('logger')) {
-                /** @var $logget \Zend\Log\Logger */
+                /** @var $logget \Laminas\Log\Logger */
                 $logger = $services->get('logger');
                 $uri = '';
                 if ($request instanceof Request) {
@@ -149,7 +149,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function initSession(MvcEvent $event)
     {
-        /** @var $e \Zend\Mvc\MvcEvent */
+        /** @var $e \Laminas\Mvc\MvcEvent */
         $app = $event->getApplication();
         $serviceManager = $app->getServiceManager();
         $request = $serviceManager->get('Request');
@@ -166,7 +166,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
                 $namespace = 'initialised';
             }
 
-            /** @var $container \Zend\Session\Container */
+            /** @var $container \Laminas\Session\Container */
             $container = new Container($namespace, $session);
 
             if (isset($container->init)) {
@@ -194,10 +194,10 @@ class SynergyModuleListener implements ListenerAggregateInterface
 
             foreach ($sessionConfig['validators'] as $validator) {
                 switch ($validator) {
-                    case \Zend\Session\Validator\HttpUserAgent::class:
+                    case \Laminas\Session\Validator\HttpUserAgent::class:
                         $validator = new $validator($container->httpUserAgent);
                         break;
-                    case \Zend\Session\Validator\RemoteAddr::class:
+                    case \Laminas\Session\Validator\RemoteAddr::class:
                         $validator = new $validator($container->remoteAddr);
                         break;
                     default:
@@ -218,7 +218,7 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function initEntityManager(MvcEvent $event)
     {
-        /** @var $sm \Zend\ServiceManager\ServiceManager */
+        /** @var $sm \Laminas\ServiceManager\ServiceManager */
         $sm = $event->getApplication()->getServiceManager();
 
         if ($sm->has('active\site')) {
@@ -312,12 +312,12 @@ class SynergyModuleListener implements ListenerAggregateInterface
     {
         if ($e->getApplication()->getRequest() instanceof Request) {
             $app = $e->getTarget();
-            /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+            /** @var $serviceManager \Laminas\ServiceManager\ServiceManager */
             $serviceManager = $app->getServiceManager();
             $router = $serviceManager->get('router');
             if ($router and $router instanceof TranslatorAwareTreeRouteStack) {
                 if ($serviceManager->has('route\translator')) {
-                    /** @var $translator \Zend\Mvc\I18n\Translator */
+                    /** @var $translator \Laminas\Mvc\I18n\Translator */
                     $translator = $serviceManager->get('route\translator');
                 } elseif ($serviceManager->has('translator')) {
                     $translator = $serviceManager->get('translator');
@@ -356,8 +356,8 @@ class SynergyModuleListener implements ListenerAggregateInterface
      */
     public function setHeaders(MvcEvent $event)
     {
-        /** @var $authService \Zend\Authentication\AuthenticationService */
-        /** @var $serviceManager \Zend\ServiceManager\ServiceManager */
+        /** @var $authService \Laminas\Authentication\AuthenticationService */
+        /** @var $serviceManager \Laminas\ServiceManager\ServiceManager */
         /** @var HttpResponse $response */
 
         $serviceManager = $event->getApplication()->getServiceManager();
