@@ -20,7 +20,7 @@
         "laminas/laminas-i18n-resources": "*",
         "doctrine/doctrine-orm-module": "^1.1",
         "laminas/laminas-mvc": "^3",
-        "gedmo/doctrine-extensions": "^2.4",
+        "gedmo/doctrine-extensions": "^3.0",
         "monolog/monolog": "^1.18",
         "synergy/solarium-module": "*",
         "laminas/laminas-dependency-plugin": "^1.0"
