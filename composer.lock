@@ -1191,6 +1191,7 @@
                 "reflection",
                 "static"
             ],
+            "abandoned": "roave/better-reflection",
             "time": "2020-03-27T11:06:43+00:00"
         },
         {
@@ -5401,31 +5402,27 @@
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.0.3",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9"
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9",
-                "reference": "bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6ede70583e101030bcace4dcddd648f760ddf642",
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0"
+                "php": "^5.6 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1",
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
                 "squizlabs/php_codesniffer": "^3.5"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev",
-                    "dev-develop": "1.1.x-dev"
-                },
                 "laminas": {
                     "module": "Laminas\\ZendFrameworkBridge"
                 }
@@ -5455,7 +5452,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2020-04-03T16:01:00+00:00"
+            "time": "2020-09-14T14:23:00+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6252,6 +6249,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-11-27T05:48:46+00:00"
         },
         {
@@ -7782,12 +7780,12 @@
             "version": "1.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": ""
             },
@@ -8170,40 +8168,34 @@
         },
         {
             "name": "laminas/laminas-development-mode",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-development-mode.git",
-                "reference": "203cf2f61dbea1489cb6e0c42ffdc987ebe4f796"
+                "reference": "11b2adc8837e4419a5b31e2a7ae59f06636d4096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-development-mode/zipball/203cf2f61dbea1489cb6e0c42ffdc987ebe4f796",
-                "reference": "203cf2f61dbea1489cb6e0c42ffdc987ebe4f796",
+                "url": "https://api.github.com/repos/laminas/laminas-development-mode/zipball/11b2adc8837e4419a5b31e2a7ae59f06636d4096",
+                "reference": "11b2adc8837e4419a5b31e2a7ae59f06636d4096",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
-                "zfcampus/zf-development-mode": "self.version"
+                "zfcampus/zf-development-mode": "^3.2.0"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
                 "mikey179/vfsstream": "^1.6.5",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+                "phpunit/phpunit": "^9.3"
             },
             "bin": [
                 "bin/laminas-development-mode"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.2.x-dev",
-                    "dev-develop": "3.3.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\DevelopmentMode\\": "src/"
@@ -8219,7 +8211,13 @@
                 "framework",
                 "laminas"
             ],
-            "time": "2019-12-31T16:40:06+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-12-16T22:26:52+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
