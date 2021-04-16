@@ -1191,6 +1191,7 @@
                 "reflection",
                 "static"
             ],
+            "abandoned": "roave/better-reflection",
             "time": "2020-03-27T11:06:43+00:00"
         },
         {
@@ -1832,6 +1833,7 @@
                 "console",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T16:31:45+00:00"
         },
         {
@@ -2758,36 +2760,30 @@
         },
         {
             "name": "laminas/laminas-i18n-resources",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:laminas/laminas-i18n-resources.git",
-                "reference": "7585cd3a4f9656814425b35689919a220c73834b"
+                "url": "https://github.com/laminas/laminas-i18n-resources.git",
+                "reference": "fc0211052aa7576bc960b30194c87f6f60a0089c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-i18n-resources/zipball/7585cd3a4f9656814425b35689919a220c73834b",
-                "reference": "7585cd3a4f9656814425b35689919a220c73834b",
+                "url": "https://api.github.com/repos/laminas/laminas-i18n-resources/zipball/fc0211052aa7576bc960b30194c87f6f60a0089c",
+                "reference": "fc0211052aa7576bc960b30194c87f6f60a0089c",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
-                "zendframework/zend-i18n-resources": "self.version"
+                "zendframework/zend-i18n-resources": "^2.6.1"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6.x-dev",
-                    "dev-develop": "2.7.x-dev"
-                }
-            },
             "autoload": {
                 "classmap": [
                     "src/Resources.php"
@@ -2797,14 +2793,20 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Provides validator translations for laminas-i18n's Translator",
+            "description": "Provides validator and captcha translations for laminas-i18n's Translator",
             "homepage": "https://laminas.dev",
             "keywords": [
                 "laminas",
                 "resources",
                 "translations"
             ],
-            "time": "2019-12-31T17:11:35+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-04-15T13:39:19+00:00"
         },
         {
             "name": "laminas/laminas-inputfilter",
@@ -3536,6 +3538,7 @@
                 "laminas",
                 "mvc"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T17:33:37+00:00"
         },
         {
@@ -4599,6 +4602,7 @@
                 "di",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-di",
             "time": "2019-12-31T17:44:51+00:00"
         },
         {
@@ -5401,31 +5405,29 @@
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.0.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9"
+                "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9",
-                "reference": "bfbbdb6c998d50dbf69d2187cb78a5f1fa36e1e9",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6cccbddfcfc742eb02158d6137ca5687d92cee32",
+                "reference": "6cccbddfcfc742eb02158d6137ca5687d92cee32",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1",
-                "squizlabs/php_codesniffer": "^3.5"
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
+                "psalm/plugin-phpunit": "^0.15.1",
+                "squizlabs/php_codesniffer": "^3.5",
+                "vimeo/psalm": "^4.6"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev",
-                    "dev-develop": "1.1.x-dev"
-                },
                 "laminas": {
                     "module": "Laminas\\ZendFrameworkBridge"
                 }
@@ -5455,7 +5457,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2020-04-03T16:01:00+00:00"
+            "time": "2021-02-25T21:54:58+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6252,6 +6254,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-11-27T05:48:46+00:00"
         },
         {
@@ -7782,12 +7785,12 @@
             "version": "1.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598",
                 "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": ""
             },
