@@ -18,7 +18,7 @@ class ServiceManagerAwareInitializer implements InitializerInterface
     {
         if ($instance instanceof ServiceLocatorAwareInterface) {
             $instance->setServiceLocator($container);
-        } elseif (method_exists($instance, 'setServiceManager')) {
+        } elseif (is_object($instance) && method_exists($instance, 'setServiceManager')) {
             $instance->setServiceManager($container);
         }
     }

@@ -12,19 +12,54 @@
             "email": "peleodiase@yahoo.co.uk"
         }
     ],
-    "prefer-stable": true,
     "require": {
         "php": ">=8.1",
+        "container-interop/container-interop": "^1.2",
         "doctrine/doctrine-orm-module": "*",
         "gedmo/doctrine-extensions": "*",
+        "laminas/laminas-authentication": "*",
+        "laminas/laminas-config": "*",
+        "laminas/laminas-crypt": "*",
+        "laminas/laminas-db": "*",
+        "laminas/laminas-di": "*",
+        "laminas/laminas-diactoros": "*",
+        "laminas/laminas-dom": "*",
+        "laminas/laminas-escaper": "*",
+        "laminas/laminas-eventmanager": "*",
+        "laminas/laminas-file": "*",
+        "laminas/laminas-filter": "*",
+        "laminas/laminas-http": "*",
+        "laminas/laminas-hydrator": "*",
+        "laminas/laminas-i18n": "*",
+        "laminas/laminas-i18n-resources": "*",
+        "laminas/laminas-inputfilter": "*",
+        "laminas/laminas-loader": "*",
+        "laminas/laminas-log": "*",
+        "laminas/laminas-mail": "*",
+        "laminas/laminas-math": "*",
+        "laminas/laminas-memory": "*",
+        "laminas/laminas-mime": "*",
+        "laminas/laminas-modulemanager": "*",
+        "laminas/laminas-mvc": "*",
+        "laminas/laminas-mvc-plugins": "^1.2",
+        "laminas/laminas-navigation": "*",
+        "laminas/laminas-paginator": "*",
+        "laminas/laminas-psr7bridge": "*",
+        "laminas/laminas-serializer": "*",
+        "laminas/laminas-servicemanager": "*",
+        "laminas/laminas-session": "*",
+        "laminas/laminas-soap": "*",
+        "laminas/laminas-text": "*",
+        "laminas/laminas-validator": "*",
+        "laminas/laminas-view": "*",
         "monolog/monolog": "*",
         "synergy/solarium-module": "*",
         "zendframework/zend-debug": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "laminas/laminas-development-mode": "^3.2",
-        "php-coveralls/php-coveralls": "^2.4"
+        "phpunit/phpunit": "^10",
+        "laminas/laminas-development-mode": "*",
+        "php-coveralls/php-coveralls": "*"
     },
     "suggest": {
         "monolog/monolog": "For enhanced logging features"
@@ -46,6 +81,8 @@
             "dev-master": "1.0.x-dev"
         }
     },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
     "config": {
         "sort-packages": true,
         "secure-http": true,
