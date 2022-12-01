@@ -22,152 +22,152 @@ class Util
 
     use CurlRequestTrait;
 
-    const DEFAULT_LOCALE      = 'en_GB';
-    const DB_DATE_FORMAT      = 'Y-m-d H:i:s';
-    const CLIENT_DOMAIN_KEY   = 'client_domain';
-    const ADMIN_IP            = '83.169.39.196';
+    const DEFAULT_LOCALE = 'en_GB';
+    const DB_DATE_FORMAT = 'Y-m-d H:i:s';
+    const CLIENT_DOMAIN_KEY = 'client_domain';
+    const ADMIN_IP = '83.169.39.196';
     const LOGO_INVENTORY_PATH = 'data/logo-inventory.txt';
 
     protected static $_enablePrint = false;
 
     protected static $_mimeTypes
         = [
-            "ez"      => "application/andrew-inset",
-            "hqx"     => "application/mac-binhex40",
-            "cpt"     => "application/mac-compactpro",
-            "doc"     => "application/msword",
-            "bin"     => "application/octet-stream",
-            "dms"     => "application/octet-stream",
-            "lha"     => "application/octet-stream",
-            "lzh"     => "application/octet-stream",
-            "exe"     => "application/octet-stream",
-            "class"   => "application/octet-stream",
-            "so"      => "application/octet-stream",
-            "dll"     => "application/octet-stream",
-            "oda"     => "application/oda",
-            "pdf"     => "application/pdf",
-            "ai"      => "application/postscript",
-            "eps"     => "application/postscript",
-            "ps"      => "application/postscript",
-            "smi"     => "application/smil",
-            "smil"    => "application/smil",
-            "wbxml"   => "application/vnd.wap.wbxml",
-            "wmlc"    => "application/vnd.wap.wmlc",
-            "wmlsc"   => "application/vnd.wap.wmlscriptc",
-            "bcpio"   => "application/x-bcpio",
-            "vcd"     => "application/x-cdlink",
-            "pgn"     => "application/x-chess-pgn",
-            "cpio"    => "application/x-cpio",
-            "csh"     => "application/x-csh",
-            "dcr"     => "application/x-director",
-            "dir"     => "application/x-director",
-            "dxr"     => "application/x-director",
-            "dvi"     => "application/x-dvi",
-            "spl"     => "application/x-futuresplash",
-            "gtar"    => "application/x-gtar",
-            "hdf"     => "application/x-hdf",
-            "js"      => "application/x-javascript",
-            "skp"     => "application/x-koan",
-            "skd"     => "application/x-koan",
-            "skt"     => "application/x-koan",
-            "skm"     => "application/x-koan",
-            "latex"   => "application/x-latex",
-            "nc"      => "application/x-netcdf",
-            "cdf"     => "application/x-netcdf",
-            "sh"      => "application/x-sh",
-            "shar"    => "application/x-shar",
-            "swf"     => "application/x-shockwave-flash",
-            "sit"     => "application/x-stuffit",
+            "ez" => "application/andrew-inset",
+            "hqx" => "application/mac-binhex40",
+            "cpt" => "application/mac-compactpro",
+            "doc" => "application/msword",
+            "bin" => "application/octet-stream",
+            "dms" => "application/octet-stream",
+            "lha" => "application/octet-stream",
+            "lzh" => "application/octet-stream",
+            "exe" => "application/octet-stream",
+            "class" => "application/octet-stream",
+            "so" => "application/octet-stream",
+            "dll" => "application/octet-stream",
+            "oda" => "application/oda",
+            "pdf" => "application/pdf",
+            "ai" => "application/postscript",
+            "eps" => "application/postscript",
+            "ps" => "application/postscript",
+            "smi" => "application/smil",
+            "smil" => "application/smil",
+            "wbxml" => "application/vnd.wap.wbxml",
+            "wmlc" => "application/vnd.wap.wmlc",
+            "wmlsc" => "application/vnd.wap.wmlscriptc",
+            "bcpio" => "application/x-bcpio",
+            "vcd" => "application/x-cdlink",
+            "pgn" => "application/x-chess-pgn",
+            "cpio" => "application/x-cpio",
+            "csh" => "application/x-csh",
+            "dcr" => "application/x-director",
+            "dir" => "application/x-director",
+            "dxr" => "application/x-director",
+            "dvi" => "application/x-dvi",
+            "spl" => "application/x-futuresplash",
+            "gtar" => "application/x-gtar",
+            "hdf" => "application/x-hdf",
+            "js" => "application/x-javascript",
+            "skp" => "application/x-koan",
+            "skd" => "application/x-koan",
+            "skt" => "application/x-koan",
+            "skm" => "application/x-koan",
+            "latex" => "application/x-latex",
+            "nc" => "application/x-netcdf",
+            "cdf" => "application/x-netcdf",
+            "sh" => "application/x-sh",
+            "shar" => "application/x-shar",
+            "swf" => "application/x-shockwave-flash",
+            "sit" => "application/x-stuffit",
             "sv4cpio" => "application/x-sv4cpio",
-            "sv4crc"  => "application/x-sv4crc",
-            "tar"     => "application/x-tar",
-            "tcl"     => "application/x-tcl",
-            "tex"     => "application/x-tex",
+            "sv4crc" => "application/x-sv4crc",
+            "tar" => "application/x-tar",
+            "tcl" => "application/x-tcl",
+            "tex" => "application/x-tex",
             "texinfo" => "application/x-texinfo",
-            "texi"    => "application/x-texinfo",
-            "t"       => "application/x-troff",
-            "tr"      => "application/x-troff",
-            "roff"    => "application/x-troff",
-            "man"     => "application/x-troff-man",
-            "me"      => "application/x-troff-me",
-            "ms"      => "application/x-troff-ms",
-            "ustar"   => "application/x-ustar",
-            "src"     => "application/x-wais-source",
-            "xhtml"   => "application/xhtml+xml",
-            "xht"     => "application/xhtml+xml",
-            "zip"     => "application/zip",
-            "au"      => "audio/basic",
-            "snd"     => "audio/basic",
-            "mid"     => "audio/midi",
-            "midi"    => "audio/midi",
-            "kar"     => "audio/midi",
-            "mpga"    => "audio/mpeg",
-            "mp2"     => "audio/mpeg",
-            "mp3"     => "audio/mpeg",
-            "aif"     => "audio/x-aiff",
-            "aiff"    => "audio/x-aiff",
-            "aifc"    => "audio/x-aiff",
-            "m3u"     => "audio/x-mpegurl",
-            "ram"     => "audio/x-pn-realaudio",
-            "rm"      => "audio/x-pn-realaudio",
-            "rpm"     => "audio/x-pn-realaudio-plugin",
-            "ra"      => "audio/x-realaudio",
-            "wav"     => "audio/x-wav",
-            "pdb"     => "chemical/x-pdb",
-            "xyz"     => "chemical/x-xyz",
-            "bmp"     => "image/bmp",
-            "gif"     => "image/gif",
-            "ief"     => "image/ief",
-            "jpeg"    => "image/jpeg",
-            "jpg"     => "image/jpeg",
-            "jpe"     => "image/jpeg",
-            "png"     => "image/png",
-            "tiff"    => "image/tiff",
-            "tif"     => "image/tif",
-            "djvu"    => "image/vnd.djvu",
-            "djv"     => "image/vnd.djvu",
-            "wbmp"    => "image/vnd.wap.wbmp",
-            "ras"     => "image/x-cmu-raster",
-            "pnm"     => "image/x-portable-anymap",
-            "pbm"     => "image/x-portable-bitmap",
-            "pgm"     => "image/x-portable-graymap",
-            "ppm"     => "image/x-portable-pixmap",
-            "rgb"     => "image/x-rgb",
-            "xbm"     => "image/x-xbitmap",
-            "xpm"     => "image/x-xpixmap",
-            "xwd"     => "image/x-windowdump",
-            "igs"     => "model/iges",
-            "iges"    => "model/iges",
-            "msh"     => "model/mesh",
-            "mesh"    => "model/mesh",
-            "silo"    => "model/mesh",
-            "wrl"     => "model/vrml",
-            "vrml"    => "model/vrml",
-            "css"     => "text/css",
-            "csv"     => "text/csv",
-            "html"    => "text/html",
-            "htm"     => "text/html",
-            "txt"     => "text/plain",
-            "asc"     => "text/plain",
-            "rtx"     => "text/richtext",
-            "rtf"     => "text/rtf",
-            "sgml"    => "text/sgml",
-            "sgm"     => "text/sgml",
-            "tsv"     => "text/tab-seperated-values",
-            "wml"     => "text/vnd.wap.wml",
-            "wmls"    => "text/vnd.wap.wmlscript",
-            "etx"     => "text/x-setext",
-            "xml"     => "text/xml",
-            "xsl"     => "text/xml",
-            "mpeg"    => "video/mpeg",
-            "mpg"     => "video/mpeg",
-            "mpe"     => "video/mpeg",
-            "qt"      => "video/quicktime",
-            "mov"     => "video/quicktime",
-            "mxu"     => "video/vnd.mpegurl",
-            "avi"     => "video/x-msvideo",
-            "movie"   => "video/x-sgi-movie",
-            "ice"     => "x-conference-xcooltalk"
+            "texi" => "application/x-texinfo",
+            "t" => "application/x-troff",
+            "tr" => "application/x-troff",
+            "roff" => "application/x-troff",
+            "man" => "application/x-troff-man",
+            "me" => "application/x-troff-me",
+            "ms" => "application/x-troff-ms",
+            "ustar" => "application/x-ustar",
+            "src" => "application/x-wais-source",
+            "xhtml" => "application/xhtml+xml",
+            "xht" => "application/xhtml+xml",
+            "zip" => "application/zip",
+            "au" => "audio/basic",
+            "snd" => "audio/basic",
+            "mid" => "audio/midi",
+            "midi" => "audio/midi",
+            "kar" => "audio/midi",
+            "mpga" => "audio/mpeg",
+            "mp2" => "audio/mpeg",
+            "mp3" => "audio/mpeg",
+            "aif" => "audio/x-aiff",
+            "aiff" => "audio/x-aiff",
+            "aifc" => "audio/x-aiff",
+            "m3u" => "audio/x-mpegurl",
+            "ram" => "audio/x-pn-realaudio",
+            "rm" => "audio/x-pn-realaudio",
+            "rpm" => "audio/x-pn-realaudio-plugin",
+            "ra" => "audio/x-realaudio",
+            "wav" => "audio/x-wav",
+            "pdb" => "chemical/x-pdb",
+            "xyz" => "chemical/x-xyz",
+            "bmp" => "image/bmp",
+            "gif" => "image/gif",
+            "ief" => "image/ief",
+            "jpeg" => "image/jpeg",
+            "jpg" => "image/jpeg",
+            "jpe" => "image/jpeg",
+            "png" => "image/png",
+            "tiff" => "image/tiff",
+            "tif" => "image/tif",
+            "djvu" => "image/vnd.djvu",
+            "djv" => "image/vnd.djvu",
+            "wbmp" => "image/vnd.wap.wbmp",
+            "ras" => "image/x-cmu-raster",
+            "pnm" => "image/x-portable-anymap",
+            "pbm" => "image/x-portable-bitmap",
+            "pgm" => "image/x-portable-graymap",
+            "ppm" => "image/x-portable-pixmap",
+            "rgb" => "image/x-rgb",
+            "xbm" => "image/x-xbitmap",
+            "xpm" => "image/x-xpixmap",
+            "xwd" => "image/x-windowdump",
+            "igs" => "model/iges",
+            "iges" => "model/iges",
+            "msh" => "model/mesh",
+            "mesh" => "model/mesh",
+            "silo" => "model/mesh",
+            "wrl" => "model/vrml",
+            "vrml" => "model/vrml",
+            "css" => "text/css",
+            "csv" => "text/csv",
+            "html" => "text/html",
+            "htm" => "text/html",
+            "txt" => "text/plain",
+            "asc" => "text/plain",
+            "rtx" => "text/richtext",
+            "rtf" => "text/rtf",
+            "sgml" => "text/sgml",
+            "sgm" => "text/sgml",
+            "tsv" => "text/tab-seperated-values",
+            "wml" => "text/vnd.wap.wml",
+            "wmls" => "text/vnd.wap.wmlscript",
+            "etx" => "text/x-setext",
+            "xml" => "text/xml",
+            "xsl" => "text/xml",
+            "mpeg" => "video/mpeg",
+            "mpg" => "video/mpeg",
+            "mpe" => "video/mpeg",
+            "qt" => "video/quicktime",
+            "mov" => "video/quicktime",
+            "mxu" => "video/vnd.mpegurl",
+            "avi" => "video/x-msvideo",
+            "movie" => "video/x-sgi-movie",
+            "ice" => "x-conference-xcooltalk"
         ];
 
     /**
@@ -255,7 +255,7 @@ class Util
     public static function printMessage($msg, $repeat = 1, $lineBreak = true, $forceOutput = false)
     {
         if (self::$_enablePrint or $forceOutput) {
-            $msg  = is_array($msg) ? print_r($msg, true) : $msg;
+            $msg = is_array($msg) ? print_r($msg, true) : $msg;
             $sign = $repeat ? str_repeat("\t", $repeat) . ' ' : '';
             if ($lineBreak) {
                 echo "{$sign}$msg\n";
@@ -355,7 +355,7 @@ class Util
     {
         if ($end) {
             try {
-                $now     = new \DateTime();
+                $now = new \DateTime();
                 $endDate = ($end instanceof \DateTime) ? $end : new \DateTime($end);
 
                 return ($now > $endDate);
@@ -399,8 +399,8 @@ class Util
     public static function XmlArray($file)
     {
         $string = file_get_contents($file);
-        $xml    = simplexml_load_string($string);
-        $json   = json_encode($xml);
+        $xml = simplexml_load_string($string);
+        $json = json_encode($xml);
 
         $array = json_decode($json, true);
 
@@ -419,8 +419,8 @@ class Util
 
         if (self::isFileExpired($logoPath, $hours)) {
             $destination = getcwd() . '/' . $logoPath;
-            $remotePath  = '~/logo-inventory.txt';
-            $remoteUser  = 'live@' . self::ADMIN_IP;
+            $remotePath = '~/logo-inventory.txt';
+            $remoteUser = 'live@' . self::ADMIN_IP;
 
             $ip = self::getLocalhostIp();
 
@@ -441,7 +441,7 @@ class Util
 
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
-            $count  = 0;
+            $count = 0;
             while ($row = fgets($handle)) {
                 if ($row) {
                     $cols = explode(' ', $row);
@@ -511,7 +511,7 @@ class Util
             $destination = getcwd() . '/' . $logoPath;;
             $remoteUser = 'live@' . self::ADMIN_IP;
             $remotePath = '~/screen-inventory.txt';
-            $ip         = self::getLocalhostIp();
+            $ip = self::getLocalhostIp();
 
             if ($ip == self::ADMIN_IP) {
                 copy('/home/live/screen-inventory.txt', $destination);
@@ -529,7 +529,7 @@ class Util
 
         if (file_exists($logoPath)) {
             $handle = fopen($logoPath, 'r');
-            $count  = 0;
+            $count = 0;
             while ($row = fgets($handle)) {
                 if ($row) {
                     $cols = explode(' ', $row);
@@ -560,7 +560,7 @@ class Util
         $paths = parse_url($url);
 
         if (isset($paths['host'])) {
-            $path  = isset($paths['path']) ? $paths['path'] : '';
+            $path = isset($paths['path']) ? $paths['path'] : '';
             $clean = sprintf('%s://%s/%s', $paths['scheme'], $paths['host'], ltrim($path, '/'));
 
             return rtrim($clean, '/');
@@ -592,7 +592,7 @@ class Util
     {
 
         if (stripos($deepLink, 'tradedoubler') !== false) {
-            $paths    = explode('url(', $deepLink);
+            $paths = explode('url(', $deepLink);
             $deepLink = Util::removeLineBreaks($paths[0]);
         } elseif (stripos($deepLink, 'http://ad.zanox.com') !== false) {
             $parts = explode('&', $deepLink);
@@ -604,14 +604,14 @@ class Util
 
             $deepLink = implode('&', $parts);
         } elseif (stripos($deepLink, 'tracking.mailsectkr.com') !== false) {
-            $paths  = parse_url($deepLink);
+            $paths = parse_url($deepLink);
             $params = urldecode($paths['query']);
             parse_str($params, $query);
             unset($query['url']);
 
             return sprintf('%s://%s%s?%s', $paths['scheme'], $paths['host'], $paths['path'], http_build_query($query));
         } elseif (stripos($deepLink, 'track.webgains.com') !== false) {
-            $paths  = parse_url($deepLink);
+            $paths = parse_url($deepLink);
             $params = urldecode($paths['query']);
             parse_str($params, $query);
             unset($query['wgtarget']);
@@ -662,7 +662,7 @@ class Util
             curl_setopt($ch, CURLOPT_URL, $source);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-            $data  = curl_exec($ch);
+            $data = curl_exec($ch);
             $error = curl_error($ch);
 
             curl_close($ch);
@@ -691,8 +691,8 @@ class Util
     {
         $array = [];
         if ($xmlstring) {
-            $xml   = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
-            $json  = json_encode($xml);
+            $xml = simplexml_load_string($xmlstring, null, LIBXML_NOCDATA);
+            $json = json_encode($xml);
             $array = json_decode($json, true);
         }
 
@@ -715,7 +715,7 @@ class Util
         }
 
         $parts = parse_url($url);
-        $url   = $parts['scheme'] . '://' . $parts['host'];
+        $url = $parts['scheme'] . '://' . $parts['host'];
         // the next bit could be slow:
         //if (self::getHttpResponseCode_using_curl($url) != 200) {
         if (self::getHttpResponseCodeUsingGetheaders($url) >= 400) {  // use this one if you cant use curl
@@ -1051,7 +1051,7 @@ class Util
 
             return false;
         }
-        $code    = @curl_getinfo(
+        $code = @curl_getinfo(
             $ch, CURLINFO_HTTP_CODE
         ); // note: php.net documentation shows this returns a string, but really it returns an int
         $lastUrl = @curl_getinfo(
@@ -1168,18 +1168,18 @@ class Util
 
     public static function xmlToArrayWithAttributes($xml, $options = [])
     {
-        $defaults       = [
+        $defaults = [
             'namespaceSeparator' => ':',//you may want this to be something other than a colon
-            'attributePrefix'    => '@',   //to distinguish between attributes and nodes with the same name
-            'alwaysArray'        => [],   //array of xml tag names which should always become arrays
-            'autoArray'          => true,        //only create arrays for tags which appear more than once
-            'textContent'        => '$',       //key used for the text content of elements
-            'autoText'           => true,         //skip textContent key if node has no attributes or child nodes
-            'keySearch'          => false,       //optional search and replace on tag and attribute names
-            'keyReplace'         => false       //replace values for above search values (as passed to str_replace())
+            'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name
+            'alwaysArray' => [],   //array of xml tag names which should always become arrays
+            'autoArray' => true,        //only create arrays for tags which appear more than once
+            'textContent' => '$',       //key used for the text content of elements
+            'autoText' => true,         //skip textContent key if node has no attributes or child nodes
+            'keySearch' => false,       //optional search and replace on tag and attribute names
+            'keyReplace' => false       //replace values for above search values (as passed to str_replace())
         ];
-        $options        = array_merge($defaults, $options);
-        $namespaces     = $xml->getDocNamespaces();
+        $options = array_merge($defaults, $options);
+        $namespaces = $xml->getDocNamespaces();
         $namespaces[''] = null; //add base (empty) namespace
 
         //get attributes from all namespaces
@@ -1191,7 +1191,7 @@ class Util
                     $attributeName =
                         str_replace($options['keySearch'], $options['keyReplace'], $attributeName);
                 }
-                $attributeKey                   = $options['attributePrefix']
+                $attributeKey = $options['attributePrefix']
                     . ($prefix ? $prefix . $options['namespaceSeparator'] : '')
                     . $attributeName;
                 $attributesArray[$attributeKey] = (string)$attribute;
@@ -1237,7 +1237,7 @@ class Util
 
         //get text content of node
         $textContentArray = [];
-        $plainText        = trim((string)$xml);
+        $plainText = trim((string)$xml);
         if ($plainText !== '') {
             $textContentArray[$options['textContent']] = $plainText;
         }
@@ -1259,8 +1259,8 @@ class Util
             if (is_array($val)) {
                 $data[] = self::cleanKeywords($val);
             } else {
-                $val  = trim($val);
-                $val  = str_replace(
+                $val = trim($val);
+                $val = str_replace(
                     [
                         '>',
                         ',',
@@ -1272,7 +1272,7 @@ class Util
                     '/',
                     $val
                 );
-                $val  = explode('/', $val);
+                $val = explode('/', $val);
                 $data = array_merge($data, $val);
             }
         }
@@ -1304,10 +1304,10 @@ class Util
         $str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
 
         $defaults = [
-            'delimiter'     => '-',
-            'limit'         => null,
-            'lowercase'     => true,
-            'replacements'  => [],
+            'delimiter' => '-',
+            'limit' => null,
+            'lowercase' => true,
+            'replacements' => [],
             'transliterate' => false,
         ];
 
@@ -1645,7 +1645,7 @@ class Util
             $text = 'Kupistol';
         }
         if ($firstPart) {
-            $sepList    = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
+            $sepList = [' - ', '- ', ' -', ' – ', '(', '[', '<>', '_', ' - ', '*', ':', '|', ' - '];
             $separators = [
                 'closing',
                 'via',
@@ -1653,9 +1653,9 @@ class Util
                 'ihr',
                 '.com-'
             ];
-            $regex      = '/\b(?:' . implode('|', $separators) . ')\b/i';
-            $text       = preg_replace($regex, '<>', $text);
-            $text       = self::getFirstPartFromString($text, $sepList);
+            $regex = '/\b(?:' . implode('|', $separators) . ')\b/i';
+            $text = preg_replace($regex, '<>', $text);
+            $text = self::getFirstPartFromString($text, $sepList);
         }
 
         $text = str_ireplace(
@@ -1830,31 +1830,31 @@ class Util
                     //array('name' => 'stringToLower', 'options' => array('encoding' => 'utf-8')),
                     ['name' => 'stripTags'],
                     [
-                        'name'    => 'pregReplace',
+                        'name' => 'pregReplace',
                         'options' => [
-                            'pattern'     => '/\.(com|co\.uk)$/i',
+                            'pattern' => '/\.(com|co\.uk)$/i',
                             'replacement' => '',
                         ],
                     ],
                     [
-                        'name'    => 'pregReplace',
+                        'name' => 'pregReplace',
                         'options' => [
-                            'pattern'     => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
+                            'pattern' => '/\b(apk|srl|int|nl\/be|nl\/de|esp|pt|AR|AUS|llc|codes|dhs|gb|Smb|\(.*\)|\[.*\]|ireland|payg|contracts|gmbh|eu|and|limited|ltd|plc|\.co\.|uk|inc|hu|ch|fr|es|nz|dk|se|ru|br|cn|jp|no|ca|ie|tr|au|lt|fi|other|dach|-uk|[^a-z0-9\-\_\s])\b/i',
                             'replacement' => '',
                         ],
                     ],
                     [
-                        'name'    => 'pregReplace',
+                        'name' => 'pregReplace',
                         'options' => [
-                            'pattern'     => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
+                            'pattern' => '/\s+(?:at|italia|ee|it|ro|cz|sk|rus|us|eu|global|cpl|en|apac|ch|de|be|nl|australia|austria|canada|at|pl|es|global|sk|sg|tw|hk|usa|android|pvt|int)$/i',
                             'replacement' => '',
                         ],
                     ],
 
                     [
-                        'name'    => 'pregReplace',
+                        'name' => 'pregReplace',
                         'options' => [
-                            'pattern'     => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
+                            'pattern' => '/([^\p{L}\p{N}\-\_\s\.]+\')$/iu',
                             'replacement' => ''
                         ],
                     ],
@@ -1917,7 +1917,7 @@ class Util
             $name = mb_convert_case($name, MB_CASE_TITLE, "UTF-8");
         } else {
             $camelFilter = new CamelCaseToSeparator(' ');
-            $name        = $camelFilter->filter($name);
+            $name = $camelFilter->filter($name);
         }
 
         $name = trim($name, ' &-!,._');
@@ -1932,7 +1932,7 @@ class Util
 
         foreach ($list as $sep) {
             $paths = explode($sep, $text);
-            $text  = trim($paths[0]);
+            $text = trim($paths[0]);
         }
 
         return $text;
@@ -1965,7 +1965,7 @@ class Util
     {
         $endPoint = 'https://v3.exchangerate-api.com/bulk/74449c575d8b6caf152d472b/' . $toCurrency;
         $filename = sys_get_temp_dir() . '/exchange-rate-' . $toCurrency;
-        $curl     = new self();
+        $curl = new self();
 
         if (self::isFileExpired($filename, 24)) {
             $data = $curl->curlRequest($endPoint);
@@ -1975,7 +1975,7 @@ class Util
         }
 
         $result = json_decode($data, true);
-        $rates  = $result['rates'];
+        $rates = $result['rates'];
 
         if (isset($rates[$from])) {
             $rate = $rates[$from];
@@ -2018,7 +2018,7 @@ class Util
                 $input = $form->get($element);
                 if (is_array($message)) {
                     $field = key($message);
-                    $html  .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
+                    $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message[$field] . '</li>';
                 } else {
                     $html .= '<li><b>' . $input->getLabel() . '</b> - ' . $message . '</li>';
                 }
@@ -2039,7 +2039,7 @@ class Util
     public static function getDomainFromRequest($request, MvcEvent $event = null)
     {
         $isConsole = false;
-        $host      = null;
+        $host = null;
         if ($request instanceof ConsoleRequest) {
             $isConsole = true;
             /** @var $routeMatch \Laminas\Router\RouteMatch */
@@ -2066,7 +2066,7 @@ class Util
     {
         //remove port number
 
-        list($domain,) = explode(':', $domain);
+        list($domain,) = explode(':', (string)$domain);
 
         return str_replace(
             [
@@ -2082,9 +2082,9 @@ class Util
 
     public static function tidyHtml($html)
     {
-        $tidy    = new \Tidy();
+        $tidy = new \Tidy();
         $options = ['indent' => false, 'doctype' => false, 'show-body-only' => true];
-        $return  = $tidy->repairString($html, $options, 'UTF8');
+        $return = $tidy->repairString($html, $options, 'UTF8');
 
         return $return;
     }
