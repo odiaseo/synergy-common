@@ -4,7 +4,6 @@ namespace SynergyCommon;
 
 use Gedmo\Sluggable\Util\Urlizer;
 use SynergyCommon\Util\CurlRequestTrait;
-use Laminas\Console\Request as ConsoleRequest;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\Word\CamelCaseToSeparator;
 use Laminas\Form\Form;

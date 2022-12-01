@@ -54,7 +54,8 @@
         "laminas/laminas-view": "*",
         "monolog/monolog": "*",
         "synergy/solarium-module": "*",
-        "zendframework/zend-debug": "*"
+        "zendframework/zend-debug": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10",
