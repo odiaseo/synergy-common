@@ -24,6 +24,7 @@ if (APPLICATION_ENV == 'development') {
 return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+        'Laminas\Di',
         'Laminas\Mvc\I18n',
         'Laminas\I18n',
         'Laminas\Mvc\Plugin\Identity',
@@ -49,6 +50,8 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'SynergyCommon',
+        'Laminas\ZendFrameworkBridge',
+        'Laminas\Diactoros',
     ),
     'module_listener_options' => array(
         'module_paths'             => array(
