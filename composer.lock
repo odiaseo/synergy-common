@@ -4303,16 +4303,16 @@
         },
         {
             "name": "laminas/laminas-paginator",
-            "version": "2.15.1",
+            "version": "2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-paginator.git",
-                "reference": "7070769de9b3d94270154c4bf24d4884e65c29f3"
+                "reference": "825d127ab5307aee85ec67fa6cb7e7339970476d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-paginator/zipball/7070769de9b3d94270154c4bf24d4884e65c29f3",
-                "reference": "7070769de9b3d94270154c4bf24d4884e65c29f3",
+                "url": "https://api.github.com/repos/laminas/laminas-paginator/zipball/825d127ab5307aee85ec67fa6cb7e7339970476d",
+                "reference": "825d127ab5307aee85ec67fa6cb7e7339970476d",
                 "shasum": ""
             },
             "require": {
@@ -4325,15 +4325,15 @@
             },
             "require-dev": {
                 "laminas/laminas-cache": "^3.6.0",
-                "laminas/laminas-cache-storage-adapter-memory": "^2.1.0",
+                "laminas/laminas-cache-storage-adapter-memory": "^2.2.0",
                 "laminas/laminas-coding-standard": "^2.4.0",
                 "laminas/laminas-config": "^3.8.0",
                 "laminas/laminas-filter": "^2.23.0",
                 "laminas/laminas-servicemanager": "^3.19.0",
                 "laminas/laminas-view": "^2.24.0",
                 "phpunit/phpunit": "^9.5.25",
-                "psalm/plugin-phpunit": "^0.17.0",
-                "vimeo/psalm": "^4.29.0"
+                "psalm/plugin-phpunit": "^0.18.0",
+                "vimeo/psalm": "^5.0.0"
             },
             "suggest": {
                 "laminas/laminas-cache": "Laminas\\Cache component to support cache features",
@@ -4378,7 +4378,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-18T18:34:30+00:00"
+            "time": "2022-12-02T15:30:03+00:00"
         },
         {
             "name": "laminas/laminas-psr7bridge",
@@ -4887,16 +4887,16 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.16.0",
+            "version": "3.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "0880e3dd88eca01eeda9dfdb5a05c38e56902c2c"
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/0880e3dd88eca01eeda9dfdb5a05c38e56902c2c",
-                "reference": "0880e3dd88eca01eeda9dfdb5a05c38e56902c2c",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
                 "shasum": ""
             },
             "require": {
@@ -4942,7 +4942,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-30T23:45:45+00:00"
+            "time": "2022-12-03T18:48:01+00:00"
         },
         {
             "name": "laminas/laminas-tag",
