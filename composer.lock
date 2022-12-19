@@ -2030,16 +2030,16 @@
         },
         {
             "name": "laminas/laminas-db",
-            "version": "2.16.0",
+            "version": "2.16.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "0fb9d7a32b40036a158961a5df082ff421321aa7"
+                "reference": "dadd9a19d2f9e89aa59205572b928892b91ff1da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/0fb9d7a32b40036a158961a5df082ff421321aa7",
-                "reference": "0fb9d7a32b40036a158961a5df082ff421321aa7",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/dadd9a19d2f9e89aa59205572b928892b91ff1da",
+                "reference": "dadd9a19d2f9e89aa59205572b928892b91ff1da",
                 "shasum": ""
             },
             "require": {
@@ -2097,7 +2097,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-18T09:28:22+00:00"
+            "time": "2022-12-17T16:31:58+00:00"
         },
         {
             "name": "laminas/laminas-dependency-plugin",
@@ -4887,16 +4887,16 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "3.16.0",
+            "version": "3.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stdlib.git",
-                "reference": "0880e3dd88eca01eeda9dfdb5a05c38e56902c2c"
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/0880e3dd88eca01eeda9dfdb5a05c38e56902c2c",
-                "reference": "0880e3dd88eca01eeda9dfdb5a05c38e56902c2c",
+                "url": "https://api.github.com/repos/laminas/laminas-stdlib/zipball/f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
+                "reference": "f4f773641807c7ccee59b758bfe4ac4ba33ecb17",
                 "shasum": ""
             },
             "require": {
@@ -4942,7 +4942,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-11-30T23:45:45+00:00"
+            "time": "2022-12-03T18:48:01+00:00"
         },
         {
             "name": "laminas/laminas-tag",
@@ -5321,26 +5321,26 @@
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.6.1",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
-                "reference": "e112dd2c099f4f6142c16fc65fda89a638e06885"
+                "reference": "5ef52e26392777a26dbb8f20fe24f91b406459f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/e112dd2c099f4f6142c16fc65fda89a638e06885",
-                "reference": "e112dd2c099f4f6142c16fc65fda89a638e06885",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/5ef52e26392777a26dbb8f20fe24f91b406459f6",
+                "reference": "5ef52e26392777a26dbb8f20fe24f91b406459f6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4, <8.2"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5.14",
-                "psalm/plugin-phpunit": "^0.15.2",
-                "squizlabs/php_codesniffer": "^3.6.2",
-                "vimeo/psalm": "^4.21.0"
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "^0.18.0",
+                "squizlabs/php_codesniffer": "^3.7.1",
+                "vimeo/psalm": "^4.29.0"
             },
             "type": "library",
             "extra": {
@@ -5379,7 +5379,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-29T13:28:29+00:00"
+            "time": "2022-12-12T11:44:10+00:00"
         },
         {
             "name": "monolog/monolog",
